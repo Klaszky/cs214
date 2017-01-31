@@ -17,7 +17,7 @@ typedef struct treeNode
 }treeNode;
 
 // This makes and returns a node with some
-// default values and a user supplied string
+// default values and a supplied string
 ///////////////////
 treeNode * createNode(char * newStr)
 {
@@ -78,7 +78,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 	return head;
 }
 
-// Recursive - This acts as my sort as well. 
+// Recursive - This acts as my sort. 
 ///////////////////
 void printTree(treeNode * head)
 {
@@ -102,7 +102,7 @@ void printTree(treeNode * head)
 	}
 }
 
-// At temps free up all of the alloc'd memory in my BST
+// Attemps free up all of the alloc'd memory in my BST
 ///////////////////
 void destroyTree(treeNode * head)
 {
@@ -124,8 +124,9 @@ void destroyTree(treeNode * head)
 	return;
 }
 
-// Takes an input string, a size and some indices, grabs the portion of the string
-// contained in said indices and returns a new, null terminated string.
+// Takes an input string, a size and some indices, 
+// grabs the portion of the string contained in said 
+// indices and returns a new, null terminated string.
 ///////////////////
 char * pullString(int start, int end, int size, char * originalString)
 {
@@ -144,11 +145,13 @@ int main(int argc, char * argv[])
 
 	// performing a test and grabbing the cmd line string
 	///////////////////
-	// if(argc != 2)
-	// {
-	// 	printf("Insufficient number of command line arguments."):
-	// 	return 0;
-	// }
+	if(argc != 2)
+	{
+		printf("Insufficient number of command line arguments.\n");
+		return 0;
+	}
+
+	char * inputString = argv[1];
 
 	
 	treeNode * head = NULL;
@@ -167,14 +170,14 @@ int main(int argc, char * argv[])
 	
 	
 	int startingPos = -1, endingPos = 0, counter = 0, len = 0, i = 0;
-	char * test1 = "i am joe and i know what i know so, just you lame Lame lAme laMe lamE";
-	len = strlen(test1);
+	// char * test1 = "i am joe and i know what i know so, just you lame Lame lAme laMe lamE";
+	len = strlen(inputString);
 	char * tempString;
 	treeNode * tempNode;
 
 	for(i = 0; i <= len; i++)
 	{
-		if(isalpha(test1[i]) == 0)
+		if(isalpha(inputString[i]) == 0)
 		{
 			if(counter == 0)
 			{
@@ -183,7 +186,7 @@ int main(int argc, char * argv[])
 			else
 			{
 				endingPos = i;
-				tempString = pullString(startingPos, endingPos, counter, test1);
+				tempString = pullString(startingPos, endingPos, counter, inputString);
 				tempNode = createNode(tempString);
 				head = addToTree(head, tempNode);
 				free(tempString);
