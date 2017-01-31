@@ -187,60 +187,59 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 
-	char * inputString = argv[1];
-
-	
-	treeNode * head = NULL;
-
-	// some test code
+	// Setting up some variables that will be used.
+	// Most should be self explanatory.
 	///////////////////
-
-	// treeNode * test = createNode("Joseph");
-	// treeNode * test2 = createNode("Joseph");
-	// head = addToTree(head, test);
-	// head = addToTree(head, test2);
-	// printf("\n%s\n\n", head->str);
-	// printf("%d\n", head->num);
-	// printf("\n%s\n\n", head->left->str);
-	// printf("%d\n", head->left->num);
-	
-	
-	int startingPos = -1, endingPos = 0, counter = 0, len = 0, i = 0;
-	// char * test1 = "i am joe and i know what i know so, just you lame Lame lAme laMe lamE";
-	len = strlen(inputString);
+	char * inputString = argv[1];
 	char * tempString;
+
+	int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	len = strlen(inputString);
+
+	treeNode * head = NULL;
 	treeNode * tempNode;
 
+	// Main loop of the program, goes over every
+	// character of the input.
+	///////////////////
 	for(i = 0; i <= len; i++)
 	{
+		// Check if current character isalpha and then
+		// makes some decisions based on that.
+		///////////////////
 		if(isalpha(inputString[i]) == 0)
 		{
-			if(counter == 0)
+			// Nothing to do if current string is empty 
+			///////////////////
+			if(sizeOfString == 0)
 			{
 				continue;
 			}
+			// Grabs the current string from input and puts it into the tree.
+			///////////////////
 			else
 			{
 				endingPos = i;
-				tempString = pullString(startingPos, endingPos, counter, inputString);
+				tempString = pullString(startingPos, endingPos, sizeOfString, inputString);
 				tempNode = createNode(tempString);
 				head = addToTree(head, tempNode);
 				free(tempString);
-				// free(tempNode);
 				startingPos = -1;
-				counter = 0;	
+				sizeOfString = 0;	
 			}
 		}
+		// Book keeping for current string.
+		///////////////////
 		else
 		{
 			if(startingPos == -1)
 			{
 				startingPos = i;
-				counter++;
+				sizeOfString++;
 			}
 			else
 			{
-				counter++;
+				sizeOfString++;
 
 			}
 		}
