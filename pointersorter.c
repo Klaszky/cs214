@@ -43,13 +43,49 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 		head = newNode;
 		return head;
 	}
-	else if(strcmp(head->str, newNode->str) == 0)
+	// Okay, so this part is a bit redundant....
+	// Because strcmp compares based on
+	// ascii values I was having a tough time
+	// getting it to sort properly without doing
+	// two compares. One not case sensitive, one not.
+	////////////////////
+	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
-		head->num++;
-		free(newNode);
-		return head;
+		if(strcmp(head->str, newNode->str) == 0)
+		{
+			head->num++;
+			free(newNode);
+			return head;
+		}
+		else if(strcmp(head->str, newNode->str) > 0)
+		{
+			if(head->left == NULL)
+			{
+				head->left = newNode;
+			}
+			else
+			{
+				head->left = addToTree(head->left, newNode);
+			}
+
+			return head;
+		}
+		else if(strcmp(head->str, newNode->str) < 0)
+		{
+			if(head->right == NULL)
+			{
+				head->right = newNode;	
+			}
+			else
+			{
+				head->right = addToTree(head->right, newNode);
+			}
+
+			return head;
+		}
+
 	}
-	else if(strcmp(head->str, newNode->str) > 0)
+	else if(strcasecmp(head->str, newNode->str) > 0)
 	{
 		if(head->left == NULL)
 		{
@@ -62,7 +98,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 
 		return head;
 	}
-	else
+	else if(strcasecmp(head->str, newNode->str) < 0)
 	{
 		if(head->right == NULL)
 		{
