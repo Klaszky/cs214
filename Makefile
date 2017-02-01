@@ -1,7 +1,7 @@
 PROGRAMS = pointersorter
 
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -Wextra -Wpedantic
 
 %: %.c %.h
 	$(CC) $(CFLAGS) -o $@ $<

@@ -42,9 +42,6 @@ treeNode * createNode(char * newStr)
 // looking at each string and comparing then inserting
 // if it doesn't find a copy of the string in new node
 ///////////////////
-// Change to make: does a case insensitive search then a sensitive one
-// to make things appear where they should
-///////////////////
 treeNode * addToTree(treeNode * head, treeNode *newNode)
 {
 	if(head == NULL)
@@ -55,8 +52,8 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 	// Okay, so this part is a bit redundant....
 	// Because strcmp compares based on
 	// ascii values I was having a tough time
-	// getting it to sort properly without doing
-	// two compares. One not case sensitive, one not.
+	// getting it to sort properly. So now there
+	// are two compares. One case sensitive, one not.
 	////////////////////
 	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
