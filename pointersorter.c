@@ -7,9 +7,9 @@
 int isalpha(int c);
 int strcmp(const char * s1, const char * s2);
 int strcasecmp(const char * s1, const char * s2);
+void free(void * ptr);
 void * malloc(size_t size);
 void * calloc(size_t nmemb, size_t size);
-void free(void * ptr);
 char * strdup(const char * s);
 size_t strlen(const char *s);
 
@@ -60,6 +60,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 		if(strcmp(head->str, newNode->str) == 0)
 		{
 			head->num++;
+			free(newNode->str);
 			free(newNode);
 			return head;
 		}
@@ -161,7 +162,7 @@ void destroyTree(treeNode * head)
 	{
 		destroyTree(head->right);
 	}
-
+	free(head->str);
 	free(head);
 	return;
 }
@@ -189,7 +190,7 @@ int main(int argc, char * argv[])
 	///////////////////
 	if(argc != 2)
 	{
-		printf("Insufficient number of command line arguments.\n");
+		printf("Incorrect number of command line arguments.\n");
 		return 0;
 	}
 
@@ -252,7 +253,6 @@ int main(int argc, char * argv[])
 	}
 
 	printTree(head);
-	destroyTree(head);
-	
+	destroyTree(head);	
 	return 0;
 }
