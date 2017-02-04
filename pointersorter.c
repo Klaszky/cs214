@@ -3,14 +3,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
-int isalpha(int c);
-int strcmp(const char * s1, const char * s2);
+// These first three prototypes were 
+// causing the compiler to throw errors when
+// the -O flag was on. Odd....
+//////////////////
+//int isalpha(int c);
+//int strcmp(const char * s1, const char * s2);
+//char * strdup(const char * s);
 int strcasecmp(const char * s1, const char * s2);
 void free(void * ptr);
 void * malloc(size_t size);
 void * calloc(size_t nmemb, size_t size);
-char * strdup(const char * s);
 size_t strlen(const char *s);
 
 
