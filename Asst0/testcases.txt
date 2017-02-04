@@ -1,0 +1,837 @@
+Note: If there was any @ or $ in my test input, I probably "escaped" out when it was put into bash so that bash didn't get all squirrely.
+
+
+Input:
+
+""
+
+Output:
+
+*nothing*
+
+######################################################
+
+Input:
+
+"Joe"
+
+Output:
+
+Joe
+
+######################################################
+
+Input:
+
+"joe Joe"
+
+Output:
+
+Joe
+joe
+
+######################################################
+
+Input:
+
+"	                                              "
+
+Output:
+
+*nothing*
+
+######################################################
+
+Input:
+
+"12345678900987654322345678908765432"
+
+Output:
+
+*nothing*
+
+######################################################
+
+Input
+
+"()()()()()()()()(j)(o)(e)()()()()()()"
+
+
+Valgrind output:
+
+==12883== HEAP SUMMARY:
+==12883==     in use at exit: 0 bytes in 0 blocks
+==12883==   total heap usage: 10 allocs, 10 frees, 1,084 bytes allocated
+==12883== 
+==12883== All heap blocks were freed -- no leaks are possible
+==12883== 
+==12883== For counts of detected and suppressed errors, rerun with: -v
+==12883== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Output:
+
+e
+j
+o
+
+######################################################
+
+Input:
+
+"!I1023498!@dont           know10298what)(&*to%$#type )(!@to*# test         	this code ba dum da dum 20398stuff !@)#(stuff010913840283"
+
+Valgrind output:
+ 
+==12750== HEAP SUMMARY:
+==12750==     in use at exit: 0 bytes in 0 blocks
+==12750==   total heap usage: 49 allocs, 49 frees, 1,418 bytes allocated
+==12750== 
+==12750== All heap blocks were freed -- no leaks are possible
+==12750== 
+==12750== For counts of detected and suppressed errors, rerun with: -v
+==12750== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Output:
+
+ba
+code
+da
+dont
+dum
+dum
+I
+know
+stuff
+stuff
+test
+this
+to
+to
+type
+what
+
+######################################################
+
+Note: These next two are just random junk. I honestly just
+wanted to see what would happen.
+
+Input:
+
+"'721o75^u( (8^ n%e6)o 7o2-nvrll3 '3/.4zlk=8 ;nee=z)jwb nntvc=t1fp 97ot'/j8;' 8hu//z)h.g lq(o53k2/u 5l5xc/p,c% d1a1(lbxq% 5h3ms))zt% t2a37wz683 2x,;8%=8s% '7fi9b;z6. #5t/kgh3kl rii4c;q hm '8r9dhbzv/ 3733q) r%9 li5fwq/'t# "
+
+Valgrind output:
+ 
+==13768== HEAP SUMMARY:
+==13768==     in use at exit: 0 bytes in 0 blocks
+==13768==   total heap usage: 169 allocs, 169 frees, 2,222 bytes allocated
+==13768== 
+==13768== All heap blocks were freed -- no leaks are possible
+==13768== 
+==13768== For counts of detected and suppressed errors, rerun with: -v
+==13768== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Output:
+
+a
+a
+b
+c
+c
+d
+dhbzv
+e
+fi
+fp
+fwq
+g
+h
+h
+hm
+hu
+j
+jwb
+k
+kgh
+kl
+l
+lbxq
+li
+lq
+ms
+n
+nee
+nntvc
+nvrll
+o
+o
+o
+o
+ot
+p
+q
+q
+r
+r
+rii
+s
+t
+t
+t
+t
+u
+u
+wz
+x
+xc
+z
+z
+z
+zlk
+zt
+
+######################################################
+
+Input:
+
+"T1-ijF8 t9F,/6X jky=W#vmY%vO-Cc =k(js wJf)S3Yj= XOidFz5.Ie N=5y 2hpfsiZ2a2qd;Wz Vj9jXz^K6vp,ns; HbwhC%eJbf^FdXb tz8Nj871IS7Zbus K(hB4H2IfKV^Xy8 8-.,fPeThb6d3uL L-ndsrRXYvbS'X4 x)rXJGyvo8K/8(t QroDl8JooUNL,v- JAJ7tIjaYAz7Yjg or'7AvsPfzDedz5  c;1nzvu'Vh 1cP uDiC5Ft2N.WPq-k WOy#)NUX#-.m,C; 3Y,m 8g17/uku.t Ks37t1)4r97)3Jm x lpGb^D8%hTpfN =Y3'nFBeuFy/tWY T'wHDhqndjfVSm- vcfSnZutbd/Zz9I YWuV5#YkmR=I3hI 938%g)=594/3'tK BEt9UmaU3SuV3O  ^nWGdBP6lXQxuL' NGxZenWddAuNPbT IrLAH(Lyvyz;#yn"
+
+Valgrind output:
+
+==13830== HEAP SUMMARY:
+==13830==     in use at exit: 0 bytes in 0 blocks
+==13830==   total heap usage: 325 allocs, 325 frees, 3,592 bytes allocated
+==13830== 
+==13830== All heap blocks were freed -- no leaks are possible
+==13830== 
+==13830== For counts of detected and suppressed errors, rerun with: -v
+==13830== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+Output:
+
+a
+AvsPfzDedz
+BEt
+C
+c
+Cc
+cP
+D
+d
+eJbf
+F
+FdXb
+fPeThb
+Ft
+g
+g
+H
+hB
+HbwhC
+hI
+hpfsiZ
+hTpfN
+I
+I
+Ie
+IfKV
+ijF
+IrLAH
+IS
+JAJ
+jky
+Jm
+JooUNL
+js
+jXz
+K
+K
+K
+k
+k
+Ks
+L
+lpGb
+lXQxuL
+Lyvyz
+m
+m
+N
+N
+ndsrRXYvbS
+nFBeuFy
+NGxZenWddAuNPbT
+Nj
+ns
+NUX
+nWGdBP
+nzvu
+O
+or
+qd
+QroDl
+r
+rXJGyvo
+S
+SuV
+T
+T
+t
+t
+t
+t
+tIjaYAz
+tK
+tWY
+tz
+uDiC
+uku
+uL
+UmaU
+v
+vcfSnZutbd
+Vh
+Vj
+vmY
+vO
+vp
+W
+wHDhqndjfVSm
+wJf
+WOy
+WPq
+Wz
+X
+X
+x
+x
+XOidFz
+Xy
+Y
+Y
+y
+Yj
+Yjg
+YkmR
+yn
+YWuV
+Zbus
+Zz
+
+######################################################
+
+Input:
+
+"A campesino looked at the air
+And told me:
+With hurricanes it’s not the wind
+or the noise or the water.
+I’ll tell you he said:
+it’s the mangoes, avocados
+Green plantains and bananas
+flying into town like projectiles.
+
+How would your family
+feel if they had to tell
+The generations that you
+got killed by a flying
+Banana.
+
+Death by drowning has honor
+If the wind picked you up
+and slammed you
+Against a mountain boulder
+This would not carry shame
+But
+to suffer a mango smashing
+Your skull
+or a plantain hitting your
+Temple at 70 miles per hour
+is the ultimate disgrace.
+
+The campesino takes off his hat—
+As a sign of respect
+toward the fury of the wind
+And says:
+Don’t worry about the noise
+Don’t worry about the water
+Don’t worry about the wind—
+If you are going out
+beware of mangoes
+And all such beautiful
+sweet things.
+
+Victor Hernández Cruz"
+
+Valgrind output:
+
+==10617== HEAP SUMMARY:
+==10617==     in use at exit: 0 bytes in 0 blocks
+==10617==   total heap usage: 487 allocs, 487 frees, 5,270 bytes allocated
+==10617== 
+==10617== All heap blocks were freed -- no leaks are possible
+==10617== 
+==10617== For counts of detected and suppressed errors, rerun with: -v
+==10617== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Output:
+
+A
+a
+a
+a
+a
+a
+about
+about
+about
+Against
+air
+all
+And
+And
+And
+and
+and
+are
+As
+at
+at
+avocados
+Banana
+bananas
+beautiful
+beware
+boulder
+But
+by
+by
+campesino
+campesino
+carry
+Cruz
+Death
+disgrace
+Don
+Don
+Don
+drowning
+family
+feel
+flying
+flying
+fury
+generations
+going
+got
+Green
+had
+has
+hat
+he
+Hern
+his
+hitting
+honor
+hour
+How
+hurricanes
+I
+If
+If
+if
+into
+is
+it
+it
+killed
+like
+ll
+looked
+mango
+mangoes
+mangoes
+me
+miles
+mountain
+ndez
+noise
+noise
+not
+not
+of
+of
+of
+off
+or
+or
+or
+out
+per
+picked
+plantain
+plantains
+projectiles
+respect
+s
+s
+said
+says
+shame
+sign
+skull
+slammed
+smashing
+such
+suffer
+sweet
+t
+t
+t
+takes
+tell
+tell
+Temple
+that
+The
+The
+the
+the
+the
+the
+the
+the
+the
+the
+the
+the
+the
+the
+they
+things
+This
+to
+to
+told
+toward
+town
+ultimate
+up
+Victor
+water
+water
+wind
+wind
+wind
+wind
+With
+worry
+worry
+worry
+would
+would
+you
+you
+you
+you
+you
+Your
+your
+your
+
+######################################################
+
+Input:
+
+"Four score and seven years ago our fathers brought forth on this continent, a new nation, conceived in Liberty, and dedicated to the proposition that all men are created equal.
+
+Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this.
+
+But, in a larger sense, we can not dedicate -- we can not consecrate -- we can not hallow -- this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us -- that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion -- that we here highly resolve that these dead shall not have died in vain -- that this nation, under God, shall have a new birth of freedom -- and that government of the people, by the people, for the people, shall not perish from the earth."
+
+Valgrind output:
+
+==10320== HEAP SUMMARY:
+==10320==     in use at exit: 0 bytes in 0 blocks
+==10320==   total heap usage: 817 allocs, 817 frees, 8,218 bytes allocated
+==10320== 
+==10320== All heap blocks were freed -- no leaks are possible
+==10320== 
+==10320== For counts of detected and suppressed errors, rerun with: -v
+==10320== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Output:
+a
+a
+a
+a
+a
+a
+a
+above
+add
+advanced
+ago
+all
+altogether
+and
+and
+and
+and
+and
+and
+any
+are
+are
+are
+as
+battle
+be
+be
+before
+birth
+brave
+brought
+But
+but
+by
+can
+can
+can
+can
+can
+cause
+civil
+come
+conceived
+conceived
+consecrate
+consecrated
+continent
+created
+dead
+dead
+dead
+dedicate
+dedicate
+dedicated
+dedicated
+dedicated
+dedicated
+detract
+devotion
+devotion
+did
+died
+do
+earth
+endure
+engaged
+equal
+far
+far
+fathers
+field
+field
+final
+fitting
+for
+for
+for
+for
+for
+forget
+forth
+fought
+Four
+freedom
+from
+from
+full
+gave
+gave
+God
+government
+great
+great
+great
+ground
+hallow
+have
+have
+have
+have
+have
+here
+here
+here
+here
+here
+here
+here
+here
+highly
+honored
+in
+in
+in
+in
+increased
+is
+is
+is
+It
+It
+It
+it
+it
+larger
+last
+Liberty
+little
+live
+lives
+living
+living
+long
+long
+measure
+men
+men
+met
+might
+nation
+nation
+nation
+nation
+nation
+never
+new
+new
+nobly
+nor
+not
+not
+not
+not
+not
+note
+Now
+of
+of
+of
+of
+of
+on
+on
+or
+or
+our
+our
+people
+people
+people
+perish
+place
+poor
+portion
+power
+proper
+proposition
+rather
+rather
+remaining
+remember
+resolve
+resting
+say
+score
+sense
+seven
+shall
+shall
+shall
+should
+so
+so
+so
+struggled
+take
+task
+testing
+that
+that
+that
+that
+that
+that
+that
+that
+that
+that
+that
+that
+that
+The
+The
+the
+the
+the
+the
+the
+the
+the
+the
+the
+their
+these
+these
+they
+they
+they
+this
+this
+this
+this
+those
+thus
+to
+to
+to
+to
+to
+to
+to
+to
+under
+unfinished
+us
+us
+us
+vain
+war
+war
+We
+We
+we
+we
+we
+we
+we
+we
+we
+we
+what
+what
+whether
+which
+which
+who
+who
+who
+will
+work
+world
+years
+
+######################################################
