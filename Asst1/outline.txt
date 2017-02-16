@@ -1,0 +1,31 @@
+outline mymalloc:
+
+For the user the interface should operate exactly like malloc except for some
+error handling situations. 
+
+mymalloc.c
+*this will use a struct called metadata that will basically a linked list
+	that keeps track of if a certain block of memory is in use, how much space
+	there is in said block and if it isn't free gives a pointer to the next free
+	chunk.
+-create a large char array that will act as the memory mymalloc will give to
+	the user
+-when the first block of memory is requested create the head of the metadata
+	linked list. 
+	~this should store the metadata in the char array and return a pointer to
+		user that points to the first block after 
+
+
+outline myfree:
+
+For the user the interface should operate exactly like free except for some
+error handling situations. 
+
+myfree.c
+-This should take a pointer as input
+	~Check the metadata and see if it's already free or not
+		=if already free, just report an error
+		=if not free, change the metadata to say free and check previous and 
+			next pointers. If either are free, combine to free up some more 
+			room.
+
