@@ -13,4 +13,7 @@ typedef struct metaData
 	size_t currentSize;
 }metaData;
 
-void *mymalloc(size_t size, char * file, int line);
+void * mymalloc(size_t size, char * file, int line);
+void myfree(void *blockPtr, char * file, int line);
+
+void createFirstBlock();

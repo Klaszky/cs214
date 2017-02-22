@@ -1,116 +1,151 @@
 #include "mymalloc.h"
 
 static char myblock[BLOCKSIZE];
+metaData *head = (void*)myblock;
 
-metaData *head = NULL;
-metaData *iterationPointer = NULL;
-metaData *nextBlock = NULL;
-
+// Just makes the frist block and sets some values
+////////////////////
+void createFirstBlock()
+{
+	head->currentSize = BLOCKSIZE - sizeof(metaData);
+	head->next = NULL;
+	head->previous = NULL;
+	head->isFree = 1;
+}
 
 void *mymalloc(size_t size, char * file, int line)
 {
-	printf("1");
 
+	// These two pointers are used to iterate over our linked list and 
+	// to help make the next link.
+	////////////////////
+	metaData *iterationPointer = NULL;
+	metaData *newBlock = NULL;
+
+	// If the user enters malloc(0) it'll tell them that this doesn't
+	// work
+	////////////////////
 	if(size == 0)
 	{
-		printf("Fail");
+		// I'll change the error messages sooner or later....
+		printf("Fail - Requested 0 Memory\n");
 		return 0;
 	}
 
-	printf("2");
-
-
-
-	printf("3");
-	if(head == NULL)
+	// If head hasn't been used set up yet, create it/
+	////////////////////
+	if(head->currentSize == 0)
 	{
-		head = (metaData *) myblock;
-		head->previous = NULL;
-		head->next = NULL;
-		head->currentSize = BLOCKSIZE - sizeof(metaData);
-		head->isFree = 1;
-		//put head into the array
-		//set head->previous = null
-		//set head size = to total size - sife of metaData
-		//set isFree to true
-
+		createFirstBlock();
 	}
 
-	printf("4");
-	iterationPointer = head;
+	// This is the pointer that will be used in the while loop
+	////////////////////
+	iterationPointer = (void*)head;
 
-
-
-	printf("5");
-	while(iterationPointer != NULL);
+	while(iterationPointer != NULL)
 	{
+		// First check if this block is free
+		////////////////////
 		if(iterationPointer->isFree)
 		{
+			// If yes, check size of block vs size requested
+			////////////////////
 			if(iterationPointer->currentSize < size)
 			{
+				// If too small, move on
+				////////////////////
 				iterationPointer = iterationPointer->next;
 			}
 			else
 			{
+				// If large enough, see if there is enough space
+				// for what is requested + another chunk of metaData
+				////////////////////
 				if(iterationPointer->currentSize < (size + sizeof(metaData) ))
 				{
+					// If there is room for whats requested, but not enough
+					// for more metaData simply return this block of memory
+					////////////////////
 					iterationPointer->isFree = 0;
-					return iterationPointer + sizeof(metaData);
+					iterationPointer->currentSize = size;
+					printf("Success\n");
+					return (void *)(iterationPointer + sizeof(metaData));
 				}
+
+				// It is large enough and we can make a new metaData
+				// chunk.
+				////////////////////
 				else
 				{
+
+					// Create a new metaData block and put it right after current
+					////////////////////
+					newBlock = (void*)((void*)iterationPointer + sizeof(metaData) + size);
+					newBlock->next = NULL;
+					newBlock->previous = iterationPointer;
+					newBlock->isFree = 1;
+					newBlock->currentSize = iterationPointer->currentSize - sizeof(metaData) - size;
+
+					// Updates to block of memory that will be returned
+					////////////////////
+					iterationPointer->currentSize = size;
+					iterationPointer->next = newBlock;
 					iterationPointer->isFree = 0;
 
-					if(iterationPointer->next == NULL)
-					{
-						nextBlock = (metaData*)(iterationPointer + sizeof(metaData) + size);
-						nextBlock->next = NULL;
-						nextBlock->previous = iterationPointer;
-						nextBlock->isFree = 1;
-					}
-
-					printf("not Fail");
-					return iterationPointer + sizeof(metaData);
+					// Return where the pointer is + a bit so we don't
+					// write over the metaData
+					////////////////////
+					printf("Success\n");
+					return (void *)(iterationPointer + sizeof(metaData));
 
 				}
-				//set isFree to false;
-				//create a new link in the metaData list and put it right after the blocks to be returned to the user
-				//return iteration pointer
 			}
 		}
+
 		else
 		{
 			iterationPointer = iterationPointer->next;
 		}
 	}
 
-	printf("Fail");
+	printf("Fail - Not enough Space\n");
 	return 0;
 }
 
-// void myfree(void *blockPtr)
-// {
-// 	if(blockPtr->isFree)
-// 	{
-// 		//print error saying its already free
-// 	}
+void myfree(void *memoryPtr, char * file, int line)
+{
+	metaData * ptr = memoryPtr - sizeof(metaData);
+	if(ptr->isFree)
+	{
+		printf("Already free");
+		return;
+	}
 
-// 	else
-// 	{
-// 		blockPtr->isFree = 1;
-// 		metaData * prevPtr = blockPtr;
-// 		metaData * nextPtr = blockPtr;
-// 		while(prevPtr->previous != NULL && prevPtr->previous->isFree == 1 )
-// 		{
-// 			//merge
-// 			prevPtr->previous->currentSize += (prevPtr->currentSize + sizeof(metaData));
-// 			prevPtr = prevPtr->previous;
-// 		}
-// 		while(nextPtr->previous != NULL && nextPtr->previous->isFree == 1 )
-// 		{
-// 			//merge
-// 			nextPtr->next->currentSize += (nextPtr-> + sizeof(metaData));
-// 			nextPtr = nextPtr->next;
-// 		}
-// 	}
-// }
+	else
+	{
+		ptr->isFree = 1;
+		// while(ptr->previous != NULL && ptr->previous->isFree == 1 )
+		// {
+		// 	printf("4\n");
+		// 	//merge
+		// 	ptr->previous->currentSize += (ptr->currentSize + sizeof(metaData));
+		// 	printf("5\n");
+		// 	ptr->previous->next = ptr->next;
+		// 	printf("6\n");
+		// 	ptr = ptr->previous;
+		// 	printf("7\n");
+		// }
+		// while(ptr->next != NULL && ptr->next->isFree == 1 )
+		// {
+		// 	printf("8\n");
+		// 	//merge
+		// 	ptr->next->currentSize += (ptr->currentSize + sizeof(metaData));
+		// 	printf("9\n");
+		// 	ptr->next->previous = ptr->previous;
+		// 	printf("10\n");
+		// 	ptr = ptr->next;
+		// 	printf("11\n");
+		// }
+	}
+}
