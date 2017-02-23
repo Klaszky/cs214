@@ -135,6 +135,15 @@ void myfree(void *memoryPtr, char * file, int line)
 	////////////////////
 	metaData * ptr = memoryPtr - 16*sizeof(metaData);
 
+	if(valid(ptr))
+	{
+		printf("It is valid\n");
+	}
+	else
+	{
+		printf("not valid\n");
+		return;
+	}
 	if(ptr->isFree)
 	{
 		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", file, line);
@@ -144,19 +153,10 @@ void myfree(void *memoryPtr, char * file, int line)
 	//  Part of a check to see if the pointer that was given, is something 
 	// that our malloc program had alloc'd. Work in progress at the moment.
 	////////////////////
-	// if(valid(ptr))
-	// {
-	// 	printf("It is valid\n");
-	// }
-	// else
-	// {
-	// 	printf("not valid\n");
-	// 	return;
-	// }
 
 	// If the pointer is pointing to metaData and it isn't already free
 	// set the variable to free then attempts to clean up memory next to it.
-	////////////////////
+	/////////////////c///
 	else
 	{
 		ptr->isFree = 1;
