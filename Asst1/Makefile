@@ -9,3 +9,6 @@ test: test.o mymalloc.o
 
 mymalloc.o: mymalloc.c mymalloc.h
 	$(CC) $(CFLAGS) -c mymalloc.c
+
+clean:
+	$(RM) test *.o
