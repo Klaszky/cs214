@@ -72,7 +72,7 @@ void *mymalloc(size_t size, char * file, int line)
 					////////////////////
 					iterationPointer->isFree = 0;
 					//for testing ...
-					//display();
+					display();
 					return (void *)(iterationPointer + sizeof(metaData));
 				}
 
@@ -107,7 +107,7 @@ void *mymalloc(size_t size, char * file, int line)
 					// write over the metaData
 					////////////////////
 					//for testing
-					//display();
+					display();
 					return (void *)(iterationPointer + sizeof(metaData));
 
 				}
@@ -138,6 +138,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	//  Part of a check to see if the pointer that was given, is something 
 	// that our malloc program had alloc'd. Work in progress at the moment.
 	////////////////////
+	/*
 	if(valid(ptr))
 	{
 		printf("It is valid\n");
@@ -146,7 +147,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	{
 		printf("not valid\n");
 		return;
-	}
+	}*/
 	if(ptr->isFree)
 	{
 		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", file, line);
@@ -184,7 +185,7 @@ void myfree(void *memoryPtr, char * file, int line)
 		}
 	}
 	//for testing...
-	//display();
+	display();
 }
 
 //for testing....

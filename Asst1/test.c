@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
 	int * test3;
 	int x;
 
-	free(test);
+	//free(test);
 	// free(&x);
 
 	test = (int*)malloc(sizeof(int));
@@ -33,7 +33,7 @@ int main(int argc, char * argv[])
 	free(test);
 
 	test = (int*)malloc(sizeof(int));
-	free(test+30);
+	//free(test+30);
 	test2 = (int*)malloc(20*sizeof(int));
 
 	free(test);
