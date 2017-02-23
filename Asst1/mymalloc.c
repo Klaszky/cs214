@@ -128,7 +128,7 @@ void myfree(void *memoryPtr, char * file, int line)
 {
 	if(memoryPtr == NULL)
 	{
-		fprintf(stderr, "Tried to free 'NULL.'\nFile: %s, Line %d\n", size, file, line);
+		fprintf(stderr, "Tried to free 'NULL.'\nFile: %s, Line %d\n", file, line);
 	}
 	// Takes the pointer you were given and attempts to make it point to the
 	// metaData
@@ -137,7 +137,7 @@ void myfree(void *memoryPtr, char * file, int line)
 
 	if(ptr->isFree)
 	{
-		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", size, file, line);
+		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", file, line);
 		return;
 	}
 
