@@ -31,7 +31,7 @@ void *mymalloc(size_t size, char * file, int line)
 	if(size == 0)
 	{
 		// I'll change the error messages sooner or later....
-		printf("Fail - Requested 0 Memory\n");
+		fprintf(stderr, "User requested 0 bytes.\nFile: %s, Line %d\n", file, line);
 		return 0;
 	}
 
@@ -71,8 +71,8 @@ void *mymalloc(size_t size, char * file, int line)
 					// for more metaData simply return this block of memory
 					////////////////////
 					iterationPointer->isFree = 0;
-					printf("Success -no room for metaData\n");
-					display();
+					//for testing ...
+					//display();
 					return (void *)(iterationPointer + sizeof(metaData));
 				}
 
@@ -106,8 +106,8 @@ void *mymalloc(size_t size, char * file, int line)
 					// Return where the pointer is + a bit so we don't
 					// write over the metaData
 					////////////////////
-					printf("Success\n");
-					display();
+					//for testing
+					//display();
 					return (void *)(iterationPointer + sizeof(metaData));
 
 				}
@@ -119,21 +119,30 @@ void *mymalloc(size_t size, char * file, int line)
 			iterationPointer = iterationPointer->next;
 		}
 	}
-
-	//printf("Fail - Not enough Space\n");
+	
+	fprintf(stderr, "Not enough memory to allocate %d bytes.\nFile: %s, Line %d\n", size, file, line);
 	return 0;
 }
 
 void myfree(void *memoryPtr, char * file, int line)
 {
+	if(memoryPtr == NULL)
+	{
+		fprintf(stderr, "Tried to free 'NULL.'\nFile: %s, Line %d\n", size, file, line);
+	}
 	// Takes the pointer you were given and attempts to make it point to the
 	// metaData
 	////////////////////
 	metaData * ptr = memoryPtr - 16*sizeof(metaData);
 
-	//printf("size: %d\n", ptr->currentSize);
+	if(ptr->isFree)
+	{
+		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", size, file, line);
+		return;
+	}
 
-	// Simple check to see if already free ... I'll change the error message sooner or later
+	//  Part of a check to see if the pointer that was given, is something 
+	// that our malloc program had alloc'd. Work in progress at the moment.
 	////////////////////
 	// if(valid(ptr))
 	// {
@@ -144,24 +153,19 @@ void myfree(void *memoryPtr, char * file, int line)
 	// 	printf("not valid\n");
 	// 	return;
 	// }
-	if(ptr->isFree)
-	{
-		printf("Already free");
-		return;
-	}
 
-	// This doesn't seem to be working right now. The goal: to look at
-	// contiguous blocks of free memory and merge them. I wrote this somewhat
-	// late at night and I'm sure my logic is off.
+	// If the pointer is pointing to metaData and it isn't already free
+	// set the variable to free then attempts to clean up memory next to it.
 	////////////////////
 	else
 	{
 		ptr->isFree = 1;
 
+		// Keeps looking at memory after the current pointer until it hits
+		// a block of memory that isn't free. Merges all the free ones together
+		////////////////////
 		while(ptr->next != NULL && ptr->next->isFree == 1 )
 		{
-			//merge
-			printf("trying to merge right\n");
 			ptr->currentSize += (ptr->next->currentSize + sizeof(metaData));
 			ptr->next = ptr->next->next;
 			if(ptr->next != NULL)
@@ -169,21 +173,21 @@ void myfree(void *memoryPtr, char * file, int line)
 				ptr->next->previous = ptr;
 			}
 		}
+		// Keeps looking at memory before the current pointer until it hits
+		// a block of memory that isn't free. Merges all the free ones together
+		////////////////////
 		while(ptr->previous != NULL && ptr->previous->isFree == 1 )
 		{
-			//merge
-			printf("trying to merge left\n");
-			ptr->currentSize += (ptr->previous->currentSize + sizeof(metaData));
-			ptr->previous = ptr->previous->previous;
-			if(ptr->previous != NULL)
-			{
-				ptr->previous->next = ptr;
-			}
+			ptr->previous->currentSize += (ptr->currentSize + sizeof(metaData));
+			ptr->previous->next = ptr->next;
+			ptr = ptr->previous;
 		}
 	}
-	display();
+	//for testing...
+	//display();
 }
 
+//for testing....
 void display()
 {
 	metaData * iterptr = head;
@@ -216,22 +220,3 @@ int valid(metaData * ptr)
 
 	return 0;
 }
-
-// void merge()
-// {
-
-// 	printf("merging\n");
-// 	metaData * ptr = head;
-// 	while(ptr->next != NULL)
-// 	{
-// 		if(ptr->isFree && ptr->next->isFree == 1)
-// 		{
-// 			ptr->next->currentSize += (ptr->currentSize + sizeof(metaData));
-// 			ptr->next->previous = ptr->previous;
-// 			ptr = ptr->next;
-// 		}
-
-// 		ptr = ptr->next;
-// 	}
-// 	display();
-// }

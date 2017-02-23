@@ -17,6 +17,4 @@ void * mymalloc(size_t size, char * file, int line);
 void myfree(void *blockPtr, char * file, int line);
 void display();
 int valid(metaData * ptr);
-// void merge();
-
 void createFirstBlock();
