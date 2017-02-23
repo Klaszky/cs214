@@ -2,7 +2,10 @@ CC = gcc
 
 CFLAGS = -g -Wall
 
-default: test
+default: test memgrind
+
+memgrind: memgrind.o mymalloc.o
+	$(CC) $(CFLAGS) -o memgrind memgrind.o mymalloc.o
 
 test: test.o mymalloc.o
 	$(CC) $(CFLAGS) -o test test.o mymalloc.o
