@@ -14,4 +14,4 @@ mymalloc.o: mymalloc.c mymalloc.h
 	$(CC) $(CFLAGS) -c mymalloc.c
 
 clean:
-	$(RM) test *.o
+	$(RM) test memgrind *.o
