@@ -18,3 +18,5 @@ void myfree(void *blockPtr, char * file, int line);
 void display();
 int valid(metaData * ptr);
 void createFirstBlock();
+void merge();
+int withinBounds(void * ptr);

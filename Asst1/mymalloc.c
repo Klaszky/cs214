@@ -5,6 +5,7 @@ metaData *head = (void*)myblock;
 
 
 
+
 // Just makes the frist block and sets some values
 ////////////////////
 void createFirstBlock()
@@ -138,8 +139,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	//  Part of a check to see if the pointer that was given, is something 
 	// that our malloc program had alloc'd. Work in progress at the moment.
 	////////////////////
-	
-	if(valid(ptr))
+	if(withinBounds(ptr))
 	{
 		printf("It is valid\n");
 	}
@@ -161,6 +161,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	else
 	{
 		ptr->isFree = 1;
+		merge();
 
 		//bug found, looking into it.
 
@@ -178,9 +179,9 @@ void myfree(void *memoryPtr, char * file, int line)
 		// 		ptr->next->previous = ptr;
 		// 	}
 		// }
-		// Keeps looking at memory before the current pointer until it hits
-		// a block of memory that isn't free. Merges all the free ones together
-		////////////////////
+		// // Keeps looking at memory before the current pointer until it hits
+		// // a block of memory that isn't free. Merges all the free ones together
+		// ////////////////////
 
 		// while(ptr->previous != NULL && ptr->previous->isFree == 1 )
 		// {
@@ -214,21 +215,37 @@ void display()
 //FIX ~ maybe compare addresses
 //////////////////
 
-int valid(metaData * ptr)
+// int valid(metaData * ptr)
+// {
+// 	metaData * iterptr = head;
+// 	while(iterptr != NULL)
+// 	{
+// 		if(iterptr == ptr)
+// 		{
+// 			return 1;
+// 		}
+
+// 		iterptr = iterptr->next;	
+// 	}
+
+// 	return 0;
+// }
+
+int withinBounds(void * ptr)
 {
-	metaData * iterptr = head;
-	while(iterptr != NULL)
-	{
-		if(iterptr == ptr)
-		{
-			return 1;
-		}
-
-		iterptr = iterptr->next;	
-	}
-
-	return 0;
+	return (void*)ptr >= (void*)myblock && (void*)ptr < (void*)myblock + BLOCKSIZE;
 }
 
-//maybe make a merge() that's not part of free. there 
-//seems to be an issue with freeing left.
+void merge()
+{
+	metaData * ptr = head;
+	while(ptr != NULL)
+	{
+		while(ptr->isFree && ptr->next != NULL && ptr->next->isFree)
+		{
+			ptr->currentSize += ptr->next->currentSize + sizeof(metaData);
+			ptr->next = ptr->next->next;
+		}
+		ptr = ptr->next;
+	}
+}

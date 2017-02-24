@@ -17,23 +17,24 @@ int main(int argc, char * argv[])
 	// free(test2);
 	int i;
 
+	free(2);
 
 	// int x;
 	int counter = 0;
-	char * test;
-	char * test2;
-	char * test3;
-	// int * test4[1000];
+	// char * test;
+	// char * test2;
+	// char * test3;
+	int * test4[1000];
 
-	// for(i = 0; i < 1000; i++)
-	// {
-	// 	test4[i] = (int*)malloc(sizeof(int));
-	// 	counter++;
-	// }
-	// for(i = 0; i < counter; i++)
-	// {
-	// 	free(test4[i]);
-	// }
+	for(i = 0; i < 1000; i++)
+	{
+		test4[i] = (int*)malloc(sizeof(int));
+		counter++;
+	}
+	for(i = 0; i < counter; i++)
+	{
+		free(test4[i]);
+	}
 
 	//free(test);
 	// free(&x);
@@ -69,34 +70,34 @@ int main(int argc, char * argv[])
 	// free(test);
 	// free(test3);
 
-	test = (char*)malloc(4500);
-	test2 = (char*)malloc(400);
-	test3 = (char*)malloc(50);
-	free(test);
-	free(test2);
-	for(i = 0; i < 5000; i++)
-	{
-		test = (char*)malloc(sizeof(char));
-		test2 = (char*)malloc(sizeof(int));
-		test3 = (char*)malloc(8*sizeof(int));
-		if(test != 0)
-		{
-			counter++;
-			free(test);
-		}
-		if(test2 != 0)
-		{
-			counter++;
-		}
-		if(test3 != 0)
-		{
-			counter++;
-			// free(test3);
-		}
-			free(test);
-			free(test2);
+	// test = (char*)malloc(4500);
+	// test2 = (char*)malloc(400);
+	// test3 = (char*)malloc(50);
+	// free(test);
+	// free(test2);
+	// for(i = 0; i < 5000; i++)
+	// {
+	// 	test = (char*)malloc(sizeof(char));
+	// 	test2 = (char*)malloc(sizeof(int));
+	// 	test3 = (char*)malloc(8*sizeof(int));
+	// 	if(test != 0)
+	// 	{
+	// 		counter++;
+	// 		free(test);
+	// 	}
+	// 	if(test2 != 0)
+	// 	{
+	// 		counter++;
+	// 	}
+	// 	if(test3 != 0)
+	// 	{
+	// 		counter++;
+	// 		// free(test3);
+	// 	}
+	// 		free(test);
+	// 		free(test2);
 
-	}
+	// }
 	printf("%d\n", counter);
 
 	return 0;
