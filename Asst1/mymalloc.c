@@ -107,7 +107,7 @@ void *mymalloc(size_t size, char * file, int line)
 					// write over the metaData
 					////////////////////
 					//for testing
-					display();
+					//display();
 					return (void *)(iterationPointer + sizeof(metaData));
 
 				}
@@ -138,7 +138,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	//  Part of a check to see if the pointer that was given, is something 
 	// that our malloc program had alloc'd. Work in progress at the moment.
 	////////////////////
-	/*
+	
 	if(valid(ptr))
 	{
 		printf("It is valid\n");
@@ -147,7 +147,7 @@ void myfree(void *memoryPtr, char * file, int line)
 	{
 		printf("not valid\n");
 		return;
-	}*/
+	}
 	if(ptr->isFree)
 	{
 		fprintf(stderr, "Already Free.\nFile: %s, Line %d\n", file, line);
@@ -162,27 +162,32 @@ void myfree(void *memoryPtr, char * file, int line)
 	{
 		ptr->isFree = 1;
 
+		//bug found, looking into it.
+
+		//maybe look left and right then call and external merge
+
 		// Keeps looking at memory after the current pointer until it hits
 		// a block of memory that isn't free. Merges all the free ones together
 		////////////////////
-		while(ptr->next != NULL && ptr->next->isFree == 1 )
-		{
-			ptr->currentSize += (ptr->next->currentSize + sizeof(metaData));
-			ptr->next = ptr->next->next;
-			if(ptr->next != NULL)
-			{
-				ptr->next->previous = ptr;
-			}
-		}
+		// while(ptr->next != NULL && ptr->next->isFree == 1 )
+		// {
+		// 	ptr->currentSize += (ptr->next->currentSize + sizeof(metaData));
+		// 	ptr->next = ptr->next->next;
+		// 	if(ptr->next != NULL)
+		// 	{
+		// 		ptr->next->previous = ptr;
+		// 	}
+		// }
 		// Keeps looking at memory before the current pointer until it hits
 		// a block of memory that isn't free. Merges all the free ones together
 		////////////////////
-		while(ptr->previous != NULL && ptr->previous->isFree == 1 )
-		{
-			ptr->previous->currentSize += (ptr->currentSize + sizeof(metaData));
-			ptr->previous->next = ptr->next;
-			ptr = ptr->previous;
-		}
+
+		// while(ptr->previous != NULL && ptr->previous->isFree == 1 )
+		// {
+		// 	ptr->previous->currentSize += (ptr->currentSize + sizeof(metaData));
+		// 	ptr->previous->next = ptr->next;
+		// 	ptr = ptr->previous;
+		// }
 	}
 	//for testing...
 	display();
@@ -206,6 +211,9 @@ void display()
 	}
 }
 
+//FIX ~ maybe compare addresses
+//////////////////
+
 int valid(metaData * ptr)
 {
 	metaData * iterptr = head;
@@ -221,3 +229,6 @@ int valid(metaData * ptr)
 
 	return 0;
 }
+
+//maybe make a merge() that's not part of free. there 
+//seems to be an issue with freeing left.
