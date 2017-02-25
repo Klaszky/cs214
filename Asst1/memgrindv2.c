@@ -66,5 +66,5 @@ int main(int argc, char * argv[])
 	i = 0;
 	successCoutner = 0;
 	failCounter = 0;
-
+	return 0;
 }

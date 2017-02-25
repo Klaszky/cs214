@@ -8,7 +8,7 @@
 
 typedef struct metaData
 {
-	struct metaData *next, *previous;
+	struct metaData *next;
 	int isFree;
 	size_t currentSize;
 }metaData;
