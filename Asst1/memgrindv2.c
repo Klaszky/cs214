@@ -80,7 +80,12 @@ int main(int argc, char * argv[])
 			if(partC[i] == NULL)
 			{
 				failCounter++;
-				i--;
+				
+				for(j = 0; j < i; j++)
+				{
+					free(partC[j]);
+				}
+				i = 0;
 			}
 			else
 			{
@@ -97,9 +102,6 @@ int main(int argc, char * argv[])
 		printf("\n\n%d\n\n", successCoutner);
 	}
 
-	for(j = 0; j < i; j++)
-	{
-		free(partC[j]);
-	}
+
 	return 0;
 }
