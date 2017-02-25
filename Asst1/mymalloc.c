@@ -69,7 +69,7 @@ void *mymalloc(size_t size, char * file, int line)
 					////////////////////
 					iterationPointer->isFree = 0;
 					//for testing ...
-					display();
+					//display();
 					return (void *)(iterationPointer + sizeof(metaData));
 				}
 
@@ -156,7 +156,7 @@ void myfree(void *memoryPtr, char * file, int line)
 		merge();
 	}
 	//for testing...
-	display();
+	//display();
 }
 
 //for testing....

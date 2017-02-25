@@ -67,45 +67,54 @@ int main(int argc, char * argv[])
 	//Part C
 
 
-	char * partC[1000];
-	i = 0;
-	successCoutner = 0;
-	failCounter = 0;
+	// char * partC[1000];
+	// i = 0;
+	// successCoutner = 0;
+	// failCounter = 0;
 
-	while(successCoutner < 1000)
-	{
-		
-		if( coinFlip() )
-		{	
-			partC[i] = (char*)malloc(sizeof(char));
-			if(partC[i] == NULL)
-			{
-				failCounter++;
-			}
-			else
-			{
-				successCoutner += 1;
-				i++;
-			}
-		}
-		else
-		{
-			if(i >= 0)
-			{
-				free(partC[i]);
-				i--;
-			}
-		}
-		totalCoutner++;
-		printf("\n\n%d\n\n", successCoutner);
-	}
+	// while(successCoutner < 1000)
+	// {
+	// 	if(i == 0)
+	// 	{
+	// 		partC[i] = (char*)malloc(sizeof(char));
+	// 		i++;
+	// 		successCoutner++;
+	// 	}
+	// 	else
+	// 	{
+	// 		if( coinFlip() )
+	// 		{	
+	// 			partC[i] = (char*)malloc(sizeof(char));
+	// 			if(partC[i] == NULL)
+	// 			{
+	// 				i--;
+	// 				free(partC[i]);
+	// 			}
+	// 			else
+	// 			{
+	// 				successCoutner++;
+	// 				i++;
+	// 			}
+	// 		}
+	// 		else
+	// 		{
+	// 			if(i >= 0)
+	// 			{
+	// 				free(partC[i]);
+	// 				i--;
+	// 			}
+	// 		}
+	// 	}
+	// 	totalCoutner++;
+	// 	printf("\n\n%d\n\n", successCoutner);
+	// }
 
-	for(j = 0; j <= i; j++)
-	{
-		free(partC[j]);
-	}
+	// for(j = 0; j <= i; j++)
+	// {
+	// 	free(partC[j]);
+	// }
 
-	printf("Total iterations: %d\n", totalCoutner);
+	// printf("Total iterations: %d\n", totalCoutner);
 
 
 	return 0;
