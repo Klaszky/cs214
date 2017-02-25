@@ -3,9 +3,6 @@
 static char myblock[BLOCKSIZE];
 metaData *head = (void*)myblock;
 
-
-
-
 // Just makes the frist block and sets some values
 ////////////////////
 void createFirstBlock()
