@@ -156,7 +156,7 @@ void myfree(void *memoryPtr, char * file, int line)
 		merge();
 	}
 	//for testing...
-//	display();
+	//display();
 }
 
 //for testing....
@@ -176,25 +176,6 @@ void display()
 
 	}
 }
-
-//FIX ~ maybe compare addresses
-//////////////////
-
-// int valid(metaData * ptr)
-// {
-// 	metaData * iterptr = head;
-// 	while(iterptr != NULL)
-// 	{
-// 		if(iterptr == ptr)
-// 		{
-// 			return 1;
-// 		}
-
-// 		iterptr = iterptr->next;	
-// 	}
-
-// 	return 0;
-// }
 
 int withinBounds(void * ptr)
 {

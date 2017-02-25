@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
 	// test2 = (char*)malloc(400);
 	// free(test);
 	// free(test2);
-	// int i;
+	int i;
 
 	// free(2);
 
@@ -121,12 +121,23 @@ int main(int argc, char * argv[])
 	// }
 	// printf("%d\n", counter);
 
+	// time_t t;
+	// srand((unsigned) time(&t));
 
-	srand(time(NULL));
-	int r = rand()%64;
-	printf("%d\n", r);
-	r = rand()%64;
-	printf("%d\n", r);
+	// for(i = 0; i < 10; i++)
+	// {
+	// 	if( (rand() % 10) % 2 == 0)
+	// 	{
+	// 		printf("even\n");
+	// 	}
+	// 	else
+	// 	{
+	// 		printf("odd\n");
+	// 	}
+	// }
+
+	printf("%d\n", sizeof(char));
+
 	return 0;
 }
 
