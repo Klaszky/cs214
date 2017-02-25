@@ -156,7 +156,7 @@ void myfree(void *memoryPtr, char * file, int line)
 		merge();
 	}
 	//for testing...
-	//display();
+	display();
 }
 
 //for testing....
