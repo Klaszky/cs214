@@ -21,17 +21,16 @@ int main(int argc, char * argv[])
 	// char * indexFileName = argv[1];
 	// char * directory = argv[2];
 
-	treeNode * head = NULL;
-	char * file = extract("./test.txt");
-	head = tokenize(file, head);
-	free(file);
-	file = extract("./test2.txt");
-	head = tokenize(file, head);
-	free(file);
-	// printf("\n\n%s\n\n", head->str);
-	// printf("\n\n%s\n\n", file);
-	printTree(head);
-	destroyTree(head);
+	// treeNode * head = NULL;
+	// char * file = extract("./test.txt");
+	// head = tokenize(file, head);
+	// free(file);
+	// file = extract("./test2.txt");
+	// head = tokenize(file, head);
+	// free(file);
+	// printTree(head);
+	// destroyTree(head);
+	fileIterator("./");
 
 	return 0;
 }
@@ -293,7 +292,52 @@ char * extract(char * path)
 
 }
 
-int fileIterator()
+void fileIterator(char * name)
 {
-	return 0;
+	DIR *dir;
+	struct dirent * entry;
+
+	if(!(dir = opendir(name)))
+	{
+		return;
+	}
+	
+	while((entry = readdir(dir)))
+	{
+		if(entry->d_type == DT_DIR)
+		{
+			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+			{
+			    continue;
+			}
+			else
+			{
+				char * path = pathMake(name, entry->d_name);
+				fileIterator(path);
+				free(path);
+			}
+		}
+		else
+		{
+			printf("\n%s\n",entry->d_name);
+		}
+	}
+	closedir(dir);
+}
+
+char * pathMake(char * currentPath, char * nextDir)
+{
+	int len1 = (int)strlen(currentPath);
+	int len2 = (int)strlen(nextDir);
+	char * path = malloc(len1 + len2 + 2);
+	if(strcmp(currentPath, "./") == 0)
+	{
+		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s%s", currentPath, nextDir);
+	}
+	else
+	{
+		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s/%s", currentPath, nextDir);
+	}
+	return path;
+	
 }

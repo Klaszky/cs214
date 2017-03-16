@@ -8,6 +8,7 @@
 #include <limits.h> // http://pubs.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
 
 // Main struct for my Binary search tree
 ///////////////////
@@ -31,3 +32,5 @@ char * extract(char * path);
 void printTree(treeNode * head);
 treeNode * tokenize(char * fileContents, treeNode * head);
 void destroyTree(treeNode * head);
+void fileIterator(char * name);
+char * pathMake(char * currentPath, char * nextDir);
