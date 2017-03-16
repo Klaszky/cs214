@@ -30,3 +30,4 @@ off_t lseek(int fd, off_t offset, int whence);
 char * extract(char * path);
 void printTree(treeNode * head);
 treeNode * tokenize(char * fileContents, treeNode * head);
+void destroyTree(treeNode * head);

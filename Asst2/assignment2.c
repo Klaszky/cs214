@@ -24,11 +24,14 @@ int main(int argc, char * argv[])
 	treeNode * head = NULL;
 	char * file = extract("./test.txt");
 	head = tokenize(file, head);
+	free(file);
 	file = extract("./test2.txt");
 	head = tokenize(file, head);
+	free(file);
 	// printf("\n\n%s\n\n", head->str);
 	// printf("\n\n%s\n\n", file);
 	printTree(head);
+	destroyTree(head);
 
 	return 0;
 }
@@ -129,16 +132,14 @@ void printTree(treeNode * head)
 		printf("null city\n");
 		return;
 	}
-	int i;
 
 	if(head->left != NULL)
 	{
 		printTree(head->left);
 	}
-	for(i = 0; i < head->num; i++)
-	{
-		printf("%s\n",head->str);
-	}
+
+	printf("%s %d\n",head->str, head->num);
+
 	if(head->right != NULL)
 	{
 		printTree(head->right);
@@ -192,6 +193,7 @@ void lowerCase(char * str, int size)
 		str[i] = tolower(str[i]);
 	}
 }
+
 treeNode * tokenize(char * fileContents, treeNode * head)
 {
 	// Setting up some variables that will be used.
