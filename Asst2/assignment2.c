@@ -59,7 +59,31 @@ int main(int argc, char * argv[])
 	
 //	file write will be like FILE ... = fopen(filename argument, "w")
 
+fileList * createLinkNode(char * fileName)
+{
+	fileList * temp = (fileList*)malloc(sizeof(fileList));
+	temp->counter = 1;
+	temp->file = strdup(newStr);
+	temp->nextFile = NULL;
+}
 
+fileList * addToFileList(fileList * fl, fileList * newLink)
+{
+	if(fl == NULL)
+	{
+		fl = newLink;
+		return fl;
+	}
+	else if(strcmp(fl->fileName, newLink->fileName) == 0)
+	{
+		fl->counter += 1;
+		return fl;
+	}
+	else
+	{
+		addToFileList(fl->next, newLink);
+	}
+}
 // This makes and returns a node with some
 // default values and a supplied string
 ///////////////////
@@ -68,7 +92,7 @@ treeNode * createNode(char * newStr)
 	treeNode * temp = (treeNode*)malloc(sizeof(treeNode));
 	temp->left = NULL;
 	temp->right = NULL;
-	temp->num = 1;
+	temp->files = NULL;
 	temp->str = strdup(newStr);
 	return temp;
 }
@@ -88,7 +112,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 	////////////////////
 	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
-		head->num++;
+		addToFileList()
 		free(newNode->str);
 		free(newNode);
 		return head;

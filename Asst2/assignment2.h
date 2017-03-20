@@ -16,9 +16,16 @@ typedef struct treeNode
 {
 	struct treeNode * left;
 	struct treeNode * right;
-	int num;
+	struct fileList * files;
 	char * str;
 }treeNode;
+
+typedef struct fileList
+{
+	int counter;
+	char * fileName;
+	struct fileList * next;
+}fileList;
 
 int strcasecmp(const char * s1, const char * s2);
 void free(void * ptr);
