@@ -240,6 +240,10 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 	// Setting up some variables that will be used.
 	// Most should be self explanatory.
 	///////////////////
+	if(fileContents == NULL)
+	{
+		return head;
+	}
 	char * inputString = fileContents;
 	char * tempString;
 
@@ -384,9 +388,18 @@ treeNode * fileIterator(char * name, treeNode * head)
 
 char * pathMake(char * currentPath, char * nextDir)
 {
+	// len1 and len2 are just to get the correct
+	// size of the string we'll be making. The + 2
+	// at the end if for the '/' and '\0'
+	////////////////////////////
 	int len1 = (int)strlen(currentPath);
 	int len2 = (int)strlen(nextDir);
 	char * path = malloc(len1 + len2 + 2);
+
+	// If we get "./" it won't create the correct path
+	// so we have this extra test in here.
+	// snprintf writes 
+	//////////////////////////
 	if(strcmp(currentPath, "./") == 0)
 	{
 		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s%s", currentPath, nextDir);
