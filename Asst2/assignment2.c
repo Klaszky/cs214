@@ -21,29 +21,29 @@ int main(int argc, char * argv[])
 	// char * indexFileName = argv[1];
 	// char * directory = argv[2];
 
-	// treeNode * head = NULL;
+	treeNode * head = NULL;
 	// char * file = extract("./test.txt");
-	// head = tokenize(file, head);
+	// head = tokenize(file, head, "test1.txt");
 	// free(file);
 	// file = extract("./test2.txt");
-	// head = tokenize(file, head);
+	// head = tokenize(file, head, "test2.txt");
 	// free(file);
-	// printTree(head);
-	// destroyTree(head);
-	// fileIterator("./");
+	head = fileIterator("./test", head);
+	printTree(head);
+	destroyTree(head);
 
 	return 0;
 }
 
 
 
-// int fileExists(char* filename){ // was gonna use stat() but files aren't gonna be >= 2gb?
+// int fileExists(char* fileName){ // was gonna use stat() but files aren't gonna be >= 2gb?
 
     
 // 	struct stat status;
-// 	return (stat(filename, &filename) == 0);
+// 	return (stat(fileName, &fileName) == 0);
 // }
-// if(fileExists(filename))  
+// if(fileExists(fileName))  
 // {
 	//wait it says the 3rd argument is a directory or file name.
 	// what do u think we should do to check which it is. 
@@ -78,6 +78,7 @@ fileList * addToFileList(fileList * fl, fileList * newLink)
 	else if(strcmp(fl->fileName, newLink->fileName) == 0)
 	{
 		fl->counter += 1;
+		free(newLink);
 		return fl;
 	}
 	else
@@ -101,22 +102,16 @@ treeNode * createNode(char * newStr)
 
 
 //maybe pass the current file we're working on.
-treeNode * addToTree(treeNode * head, treeNode *newNode)
+treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 {
 	if(head == NULL)
 	{
 		head = newNode;
 		return head;
 	}
-	// Okay, so this part is a bit redundant....
-	// Because strcmp compares based on
-	// ascii values I was having a tough time
-	// getting it to sort properly. So now there
-	// are two compares. One case sensitive, one not.
-	////////////////////
 	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
-		// addToFileList()
+		head->files = addToFileList(head->files, newLink);
 		free(newNode->str);
 		free(newNode);
 		return head;
@@ -126,10 +121,11 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 		if(head->left == NULL)
 		{
 			head->left = newNode;
+			head->left->files = addToFileList(head->left->files, newLink);
 		}
 		else
 		{
-			head->left = addToTree(head->left, newNode);
+			head->left = addToTree(head->left, newNode, newLink);
 		}
 
 		return head;
@@ -139,10 +135,11 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 		if(head->right == NULL)
 		{
 			head->right = newNode;	
+			head->right->files = addToFileList(head->right->files, newLink);
 		}
 		else
 		{
-			head->right = addToTree(head->right, newNode);
+			head->right = addToTree(head->right, newNode, newLink);
 		}
 
 		return head;
@@ -154,9 +151,10 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 ///////////////////
 void printTree(treeNode * head)
 {
+	fileList * ptr;
 	if(head == NULL)
 	{
-		printf("null city\n");
+		printf("Empty Tree\n");
 		return;
 	}
 
@@ -166,6 +164,12 @@ void printTree(treeNode * head)
 	}
 
 	printf("%s\n",head->str);
+	ptr = head->files;
+	while(ptr != NULL)
+	{
+		printf("%s %d\n", ptr->fileName, ptr->counter);
+		ptr = ptr->next;
+	}
 
 	if(head->right != NULL)
 	{
@@ -221,7 +225,7 @@ void lowerCase(char * str, int size)
 	}
 }
 
-treeNode * tokenize(char * fileContents, treeNode * head)
+treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 {
 	// Setting up some variables that will be used.
 	// Most should be self explanatory.
@@ -233,17 +237,22 @@ treeNode * tokenize(char * fileContents, treeNode * head)
 	len = strlen(inputString);
 
 	treeNode * tempNode;
+	fileList * tempLink;
 
-	// The logic will have to be changed a bit because
-	// what is considered a token is a bit different
-	// in this assignment.
-	////////////////////
 	for(i = 0; i <= len; i++)
 	{
 		// Check if current character isalpha and then
 		// makes some decisions based on that.
 		///////////////////
-		if(isalpha(inputString[i]) == 0)
+		
+		// This should cover the case where the string can't start
+		// with a number.
+		////////////////////
+		if(sizeOfString == 0 && isdigit(inputString[i]) != 0)
+		{
+			continue;
+		}
+		else if(isalpha(inputString[i]) == 0 && isdigit(inputString[i]) == 0)
 		{
 			// Nothing to do if current string is empty 
 			///////////////////
@@ -251,14 +260,19 @@ treeNode * tokenize(char * fileContents, treeNode * head)
 			{
 				continue;
 			}
+
 			// Grabs the current string from input and puts it into the tree.
 			///////////////////
 			else
 			{
 				endingPos = i;
+
 				tempString = pullString(startingPos, endingPos, sizeOfString, inputString);
 				tempNode = createNode(tempString);
-				head = addToTree(head, tempNode);
+
+				tempLink = createLinkNode(currentFile);
+
+				head = addToTree(head, tempNode, tempLink);
 				free(tempString);
 				startingPos = -1;
 				sizeOfString = 0;	
@@ -320,14 +334,15 @@ char * extract(char * path)
 
 }
 
-void fileIterator(char * name)
+treeNode * fileIterator(char * name, treeNode * head)
 {
-	DIR *dir;
+	DIR * dir;
 	struct dirent * entry;
+	char * fileContents;
 
 	if(!(dir = opendir(name)))
 	{
-		return;
+		return NULL;
 	}
 	
 	while((entry = readdir(dir)))
@@ -341,16 +356,21 @@ void fileIterator(char * name)
 			else
 			{
 				char * path = pathMake(name, entry->d_name);
-				fileIterator(path);
+				head = fileIterator(path, head);
 				free(path);
 			}
 		}
-		else
+		else if(entry->d_type == DT_REG)
 		{
-			printf("\n%s\n",entry->d_name);
+			char * path = pathMake(name, entry->d_name);
+			fileContents = extract(path);
+			head = tokenize(fileContents, head, entry->d_name);
+			free(fileContents);
+			free(path);
 		}
 	}
 	closedir(dir);
+	return head;
 }
 
 char * pathMake(char * currentPath, char * nextDir)
@@ -366,6 +386,5 @@ char * pathMake(char * currentPath, char * nextDir)
 	{
 		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s/%s", currentPath, nextDir);
 	}
-	return path;
-	
+	return path;	
 }
