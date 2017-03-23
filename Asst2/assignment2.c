@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 	// file = extract("./test2.txt");
 	// head = tokenize(file, head, "test2.txt");
 	// free(file);
-	head = fileIterator("./test", head);
+	head = fileIterator(".", head);
 	printTree(head);
 	destroyTree(head);
 
@@ -194,11 +194,21 @@ void destroyTree(treeNode * head)
 	{
 		destroyTree(head->right);
 	}
+	destroyList(head->files);
 	free(head->str);
 	free(head);
 	return;
 }
 
+void destroyList(fileList * fl)
+{
+	if(fl->next != NULL)
+	{
+		destroyList(fl->next);
+	}
+	free(fl->fileName);
+	free(fl);
+}
 // Takes an input string, a size and some indices, 
 // grabs the portion of the string contained in said 
 // indices and returns a new, null terminated string.
@@ -294,7 +304,6 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 		}
 
 	}
-
 	return head;
 }
 

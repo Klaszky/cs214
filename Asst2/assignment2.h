@@ -41,3 +41,4 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
 void destroyTree(treeNode * head);
 treeNode * fileIterator(char * name, treeNode * head);
 char * pathMake(char * currentPath, char * nextDir);
+void destroyList(fileList * fl);
