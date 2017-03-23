@@ -30,7 +30,7 @@ int main(int argc, char * argv[])
 	// free(file);
 	// printTree(head);
 	// destroyTree(head);
-	fileIterator("./");
+	// fileIterator("./");
 
 	return 0;
 }
@@ -63,8 +63,9 @@ fileList * createLinkNode(char * fileName)
 {
 	fileList * temp = (fileList*)malloc(sizeof(fileList));
 	temp->counter = 1;
-	temp->file = strdup(newStr);
-	temp->nextFile = NULL;
+	temp->fileName = strdup(fileName);
+	temp->next = NULL;
+	return temp;
 }
 
 fileList * addToFileList(fileList * fl, fileList * newLink)
@@ -81,7 +82,8 @@ fileList * addToFileList(fileList * fl, fileList * newLink)
 	}
 	else
 	{
-		addToFileList(fl->next, newLink);
+		fl->next = addToFileList(fl->next, newLink);
+		return fl;
 	}
 }
 // This makes and returns a node with some
@@ -97,6 +99,8 @@ treeNode * createNode(char * newStr)
 	return temp;
 }
 
+
+//maybe pass the current file we're working on.
 treeNode * addToTree(treeNode * head, treeNode *newNode)
 {
 	if(head == NULL)
@@ -112,7 +116,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode)
 	////////////////////
 	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
-		addToFileList()
+		// addToFileList()
 		free(newNode->str);
 		free(newNode);
 		return head;
@@ -161,7 +165,7 @@ void printTree(treeNode * head)
 		printTree(head->left);
 	}
 
-	printf("%s %d\n",head->str, head->num);
+	printf("%s\n",head->str);
 
 	if(head->right != NULL)
 	{
