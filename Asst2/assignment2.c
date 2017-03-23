@@ -1,5 +1,9 @@
 #include "assignment2.h"
 
+
+//Found a werid bug where it doesn't seem to add the 
+//frist word of the first file isn't added to the tree...
+//seems to be fine after that.
 /*
 Main():
 	-Check user input to make sure that the user 
@@ -28,7 +32,7 @@ int main(int argc, char * argv[])
 	// file = extract("./test2.txt");
 	// head = tokenize(file, head, "test2.txt");
 	// free(file);
-	head = fileIterator(".", head);
+	head = fileIterator("./test/testDir2", head);
 	printTree(head);
 	destroyTree(head);
 
@@ -59,6 +63,10 @@ int main(int argc, char * argv[])
 	
 //	file write will be like FILE ... = fopen(filename argument, "w")
 
+
+// This makes and returns a Link with some
+// default values and a supplied string
+///////////////////
 fileList * createLinkNode(char * fileName)
 {
 	fileList * temp = (fileList*)malloc(sizeof(fileList));
@@ -77,7 +85,7 @@ fileList * addToFileList(fileList * fl, fileList * newLink)
 	}
 	else if(strcmp(fl->fileName, newLink->fileName) == 0)
 	{
-		fl->counter += 1;
+		fl->counter ++;
 		free(newLink);
 		return fl;
 	}
@@ -87,6 +95,7 @@ fileList * addToFileList(fileList * fl, fileList * newLink)
 		return fl;
 	}
 }
+
 // This makes and returns a node with some
 // default values and a supplied string
 ///////////////////
@@ -101,14 +110,19 @@ treeNode * createNode(char * newStr)
 }
 
 
-//maybe pass the current file we're working on.
 treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 {
+	// If tree is empty, just make head the tree
+	///////////////////
 	if(head == NULL)
 	{
 		head = newNode;
 		return head;
 	}
+	// If this node is alread in the tree
+	// it free the newNode that was passed and tries to 
+	// add the current file to the node's linked list
+	/////////////////////
 	else if(strcasecmp(head->str, newNode->str) == 0)
 	{
 		head->files = addToFileList(head->files, newLink);
@@ -116,6 +130,10 @@ treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 		free(newNode);
 		return head;
 	}
+	// Recursive. If hits null, the makes that branch
+	// the new node, if it hits nonNull, continue down
+	// that branch
+	///////////////////
 	else if(strcasecmp(head->str, newNode->str) > 0)
 	{
 		if(head->left == NULL)
@@ -144,10 +162,13 @@ treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 
 		return head;
 	}
+
 	return head;
 }
 
-// Recursive - This acts as my sort. 
+// Recursive - This acts as my sort.
+// I'm going to change this to be my output functions 
+// sooner or later. 
 ///////////////////
 void printTree(treeNode * head)
 {
@@ -178,6 +199,7 @@ void printTree(treeNode * head)
 }
 
 // Attempts free up all of the alloc'd memory in my BST
+// and each node's linked list.
 ///////////////////
 void destroyTree(treeNode * head)
 {
@@ -322,7 +344,8 @@ char * extract(char * path)
 	int amtToRead = fileLength;
 	lseek(fd, 0, SEEK_SET);
 
-	//could quick file checks
+	// couple quick file checks
+	////////////////////
 	if(fd == -1)
 	{
 		printf("Error opening file.");
@@ -392,9 +415,8 @@ char * pathMake(char * currentPath, char * nextDir)
 	// size of the string we'll be making. The + 2
 	// at the end if for the '/' and '\0'
 	////////////////////////////
-	int len1 = (int)strlen(currentPath);
-	int len2 = (int)strlen(nextDir);
-	char * path = malloc(len1 + len2 + 2);
+	int len = strlen(currentPath)+strlen(nextDir)+2;
+	char * path = malloc(len);
 
 	// If we get "./" it won't create the correct path
 	// so we have this extra test in here.
@@ -402,11 +424,11 @@ char * pathMake(char * currentPath, char * nextDir)
 	//////////////////////////
 	if(strcmp(currentPath, "./") == 0)
 	{
-		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s%s", currentPath, nextDir);
+		snprintf(path, (len), "%s%s", currentPath, nextDir);
 	}
 	else
 	{
-		snprintf(path, (strlen(currentPath)+strlen(nextDir)+2), "%s/%s", currentPath, nextDir);
+		snprintf(path, (len), "%s/%s", currentPath, nextDir);
 	}
 	return path;	
 }
