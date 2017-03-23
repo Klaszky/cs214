@@ -1,9 +1,5 @@
 #include "assignment2.h"
 
-
-//Found a werid bug where it doesn't seem to add the 
-//frist word of the first file isn't added to the tree...
-//seems to be fine after that.
 /*
 Main():
 	-Check user input to make sure that the user 
@@ -117,6 +113,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 	if(head == NULL)
 	{
 		head = newNode;
+		head->files = addToFileList(head->files, newLink);
 		return head;
 	}
 	// If this node is alread in the tree
