@@ -84,7 +84,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 		head->files = addToFileList(head->files, newLink);
 		return head;
 	}
-	// If this node is alread in the tree
+	// If this node is already in the tree
 	// it free the newNode that was passed and tries to 
 	// add the current file to the node's linked list
 	/////////////////////
@@ -312,7 +312,6 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 // many while loops.
 void finalOutput(treeNode * head, char * outputFileName)
 {
-	//
 	errno = 0;
 	int fd = open(outputFileName, O_WRONLY | O_CREAT);
 	int errsv;
@@ -320,6 +319,8 @@ void finalOutput(treeNode * head, char * outputFileName)
 	int amtToWrite;
 
 	errsv = errno;
+	// Error check for common file opening issues.
+	///////////////
 	if(errsv == 13)
 	{
 		printf("\n\nYou don't have access to this file\n\n");
@@ -336,6 +337,8 @@ void finalOutput(treeNode * head, char * outputFileName)
 		return;
 	}
 
+	// Write the opening xml tags
+	////////////////////
 	amtToWrite = strlen(opening);
 	while(amtToWrite > 0)
 	{
@@ -343,8 +346,12 @@ void finalOutput(treeNode * head, char * outputFileName)
 		amtToWrite -= status;
 	}
 
+	// Go through the BST and write it's contents to the file
+	//////////////////
 	writeTree(head, fd);
 
+	//Write the closing xml tags
+	//////////////////
 	amtToWrite = strlen(closing);
 	while(amtToWrite > 0)
 	{
@@ -357,6 +364,8 @@ void finalOutput(treeNode * head, char * outputFileName)
 	close(fd);
 }
 
+// Goes over the BST recursively and adds items to the file
+////////////////
 void writeTree(treeNode * head, int fd)
 {
 
@@ -366,17 +375,28 @@ void writeTree(treeNode * head, int fd)
 	char * digit;
 	int digitLen;
 
+	// Error check
+	////////////////
 	if(head == NULL)
 	{
 		return;
 	}
 
+	// Continue along the left tree.
+	/////////////////
 	if(head->left != NULL)
 	{	
 		writeTree(head->left, fd);
 	}
 
+	// This part is a hot mess. It adds the first part of the xml tag,
+	// the word, the number of times it appears, then closes the tag. 
+	// Again, I know it's really ugly, but when I tried to make it all one
+	// string I was getting really weird outputs. So I did it this way. Ugh.
+	/////////////////
 
+	// Open xml word tags.
+	////////////////
 	amtToWrite = strlen(wordOpen);
 	while(amtToWrite > 0)
 	{
@@ -398,9 +418,15 @@ void writeTree(treeNode * head, int fd)
 		amtToWrite -= status;
 	}
 
-
+	// Same as the hot mess above, except for each file. Once again, I tried
+	// to make this all one big string and my output got all jacked up. So,
+	// I did it this way and it worked like a charm. So ... here we are. At 
+	// almost midnight and I just can't care anymore. It's fine ...it's fine.
+	///////////////////
 	while(ptr != NULL)
 	{
+		// Open xml file tags
+		/////////////////
 		amtToWrite = strlen(fileNameOpen);
 		while(amtToWrite > 0)
 		{
@@ -420,6 +446,9 @@ void writeTree(treeNode * head, int fd)
 			amtToWrite -= status;
 		}
 
+		// Making an int a string was a bit more annoying that
+		// I anticipated...
+		////////////////
 		digitLen = intLen(ptr->counter) + 1;
 		digit = malloc( digitLen * sizeof(char));
 		sprintf(digit, "%d", ptr->counter);
@@ -432,6 +461,8 @@ void writeTree(treeNode * head, int fd)
 		free(digit);
 
 
+		// Close xml file tags
+		/////////////////
 		amtToWrite = strlen(fileNameClose);
 		while(amtToWrite > 0)
 		{
@@ -441,6 +472,8 @@ void writeTree(treeNode * head, int fd)
 		ptr = ptr->next;
 	}
 
+	// Close xml word tags
+	//////////////////
 	amtToWrite = strlen(wordClose);
 	while(amtToWrite > 0)
 	{
@@ -448,12 +481,16 @@ void writeTree(treeNode * head, int fd)
 		amtToWrite -= status;
 	}
 
+	// Continue along the tree.
+	//////////////////
 	if(head->right != NULL)
 	{
 		writeTree(head->right, fd);
 	}
 }
 
+// Pulls out all data from a give file
+///////////////
 char * extract(char * path)
 {
 	// Setting up the vars we'll use to extract the 
@@ -494,7 +531,6 @@ char * extract(char * path)
 		return NULL;
 	}
 
-	//
 	char * fileContents = (char*)malloc((sizeof(char) * fileLength) + 1);
 	while(amtToRead > 0)
 	{
@@ -507,8 +543,15 @@ char * extract(char * path)
 	return fileContents;
 }
 
+// Main loop of the program. Loops through each file in a given
+// directory recursively, pulls all the contents from each of those
+// files and tokenizes them. 
+/////////////////
 treeNode * fileIterator(char * name, treeNode * head)
 {
+	// Creates a directory pointer, an entry pointer and a char
+	// pointer to hold what's pulled out of a file. 
+	//////////////////
 	DIR * dir;
 	struct dirent * entry;
 	char * fileContents;
@@ -516,8 +559,15 @@ treeNode * fileIterator(char * name, treeNode * head)
 	int errsv;
 	if((dir = opendir(name)) == NULL)
 	{
+		// opendir returned null so we weren't given a directory, 
+		// so we'll try to open a file.
+		///////////////////
 		errsv = errno;
 		name = fileFixer(name);
+
+		// Error checks for common file opening issues. Also makes sure the 
+		// file we're given is a proper path... not just a name.
+		///////////////////
 		if(errsv == 2)
 		{
 			printf("\n\nNo such file or directory\n\n");
@@ -528,7 +578,7 @@ treeNode * fileIterator(char * name, treeNode * head)
 		{
 			fileContents = extract(name);
 			
-			// Error check
+			// Error check for an empty file
 			///////////////
 			if(fileContents == NULL)
 			{
@@ -536,6 +586,9 @@ treeNode * fileIterator(char * name, treeNode * head)
 				return head;
 			}
 
+			// All is good with our file, tokenize it and put it
+			// in out BST
+			///////////////
 			head = tokenize(fileContents, head, name);
 			free(fileContents);
 			free(name);
@@ -544,9 +597,14 @@ treeNode * fileIterator(char * name, treeNode * head)
 		free(name);
 		return NULL;
 	}
-	
+	// We were given a directory, so we'll look until readdir hits the end of 
+	// the directory.
+	/////////////////
 	while((entry = readdir(dir)))
 	{
+		// If it's a directory: if is a '.' directory, continue on with the loop,
+		// we don't need to open them. If it's a regular directory, open it and 
+		// continue down that path.
 		if(entry->d_type == DT_DIR)
 		{
 			if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
@@ -573,6 +631,8 @@ treeNode * fileIterator(char * name, treeNode * head)
 	return head;
 }
 
+// Keeps track of the current path
+//////////////
 char * pathMake(char * currentPath, char * nextDir)
 {
 	// len1 and len2 are just to get the correct
@@ -597,6 +657,9 @@ char * pathMake(char * currentPath, char * nextDir)
 	return path;	
 }
 
+
+// Quick and dirty helper method
+//////////////////
 char * fileFixer(char * file)
 {
 	// If a file is passed with a just a name and no path at all
@@ -616,6 +679,9 @@ char * fileFixer(char * file)
 	}
 }
 
+
+// Quick and dirty helper method to get the number of digits in an int
+//////////////////
 int intLen(int x)
 {	
 	int toReturn = 0;
