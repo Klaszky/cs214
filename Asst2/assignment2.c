@@ -21,50 +21,26 @@ int main(int argc, char * argv[])
 	// char * indexFileName = argv[1];
 	// char * directory = argv[2];
 
-	treeNode * head = NULL;
 	// char * file = extract("./test.txt");
 	// head = tokenize(file, head, "test1.txt");
 	// free(file);
 	// file = extract("./test2.txt");
 	// head = tokenize(file, head, "test2.txt");
 	// free(file);
-	head = fileIterator("./test/testDir2", head);
+	treeNode * head = NULL;
+	head = fileIterator("./", head);
 	printTree(head);
 	destroyTree(head);
 
 	return 0;
 }
 
-
-
-// int fileExists(char* fileName){ // was gonna use stat() but files aren't gonna be >= 2gb?
-
-    
-// 	struct stat status;
-// 	return (stat(fileName, &fileName) == 0);
-// }
-// if(fileExists(fileName))  
-// {
-	//wait it says the 3rd argument is a directory or file name.
-	// what do u think we should do to check which it is. 
-	// we can use a method like this
-	/*int isDirectory(const char *path) {
-   struct stat statbuf;
-   if (stat(path, &statbuf) != 0)
-       return 0;
-   return S_ISDIR(statbuf.st_mode);
-   
-   */// http://stackoverflow.com/questions/4553012/checking-if-a-file-is-a-directory-or-just-a-file
-// }
-	
-//	file write will be like FILE ... = fopen(filename argument, "w")
-
-
 // This makes and returns a Link with some
 // default values and a supplied string
 ///////////////////
 fileList * createLinkNode(char * fileName)
 {
+	lowerCase(fileName, strlen(fileName));
 	fileList * temp = (fileList*)malloc(sizeof(fileList));
 	temp->counter = 1;
 	temp->fileName = strdup(fileName);
@@ -81,7 +57,8 @@ fileList * addToFileList(fileList * fl, fileList * newLink)
 	}
 	else if(strcmp(fl->fileName, newLink->fileName) == 0)
 	{
-		fl->counter ++;
+		fl->counter++;
+		free(newLink->fileName);
 		free(newLink);
 		return fl;
 	}
@@ -194,6 +171,8 @@ void printTree(treeNode * head)
 		printTree(head->right);
 	}
 }
+
+
 
 // Attempts free up all of the alloc'd memory in my BST
 // and each node's linked list.
@@ -330,30 +309,49 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 	return head;
 }
 
+
 char * extract(char * path)
 {
-	//setting up the vars we'll use to extract the 
-	//contents of the file.
+	// Setting up the vars we'll use to extract the 
+	// contents of the file.
+	////////////////////
+	errno = 0;
 	int fd = open(path, O_RDONLY);
+	int errsv;
+	errsv = errno;
+
+	// Error check for file access
+	////////////////
+	if(errsv == 13)
+	{
+		printf("\n\nYou don't have access to this file\n\n");
+
+		return NULL;
+	}
+
 	int fileLength = lseek(fd, 0, SEEK_END);
 	int status = 0;
 	int offset = 0;
 	int amtToRead = fileLength;
 	lseek(fd, 0, SEEK_SET);
 
-	// couple quick file checks
+	// File couldn't be opend
 	////////////////////
 	if(fd == -1)
 	{
 		printf("Error opening file.");
 		return NULL;
 	}
+
+	// File is empty
+	//////////////////
 	if(fileLength == 0)
 	{
 		printf("Error, empty file.");
 		return NULL;
 	}
 
+	//
 	char * fileContents = (char*)malloc((sizeof(char) * fileLength) + 1);
 	while(amtToRead > 0)
 	{
@@ -364,7 +362,6 @@ char * extract(char * path)
 	fileContents[fileLength] = '\0';
 	close(fd);
 	return fileContents;
-
 }
 
 treeNode * fileIterator(char * name, treeNode * head)
@@ -372,9 +369,33 @@ treeNode * fileIterator(char * name, treeNode * head)
 	DIR * dir;
 	struct dirent * entry;
 	char * fileContents;
-
-	if(!(dir = opendir(name)))
+	errno = 0;
+	int errsv;
+	if((dir = opendir(name)) == NULL)
 	{
+		errsv = errno;
+		printf("\n\n%d\n\n", errsv);
+		if(errsv == 2)
+		{
+			printf("\n\nNo such file or directory\n\n");
+			return head;
+		}
+		if(errsv == 20)
+		{
+			fileContents = extract(name);
+			
+			// Error check
+			///////////////
+			if(fileContents == NULL)
+			{
+				return head;
+			}
+
+			head = tokenize(fileContents, head, name);
+			free(fileContents);
+			return head;
+		}
+
 		return NULL;
 	}
 	
