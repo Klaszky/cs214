@@ -1,35 +1,17 @@
 #include "assignment2.h"
 
-/*
-Main():
-	-Check user input to make sure that the user 
-	provided the correct number of arguments and that it
-	is a valid file or directory.
-
-invertedIndex <inverted-index file name> <directory or file name>
-
-*/
-
 int main(int argc, char * argv[])
-{ //open main
-	// if(argc != 3)
-	// {
-	// 	printf("Error, incorrect number of arguments");
-	// 	return -1;
+{ 
+	if(argc != 3)
+	{
+		printf("Error, incorrect number of arguments");
+		return -1;
 
-	// }
-	// char * indexFileName = argv[1];
-	// char * directory = argv[2];
+	}
 
-	// char * file = extract("./test.txt");
-	// head = tokenize(file, head, "test1.txt");
-	// free(file);
-	// file = extract("./test2.txt");
-	// head = tokenize(file, head, "test2.txt");
-	// free(file);
 	treeNode * head = NULL;
-	head = fileIterator("./test.txt", head);
-	printTree(head);
+	head = fileIterator(argv[2], head);
+	finalOutput(head, argv[1]);
 	destroyTree(head);
 
 	return 0;
@@ -48,13 +30,21 @@ fileList * createLinkNode(char * fileName)
 	return temp;
 }
 
+// Looks to see if there is already a link with the same fileName
+// if there is, it increments the counter var for that link.
+// If there isn't it adds a new Link to the fileList struct.
+////////////////////
 fileList * addToFileList(fileList * fl, fileList * newLink)
 {
+	// Hit the end of the list, simply add the node
+	/////////////////
 	if(fl == NULL)
 	{
 		fl = newLink;
 		return fl;
 	}
+	// Two files with the same name? Increment the counter var
+	/////////////////////
 	else if(strcmp(fl->fileName, newLink->fileName) == 0)
 	{
 		fl->counter++;
@@ -82,7 +72,8 @@ treeNode * createNode(char * newStr)
 	return temp;
 }
 
-
+// Adds a new node if one doesn't already exists or augments one that is
+// already in there.
 treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 {
 	// If tree is empty, just make head the tree
@@ -141,8 +132,7 @@ treeNode * addToTree(treeNode * head, treeNode *newNode, fileList * newLink)
 }
 
 // Recursive - This acts as my sort.
-// I'm going to change this to be my output functions 
-// sooner or later. 
+// I use this for testing primary
 ///////////////////
 void printTree(treeNode * head)
 {
@@ -172,8 +162,6 @@ void printTree(treeNode * head)
 	}
 }
 
-
-
 // Attempts free up all of the alloc'd memory in my BST
 // and each node's linked list.
 ///////////////////
@@ -198,6 +186,9 @@ void destroyTree(treeNode * head)
 	return;
 }
 
+// Attempts to free all of the fileLists associated with each
+// node in the BST
+////////////////////
 void destroyList(fileList * fl)
 {
 	if(fl->next != NULL)
@@ -224,6 +215,9 @@ char * pullString(int start, int end, int size, char * originalString)
 	return toReturn;
 }
 
+// Part of the assignment is to make sure each string and file is
+// all lowercase.
+///////////////////
 void lowerCase(char * str, int size)
 {	
 	int i;
@@ -233,6 +227,9 @@ void lowerCase(char * str, int size)
 	}
 }
 
+// This is one of the main functions of the program. This goes through
+// a file's contents, pulls out each string, and puts it into the BST
+/////////////////////
 treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 {
 	// Setting up some variables that will be used.
@@ -253,7 +250,7 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 
 	for(i = 0; i <= len; i++)
 	{
-		// Check if current character isalpha and then
+		// Check if current character isalpha / isdigit and then
 		// makes some decisions based on that.
 		///////////////////
 		
@@ -309,6 +306,153 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 	return head;
 }
 
+// This function and the following function are ... inelegant at best.
+// However, I wasn't able to think of a better way to make this output
+// properly other than hard coding some char arrays and then using many,
+// many while loops.
+void finalOutput(treeNode * head, char * outputFileName)
+{
+	//
+	errno = 0;
+	int fd = open(outputFileName, O_WRONLY | O_CREAT);
+	int errsv;
+	int status = 0;
+	int amtToWrite;
+
+	errsv = errno;
+	if(errsv == 13)
+	{
+		printf("\n\nYou don't have access to this file\n\n");
+		return;
+	}
+	if(fd == -1)
+	{
+		printf("\nError opening file to write\n");
+		return;
+	}
+	if(head == NULL)
+	{
+		printf("\nNo output, empty tree");
+		return;
+	}
+
+	amtToWrite = strlen(opening);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, opening, amtToWrite);
+		amtToWrite -= status;
+	}
+
+	writeTree(head, fd);
+
+	amtToWrite = strlen(closing);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, closing, amtToWrite);
+		amtToWrite -= status;
+	}
+	
+
+
+	close(fd);
+}
+
+void writeTree(treeNode * head, int fd)
+{
+
+	fileList * ptr = head->files;
+	int status = 0;
+	int amtToWrite;
+	char * digit;
+	int digitLen;
+
+	if(head == NULL)
+	{
+		return;
+	}
+
+	if(head->left != NULL)
+	{	
+		writeTree(head->left, fd);
+	}
+
+
+	amtToWrite = strlen(wordOpen);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, wordOpen, amtToWrite);
+		amtToWrite -= status;
+	}
+
+	amtToWrite = strlen(head->str);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, head->str, amtToWrite);
+		amtToWrite -= status;
+	}
+
+	amtToWrite = strlen(wordOpenMid);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, wordOpenMid, amtToWrite);
+		amtToWrite -= status;
+	}
+
+
+	while(ptr != NULL)
+	{
+		amtToWrite = strlen(fileNameOpen);
+		while(amtToWrite > 0)
+		{
+			status = write(fd, fileNameOpen , amtToWrite);
+			amtToWrite -= status;
+		}
+		amtToWrite = strlen(ptr->fileName);
+		while(amtToWrite > 0)
+		{
+			status = write(fd, ptr->fileName, amtToWrite);
+			amtToWrite -= status;
+		}
+		amtToWrite = strlen(fileNameMid);
+		while(amtToWrite > 0)
+		{
+			status = write(fd, fileNameMid, amtToWrite);
+			amtToWrite -= status;
+		}
+
+		digitLen = intLen(ptr->counter) + 1;
+		digit = malloc( digitLen * sizeof(char));
+		sprintf(digit, "%d", ptr->counter);
+		amtToWrite = strlen(digit);
+		while(amtToWrite > 0)
+		{
+			status = write(fd, digit, amtToWrite);
+			amtToWrite -= status;
+		}		
+		free(digit);
+
+
+		amtToWrite = strlen(fileNameClose);
+		while(amtToWrite > 0)
+		{
+			status = write(fd, fileNameClose, amtToWrite);
+			amtToWrite -= status;
+		}
+		ptr = ptr->next;
+	}
+
+	amtToWrite = strlen(wordClose);
+	while(amtToWrite > 0)
+	{
+		status = write(fd, wordClose, amtToWrite);
+		amtToWrite -= status;
+	}
+
+	if(head->right != NULL)
+	{
+		writeTree(head->right, fd);
+	}
+}
 
 char * extract(char * path)
 {
@@ -331,7 +475,6 @@ char * extract(char * path)
 
 	int fileLength = lseek(fd, 0, SEEK_END);
 	int status = 0;
-	int offset = 0;
 	int amtToRead = fileLength;
 	lseek(fd, 0, SEEK_SET);
 
@@ -355,7 +498,7 @@ char * extract(char * path)
 	char * fileContents = (char*)malloc((sizeof(char) * fileLength) + 1);
 	while(amtToRead > 0)
 	{
-		status = read(fd, fileContents+offset, amtToRead);
+		status = read(fd, fileContents, amtToRead);
 		amtToRead -= status;
 	}
 
@@ -456,7 +599,9 @@ char * pathMake(char * currentPath, char * nextDir)
 
 char * fileFixer(char * file)
 {
-
+	// If a file is passed with a just a name and no path at all
+	// it add a './' to make it a relative path
+	//////////////////
 	if((file[0] != '.' || file[0] != '~') && file[1] != '/') 
 	{
 		int len = strlen(file) + 3;
@@ -469,4 +614,16 @@ char * fileFixer(char * file)
 		char * newFileName = strdup(file);
 		return newFileName;
 	}
+}
+
+int intLen(int x)
+{	
+	int toReturn = 0;
+	while(x > 0)
+	{
+		toReturn++;
+		x /= 10;
+	}
+
+	return toReturn;
 }

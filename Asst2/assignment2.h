@@ -27,19 +27,35 @@ typedef struct fileList
 	struct fileList * next;
 }fileList;
 
-int strcasecmp(const char * s1, const char * s2);
+// Prototypes
+//////////////////
+
+void destroyList(fileList * fl);
+void destroyTree(treeNode * head);
+void finalOutput(treeNode * head, char * outputFileName);
 void free(void * ptr);
-void * malloc(size_t size);
-void * calloc(size_t nmemb, size_t size);
-size_t strlen(const char *s);
-int tolower(int c);
 void lowerCase(char * string, int size);
+void printTree(treeNode * head);
+void writeTree(treeNode * head, int fd);
+void * calloc(size_t nmemb, size_t size);
+void * malloc(size_t size);
+int intLen(int x);
+int strcasecmp(const char * s1, const char * s2);
+int tolower(int c);
+size_t strlen(const char *s);
 off_t lseek(int fd, off_t offset, int whence);
 char * extract(char * path);
-void printTree(treeNode * head);
-treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
-void destroyTree(treeNode * head);
-treeNode * fileIterator(char * name, treeNode * head);
-char * pathMake(char * currentPath, char * nextDir);
-void destroyList(fileList * fl);
 char * fileFixer(char * file);
+char * pathMake(char * currentPath, char * nextDir);
+treeNode * fileIterator(char * name, treeNode * head);
+treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
+
+
+char * opening = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<fileIndex>\n";
+char * closing = "</fileIndex>";
+char * wordOpen = "\t<word text=\"";
+char * wordOpenMid = "\">\n";
+char * wordClose = "\t</word>\n";
+char * fileNameOpen = "\t\t<file name=\"";
+char * fileNameMid = "\">";
+char * fileNameClose = "</file>\n";
