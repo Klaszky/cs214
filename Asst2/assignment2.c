@@ -28,7 +28,7 @@ int main(int argc, char * argv[])
 	// head = tokenize(file, head, "test2.txt");
 	// free(file);
 	treeNode * head = NULL;
-	head = fileIterator("./", head);
+	head = fileIterator("./test.txt", head);
 	printTree(head);
 	destroyTree(head);
 
@@ -374,10 +374,11 @@ treeNode * fileIterator(char * name, treeNode * head)
 	if((dir = opendir(name)) == NULL)
 	{
 		errsv = errno;
-		printf("\n\n%d\n\n", errsv);
+		name = fileFixer(name);
 		if(errsv == 2)
 		{
 			printf("\n\nNo such file or directory\n\n");
+			free(name);
 			return head;
 		}
 		if(errsv == 20)
@@ -388,14 +389,16 @@ treeNode * fileIterator(char * name, treeNode * head)
 			///////////////
 			if(fileContents == NULL)
 			{
+				free(name);
 				return head;
 			}
 
 			head = tokenize(fileContents, head, name);
 			free(fileContents);
+			free(name);
 			return head;
 		}
-
+		free(name);
 		return NULL;
 	}
 	
@@ -449,4 +452,21 @@ char * pathMake(char * currentPath, char * nextDir)
 		snprintf(path, (len), "%s/%s", currentPath, nextDir);
 	}
 	return path;	
+}
+
+char * fileFixer(char * file)
+{
+
+	if((file[0] != '.' || file[0] != '~') && file[1] != '/') 
+	{
+		int len = strlen(file) + 3;
+		char * newFileName = malloc(len);
+		snprintf(newFileName, len, "./%s", file);
+		return newFileName;
+	}
+	else
+	{
+		char * newFileName = strdup(file);
+		return newFileName;
+	}
 }
