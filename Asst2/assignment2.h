@@ -49,7 +49,8 @@ char * fileFixer(char * file);
 char * pathMake(char * currentPath, char * nextDir);
 treeNode * fileIterator(char * name, treeNode * head);
 treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
-
+void llSort(fileList * fl);
+void swap(fileList * link1, fileList * link2);
 
 char * opening = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<fileIndex>\n";
 char * closing = "</fileIndex>";

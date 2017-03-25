@@ -1,5 +1,5 @@
 #include "assignment2.h"
-// test
+// llFix
 ////////////
 int main(int argc, char * argv[])
 { 
@@ -424,6 +424,7 @@ void writeTree(treeNode * head, int fd)
 	// I did it this way and it worked like a charm. So ... here we are. At 
 	// almost midnight and I just can't care anymore. It's fine ...it's fine.
 	///////////////////
+	llSort(ptr);
 	while(ptr != NULL)
 	{
 		// Open xml file tags
@@ -693,4 +694,47 @@ int intLen(int x)
 	}
 
 	return toReturn;
+}
+
+void llSort(fileList * fl)
+{
+	fileList * currentLink = fl;
+	fileList * iterPtr;
+	fileList * max;
+
+	while(currentLink != NULL)
+	{
+		max = currentLink;
+		iterPtr = currentLink->next;
+
+		while(iterPtr != NULL)
+		{
+			if(max->counter < iterPtr->counter)
+			{
+				max = iterPtr;
+			}
+			else if(max->counter == iterPtr->counter)
+			{
+				if(strcmp(max->fileName, iterPtr->fileName) < 1)
+				{
+					max = iterPtr;
+				}
+			}
+
+			iterPtr = iterPtr->next;
+		}
+
+		swap(currentLink, max);
+		currentLink = currentLink->next;
+	}
+}
+
+void swap(fileList * link1, fileList * link2)
+{
+	char * tempFileName = link1->fileName;
+	int tempCounter = link1->counter;
+	link1->fileName = link2->fileName;
+	link1->counter = link2->counter;
+	link2->fileName = tempFileName;
+	link2->counter = tempCounter;
 }
