@@ -311,7 +311,7 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 // properly other than hard coding some char arrays and then using many,
 // many while loops.
 void finalOutput(treeNode * head, char * outputFileName)
-{
+{ElementPlacement
 	errno = 0;
 	int fd = open(outputFileName, O_WRONLY | O_CREAT);
 	int errsv;

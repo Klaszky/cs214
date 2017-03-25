@@ -37,6 +37,8 @@ void free(void * ptr);
 void lowerCase(char * string, int size);
 void printTree(treeNode * head);
 void writeTree(treeNode * head, int fd);
+void llSort(fileList * fl);
+void swap(fileList * link1, fileList * link2);
 void * calloc(size_t nmemb, size_t size);
 void * malloc(size_t size);
 int intLen(int x);
@@ -49,8 +51,6 @@ char * fileFixer(char * file);
 char * pathMake(char * currentPath, char * nextDir);
 treeNode * fileIterator(char * name, treeNode * head);
 treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
-void llSort(fileList * fl);
-void swap(fileList * link1, fileList * link2);
 
 char * opening = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<fileIndex>\n";
 char * closing = "</fileIndex>";
