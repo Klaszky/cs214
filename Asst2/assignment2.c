@@ -695,6 +695,8 @@ int intLen(int x)
 	return toReturn;
 }
 
+// Sorts iteratively. Not pretty, but it works
+//////////////////
 void llSort(fileList * fl)
 {
 	fileList * currentLink = fl;
@@ -728,6 +730,8 @@ void llSort(fileList * fl)
 	}
 }
 
+// Helper method.
+////////////////
 void swap(fileList * link1, fileList * link2)
 {
 	char * tempFileName = link1->fileName;
