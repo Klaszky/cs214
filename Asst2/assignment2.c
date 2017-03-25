@@ -1,6 +1,5 @@
 #include "assignment2.h"
-// llFix
-////////////
+
 int main(int argc, char * argv[])
 { 
 	if(argc != 3)
