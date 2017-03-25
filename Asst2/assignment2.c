@@ -715,7 +715,7 @@ void llSort(fileList * fl)
 			}
 			else if(max->counter == iterPtr->counter)
 			{
-				if(strcmp(max->fileName, iterPtr->fileName) < 1)
+				if(strcmp(max->fileName, iterPtr->fileName) > 0)
 				{
 					max = iterPtr;
 				}

@@ -13,4 +13,4 @@ $(TARGET): $(TARGET).c
 	$(CC) $(CFLAGS) -o $(OUT) $(TARGET).c
 
 clean:
-	$(RM) $(TARGET)
+	$(RM) $(OUT)
