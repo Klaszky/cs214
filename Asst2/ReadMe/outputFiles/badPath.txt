@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileIndex>
+	<word text="a">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="fan">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="for">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="from">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="he">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="his">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="huge">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="im">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="is">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="island">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="john">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="locke">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="lost">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="love">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="not">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="of">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="over">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="the">
+		<file name="test.txt">2</file>
+	</word>
+	<word text="too">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="top">
+		<file name="test.txt">1</file>
+	</word>
+	<word text="with">
+		<file name="test.txt">1</file>
+	</word>
+</fileIndex>

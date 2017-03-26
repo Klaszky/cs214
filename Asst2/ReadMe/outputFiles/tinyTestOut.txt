@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileIndex>
+	<word text="am">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="done">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="going">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="i">
+		<file name="./tests/tinytest.txt">3</file>
+	</word>
+	<word text="junk">
+		<file name="./tests/tinytest.txt">3</file>
+	</word>
+	<word text="just">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="m">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="random">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="some">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="test">
+		<file name="./tests/tinytest.txt">2</file>
+	</word>
+	<word text="think">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="to">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="type">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+	<word text="typing">
+		<file name="./tests/tinytest.txt">1</file>
+	</word>
+</fileIndex>

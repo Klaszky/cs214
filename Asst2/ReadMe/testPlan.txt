@@ -1,0 +1,186 @@
+Test plan
+
+Okay so here’s how this is going to be laid out:
+
+-Short explanation of what I was testing.
+-Paste of error message output or “No Error.”
+-Name of output file in the outputFiles directory.
+
+-Valgrind output.
+
+-Test on a tiny file, test.txt, with just a few words to see if it handled be given a file instead of a directory and to check the output.
+-No Error.
+-tinyTestOut.txt
+
+==31065== HEAP SUMMARY:
+==31065==     in use at exit: 0 bytes in 0 blocks
+==31065==   total heap usage: 110 allocs, 110 frees, 1,224 bytes allocated
+==31065== 
+==31065== All heap blocks were freed -- no leaks are possible
+==31065== 
+==31065== For counts of detected and suppressed errors, rerun with: -v
+==31065== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-Test on a much, much larger file, quixote.txt, which is the whole book Don Quixote.
+-No Error.
+-quixOut.txt
+
+==31288== HEAP SUMMARY:
+==31288==     in use at exit: 0 bytes in 0 blocks
+==31288==   total heap usage: 2,154,963 allocs, 2,154,963 frees, 27,261,501 bytes allocated
+==31288== 
+==31288== All heap blocks were freed -- no leaks are possible
+==31288== 
+==31288== For counts of detected and suppressed errors, rerun with: -v
+==31288== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-Test on an empty directory.
+-No output, empty tree. 
+There were no files in the directory, the files were empty or access to the files wasn't grated.
+-No output file
+
+==31310== HEAP SUMMARY:
+==31310==     in use at exit: 0 bytes in 0 blocks
+==31310==   total heap usage: 1 allocs, 1 frees, 32,796 bytes allocated
+==31310== 
+==31310== All heap blocks were freed -- no leaks are possible
+==31310== 
+==31310== For counts of detected and suppressed errors, rerun with: -v
+==31310== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-Test on a small directory with small files in them.
+-No Error.
+-smallDirOut.txt
+
+==31407== HEAP SUMMARY:
+==31407==     in use at exit: 0 bytes in 0 blocks
+==31407==   total heap usage: 501 allocs, 501 frees, 37,620 bytes allocated
+==31407== 
+==31407== All heap blocks were freed -- no leaks are possible
+==31407== 
+==31407== For counts of detected and suppressed errors, rerun with: -v
+==31407== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+Test to index a file with no read or write permissions for anyone. 
+Access wasn't granted for file "./tests/accessTest.txt".
+
+-No output, empty tree.
+-There were no files in the directory, the files were empty or access to the files wasn't grated.
+-accessOut.txt
+
+==31525== HEAP SUMMARY:
+==31525==     in use at exit: 0 bytes in 0 blocks
+==31525==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==31525== 
+==31525== All heap blocks were freed -- no leaks are possible
+==31525== 
+==31525== For counts of detected and suppressed errors, rerun with: -v
+==31525== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+-Test to index a regular file, but write to a file that already exists, but has no permissions should it can’t be overwritten. From ls -l: 
+(---------- 1 joseph joseph       0 Mar 25 23:35 accessLess.txt)
+Also, I ran it on smallDir again.
+-You don't have access to file "accessLess.txt"
+No output file can be written.
+-No output file
+
+==31772== HEAP SUMMARY:
+==31772==     in use at exit: 0 bytes in 0 blocks
+==31772==   total heap usage: 437 allocs, 437 frees, 37,492 bytes allocated
+==31772== 
+==31772== All heap blocks were freed -- no leaks are possible
+==31772== 
+==31772== For counts of detected and suppressed errors, rerun with: -v
+==31772== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+-Test on a real file, but poorly formed path. For example: ./test.txt is a real file in my folder, but when passed “test.txt” it shouldn’t run.
+-No error
+-badPath.txt
+
+==31938== HEAP SUMMARY:
+==31938==     in use at exit: 0 bytes in 0 blocks
+==31938==   total heap usage: 132 allocs, 132 frees, 1,140 bytes allocated
+==31938== 
+==31938== All heap blocks were freed -- no leaks are possible
+==31938== 
+==31938== For counts of detected and suppressed errors, rerun with: -v
+==31938== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-A file that doesn’t exist
+-No such file, directory, or improperly formed path: "thisisntreal.txt".
+-No output file
+
+==31973== HEAP SUMMARY:
+==31973==     in use at exit: 0 bytes in 0 blocks
+==31973==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==31973== 
+==31973== All heap blocks were freed -- no leaks are possible
+==31973== 
+==31973== For counts of detected and suppressed errors, rerun with: -v
+==31973== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-A folder that doesn’t exsist
+-No such file, directory, or improperly formed path: "./thisisntreal".
+-No output file
+
+==32003== 
+==32003== HEAP SUMMARY:
+==32003==     in use at exit: 0 bytes in 0 blocks
+==32003==   total heap usage: 0 allocs, 0 frees, 0 bytes allocated
+==32003== 
+==32003== All heap blocks were freed -- no leaks are possible
+==32003== 
+==32003== For counts of detected and suppressed errors, rerun with: -v
+==32003== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-An absolute path (~/cs214/Asst2/tests/smallDir)
+-No Error
+-absTest.txt
+
+==32065== HEAP SUMMARY:
+==32065==     in use at exit: 0 bytes in 0 blocks
+==32065==   total heap usage: 501 allocs, 501 frees, 37,689 bytes allocated
+==32065== 
+==32065== All heap blocks were freed -- no leaks are possible
+==32065== 
+==32065== For counts of detected and suppressed errors, rerun with: -v
+==32065== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+-Run on a .pdf, because why not?
+-No Error, but weird stuff was pulled. Jumbles of characters.
+-pdfOut.txt
+
+==32102== HEAP SUMMARY:
+==32102==     in use at exit: 0 bytes in 0 blocks
+==32102==   total heap usage: 11,031 allocs, 11,031 frees, 38,113,002 bytes allocated
+==32102== 
+==32102== All heap blocks were freed -- no leaks are possible
+==32102== 
+==32102== For counts of detected and suppressed errors, rerun with: -v
+==32102== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+Okay, so I'm sure you're getting tired of reading these, I'm just going to do one more 
+and it's running my code on all of my test cases plus a bunch of other big files. 
+Here's some other things I've check:
+-Going down many files
+-Having two files with the same name, but one was in caps and one was lower
+-Having two files with the same name, but different extensions
+-Many very large files
+
+Okay last one:
+
+-Every test together.
+-Access wasn't granted for file "./tests/accessTest.txt".
+Error, file "./tests/emptyTest.txt" is empty.
+Moving to next file in directory.
+-bigTest.txt
+
+==32169== HEAP SUMMARY:
+==32169==     in use at exit: 0 bytes in 0 blocks
+==32169==   total heap usage: 10,113,711 allocs, 10,113,711 frees, 157,048,329 bytes allocated
+==32169== 
+==32169== All heap blocks were freed -- no leaks are possible
+==32169== 
+==32169== For counts of detected and suppressed errors, rerun with: -v
+==32169== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

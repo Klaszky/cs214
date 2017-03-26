@@ -328,6 +328,7 @@ void finalOutput(treeNode * head, char * outputFileName)
 	if(errsv == 13)
 	{
 		fprintf(stderr, "\nYou don't have access to file \"%s\"\n", outputFileName);
+		fprintf(stderr, "No output file can be written.\n");
 		return;
 	}
 	if(fd == -1)
@@ -574,8 +575,7 @@ treeNode * fileIterator(char * name, treeNode * head)
 		///////////////////
 		if(errsv == 2)
 		{
-			fprintf(stderr, "\nNo such file, directory, or impoperly formed path: \"%s\".\n", name);
-			free(name);
+			fprintf(stderr, "\nNo such file, directory, or improperly formed path: \"%s\".\n", name);
 			return head;
 		}
 		if(errsv == 20)

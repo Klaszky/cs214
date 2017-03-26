@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileIndex>
+	<word text="ago">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="also">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="asleep">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="bear">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="blah">
+		<file name="small1.txt">3</file>
+	</word>
+	<word text="but">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="directory">
+		<file name="small1.txt">1</file>
+	</word>
+	<word text="dogs">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="file">
+		<file name="small1.txt">1</file>
+	</word>
+	<word text="fine">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="first">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="good">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="he">
+		<file name="small3.txt">3</file>
+	</word>
+	<word text="i">
+		<file name="small2.txt">2</file>
+	</word>
+	<word text="is">
+		<file name="small3.txt">3</file>
+		<file name="small2.txt">2</file>
+	</word>
+	<word text="it">
+		<file name="small2.txt">5</file>
+	</word>
+	<word text="its">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="joe">
+		<file name="small1.txt">1</file>
+	</word>
+	<word text="just">
+		<file name="small2.txt">1</file>
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="kind">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="lived">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="loses">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="lost">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="m">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="most">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="my">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="name">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="never">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="now">
+		<file name="small2.txt">1</file>
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="of">
+		<file name="small2.txt">1</file>
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="old">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="potential">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="pretty">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="really">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="right">
+		<file name="small2.txt">1</file>
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="s">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="sad">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="saw">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="season">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="several">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="show">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="sleeps">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="small">
+		<file name="small1.txt">2</file>
+	</word>
+	<word text="so">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="super">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="test">
+		<file name="small1.txt">6</file>
+		<file name="small3.txt">4</file>
+	</word>
+	<word text="testw123numbers">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="the">
+		<file name="small2.txt">2</file>
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="then">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="time">
+		<file name="small3.txt">1</file>
+	</word>
+	<word text="to">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="tv">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="up">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="watching">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="way">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="which">
+		<file name="small2.txt">1</file>
+	</word>
+	<word text="years">
+		<file name="small2.txt">1</file>
+	</word>
+</fileIndex>
