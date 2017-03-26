@@ -1,0 +1,83 @@
+Main():
+	-Check user input to make sure that the user 
+	provided the correct number of arguments and that it
+	is a valid file or directory. 
+
+	If argument was just a file:
+		-Call function Extract() to malloc a char[] array the
+		size the text file, put all text from file into 
+		array.
+		-When text is in array: call Tokenize() to get all
+		string tokens put them into a data structure. (I'm
+		thinking a binary search tree) 
+
+	If argument was a directory:
+		-Call function FileIterator() (... I'll try to think
+		of a better name...)
+			-For each file that is pulled out from
+			FileIterator():
+				-If valid file:
+					-Extract() text
+					-Tokenize() strings
+					-Put into data structure
+				-If directory:
+					FileIterator(directory)
+				-If not valid file:
+					continue;
+
+	After all files have been extracted and tokenized:
+		-Create our output document
+		-Iterate over data structure sorted by alphabetic 
+		order of the string token:
+			-For each item, append the string token,
+			each file that it appears and the number of times
+			it appears in each file.
+		-Free everything in the data structure
+
+Extract():
+	-Get number of bytes in the file using 
+	"int fileLength = lseek(fd, 0, SEEK_END);"
+	-Return cursor to beginning of file using
+	lseek(fd, 0, SEEK_SET);
+	-char fileContents = (char*)malloc(sizeOf(char) * fileLength);
+	-Get all bytes out of file. Professor suggested using
+	something like this:
+		int fd = open("./somefile", <flags>);
+		int amount = fileLenght;
+		if(fd == -1)
+		{
+			//opening didn't work
+		}
+
+		//Read will return the amount of memory it
+		//in bytes that it read in. 
+		//Because of the way read works there is no
+		//guarantee that it will read all of the memory
+		//you ask for. Which is why we need the loop. 
+		while(amount > 0)
+		{
+			status = read(fd,fileContents,amount)
+			amount -= status;
+		}
+	-After all has been extracted return the char array/
+
+Tokenize(char * array):
+	-We can essential use that same tokenizer we build for
+	assignment 1 with just slight adjustments. So I won't
+	go into detail on this one.
+
+FileIterator():
+	-I still have to do some research on this, but Professor
+	said to use:
+		-opendir
+		-readdir
+			-each time this is call it should return
+			the name of the next file or directory
+			in the current directory
+			-it returns a 'dirent' struct with the the name 
+			of the file/directory, but not the path so 
+			that's something we'll have to manually keep 
+			track of.
+	-for each file we get out of readdir:
+		-Extract()
+		-Tokenize()

@@ -14,3 +14,5 @@ $(TARGET): $(TARGET).c
 
 clean:
 	$(RM) $(OUT)
+	$(RM) output.txt
+	

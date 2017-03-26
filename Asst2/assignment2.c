@@ -317,7 +317,7 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 void finalOutput(treeNode * head, char * outputFileName)
 {
 	errno = 0;
-	int fd = open(outputFileName, O_WRONLY | O_CREAT);
+	int fd = open(outputFileName, O_WRONLY | O_CREAT, 00777);
 	int errsv;
 	int status = 0;
 	int amtToWrite;
@@ -568,7 +568,6 @@ treeNode * fileIterator(char * name, treeNode * head)
 		// so we'll try to open a file.
 		///////////////////
 		errsv = errno;
-		// name = fileFixer(name);
 
 		// Error checks for common file opening issues. Also makes sure the 
 		// file we're given is a proper path... not just a name.
@@ -587,7 +586,6 @@ treeNode * fileIterator(char * name, treeNode * head)
 			///////////////
 			if(fileContents == NULL)
 			{
-				// free(name);
 				return head;
 			}
 
@@ -596,10 +594,8 @@ treeNode * fileIterator(char * name, treeNode * head)
 			///////////////
 			head = tokenize(fileContents, head, name);
 			free(fileContents);
-			// free(name);
 			return head;
 		}
-		// free(name);
 		return NULL;
 	}
 	// We were given a directory, so we'll look until readdir hits the end of 
@@ -661,29 +657,6 @@ char * pathMake(char * currentPath, char * nextDir)
 	}
 	return path;	
 }
-
-
-// Quick and dirty helper method
-//////////////////
-// char * fileFixer(char * file)
-// {
-// 	// If a file is passed with a just a name and no path at all
-// 	// it add a './' to make it a relative path
-// 	//////////////////
-// 	if((file[0] != '.' || file[0] != '~') && file[1] != '/') 
-// 	{
-// 		int len = strlen(file) + 3;
-// 		char * newFileName = malloc(len);
-// 		snprintf(newFileName, len, "./%s", file);
-// 		return newFileName;
-// 	}
-// 	else
-// 	{
-// 		char * newFileName = strdup(file);
-// 		return newFileName;
-// 	}
-// }
-
 
 // Quick and dirty helper method to get the number of digits in an int
 //////////////////
