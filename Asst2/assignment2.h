@@ -44,6 +44,7 @@ void * malloc(size_t size);
 int intLen(int x);
 int strcasecmp(const char * s1, const char * s2);
 int tolower(int c);
+int fprintf(FILE * stream, const char * format, ...);
 size_t strlen(const char *s);
 off_t lseek(int fd, off_t offset, int whence);
 char * extract(char * path);

@@ -4,7 +4,9 @@ int main(int argc, char * argv[])
 { 
 	if(argc != 3)
 	{
-		printf("Error, incorrect number of arguments");
+		fprintf(stderr, "Error, incorrect number of arguments.\n");
+		fprintf(stderr, "Please run the program again with the following format:\n");
+		fprintf(stderr, "./ast2 <output file> <file or directory to index>\n");
 		return -1;
 
 	}
@@ -139,7 +141,9 @@ void printTree(treeNode * head)
 	fileList * ptr;
 	if(head == NULL)
 	{
-		printf("Empty Tree\n");
+		fprintf(stderr, "Empty Tree\n");
+		fprintf(stderr, "There were no files in the directory, the files were ");
+		fprintf(stderr, "empty or access to the files wasn't grated.\n");
 		return;
 	}
 
@@ -311,7 +315,7 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 // properly other than hard coding some char arrays and then using many,
 // many while loops.
 void finalOutput(treeNode * head, char * outputFileName)
-{ElementPlacement
+{
 	errno = 0;
 	int fd = open(outputFileName, O_WRONLY | O_CREAT);
 	int errsv;
@@ -323,17 +327,19 @@ void finalOutput(treeNode * head, char * outputFileName)
 	///////////////
 	if(errsv == 13)
 	{
-		printf("\n\nYou don't have access to this file\n\n");
+		fprintf(stderr, "\nYou don't have access to file \"%s\"\n", outputFileName);
 		return;
 	}
 	if(fd == -1)
 	{
-		printf("\nError opening file to write\n");
+		fprintf(stderr, "\nError opening file \"%s\" to write our outpt.\n", outputFileName);
 		return;
 	}
 	if(head == NULL)
 	{
-		printf("\nNo output, empty tree");
+		fprintf(stderr, "\nNo output, empty tree.\n");
+		fprintf(stderr, "There were no files in the directory, the files were ");
+		fprintf(stderr, "empty or access to the files wasn't grated.\n");
 		return;
 	}
 
@@ -497,16 +503,16 @@ char * extract(char * path)
 	// Setting up the vars we'll use to extract the 
 	// contents of the file.
 	////////////////////
+
 	errno = 0;
 	int fd = open(path, O_RDONLY);
 	int errsv;
 	errsv = errno;
-
 	// Error check for file access
 	////////////////
 	if(errsv == 13)
 	{
-		printf("\n\nYou don't have access to this file\n\n");
+		fprintf(stderr, "\nAccess wasn't granted for file \"%s\".\n", path);
 
 		return NULL;
 	}
@@ -515,12 +521,11 @@ char * extract(char * path)
 	int status = 0;
 	int amtToRead = fileLength;
 	lseek(fd, 0, SEEK_SET);
-
 	// File couldn't be opend
 	////////////////////
 	if(fd == -1)
 	{
-		printf("Error opening file.");
+		fprintf(stderr, "\nError opening file \"%s\".\n", path);
 		return NULL;
 	}
 
@@ -528,10 +533,9 @@ char * extract(char * path)
 	//////////////////
 	if(fileLength == 0)
 	{
-		printf("Error, empty file.");
+		fprintf(stderr, "Error, file \"%s\" is empty.\nMoving to next file in directory.\n", path);
 		return NULL;
 	}
-
 	char * fileContents = (char*)malloc((sizeof(char) * fileLength) + 1);
 	while(amtToRead > 0)
 	{
@@ -552,7 +556,7 @@ treeNode * fileIterator(char * name, treeNode * head)
 {
 	// Creates a directory pointer, an entry pointer and a char
 	// pointer to hold what's pulled out of a file. 
-	//////////////////
+	//////////////////opendir
 	DIR * dir;
 	struct dirent * entry;
 	char * fileContents;
@@ -564,14 +568,14 @@ treeNode * fileIterator(char * name, treeNode * head)
 		// so we'll try to open a file.
 		///////////////////
 		errsv = errno;
-		name = fileFixer(name);
+		// name = fileFixer(name);
 
 		// Error checks for common file opening issues. Also makes sure the 
 		// file we're given is a proper path... not just a name.
 		///////////////////
 		if(errsv == 2)
 		{
-			printf("\n\nNo such file or directory\n\n");
+			fprintf(stderr, "\nNo such file, directory, or impoperly formed path: \"%s\".\n", name);
 			free(name);
 			return head;
 		}
@@ -583,7 +587,7 @@ treeNode * fileIterator(char * name, treeNode * head)
 			///////////////
 			if(fileContents == NULL)
 			{
-				free(name);
+				// free(name);
 				return head;
 			}
 
@@ -592,10 +596,10 @@ treeNode * fileIterator(char * name, treeNode * head)
 			///////////////
 			head = tokenize(fileContents, head, name);
 			free(fileContents);
-			free(name);
+			// free(name);
 			return head;
 		}
-		free(name);
+		// free(name);
 		return NULL;
 	}
 	// We were given a directory, so we'll look until readdir hits the end of 
@@ -661,24 +665,24 @@ char * pathMake(char * currentPath, char * nextDir)
 
 // Quick and dirty helper method
 //////////////////
-char * fileFixer(char * file)
-{
-	// If a file is passed with a just a name and no path at all
-	// it add a './' to make it a relative path
-	//////////////////
-	if((file[0] != '.' || file[0] != '~') && file[1] != '/') 
-	{
-		int len = strlen(file) + 3;
-		char * newFileName = malloc(len);
-		snprintf(newFileName, len, "./%s", file);
-		return newFileName;
-	}
-	else
-	{
-		char * newFileName = strdup(file);
-		return newFileName;
-	}
-}
+// char * fileFixer(char * file)
+// {
+// 	// If a file is passed with a just a name and no path at all
+// 	// it add a './' to make it a relative path
+// 	//////////////////
+// 	if((file[0] != '.' || file[0] != '~') && file[1] != '/') 
+// 	{
+// 		int len = strlen(file) + 3;
+// 		char * newFileName = malloc(len);
+// 		snprintf(newFileName, len, "./%s", file);
+// 		return newFileName;
+// 	}
+// 	else
+// 	{
+// 		char * newFileName = strdup(file);
+// 		return newFileName;
+// 	}
+// }
 
 
 // Quick and dirty helper method to get the number of digits in an int
