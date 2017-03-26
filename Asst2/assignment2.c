@@ -317,7 +317,7 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 void finalOutput(treeNode * head, char * outputFileName)
 {
 	errno = 0;
-	int fd = open(outputFileName, O_WRONLY | O_CREAT, 00777);
+	int fd = open(outputFileName, O_WRONLY | O_CREAT, 00700);
 	int errsv;
 	int status = 0;
 	int amtToWrite;

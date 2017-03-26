@@ -2,10 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <sys/types.h> // open man page
-#include <dirent.h> // open man page
-#include <sys/stat.h> // https://linux.die.net/man/3/stat get file status
-#include <limits.h> // http://pubs.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html
+#include <sys/types.h>
+#include <dirent.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
