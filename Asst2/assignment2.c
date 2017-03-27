@@ -627,12 +627,18 @@ treeNode * fileIterator(char * name, treeNode * head)
 			free(fileContents);
 			free(path);
 		}
+		else
+		{
+			char * path = pathMake(name, entry->d_name);
+			fprintf(stderr, "I have don't know how to handle this entry. %s\n", path);
+			free(path);
+		}
 	}
 	closedir(dir);
 	return head;
 }
 
-// Keeps track of the current path
+// Helper method. Keeps track of the current path
 //////////////
 char * pathMake(char * currentPath, char * nextDir)
 {
@@ -673,6 +679,7 @@ int intLen(int x)
 }
 
 // Sorts iteratively. Not pretty, but it works
+// O(n^2) Because it is basically selection sort on a LL.
 //////////////////
 void llSort(fileList * fl)
 {
@@ -707,7 +714,8 @@ void llSort(fileList * fl)
 	}
 }
 
-// Helper method.
+// Helper method. Swaps the values of two pointers it was given.
+// not pretty, but it works.
 ////////////////
 void swap(fileList * link1, fileList * link2)
 {
