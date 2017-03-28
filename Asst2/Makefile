@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -g
 
 TARGET = assignment2
 
-OUT = asst2
+OUT = index
 
 
 all: $(TARGET)
