@@ -317,11 +317,40 @@ treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile)
 void finalOutput(treeNode * head, char * outputFileName)
 {
 	errno = 0;
-	int fd = open(outputFileName, O_WRONLY | O_CREAT, 00700);
 	int errsv;
 	int status = 0;
 	int amtToWrite;
+	char line[256];
 
+	// Check to see if the user output file already exists. If it does: asks
+	// user if they want to over write it or not.
+	/////////////////
+	int fd = open(outputFileName, O_RDONLY);
+	if(fd != -1)
+	{
+		printf("\"%s\" Already exists. Would you like to overwrite it?\nEnter y for yes, n for no.\n>", outputFileName);
+		fgets(line, sizeof(line), stdin);
+		while(!(tolower(line[0]) == 'y' || tolower(line[0]) == 'n'))
+		{
+			printf("I don't understand that input. Enter y for yes, or n for no.\n");
+			printf(">");
+			fgets(line, sizeof(line), stdin);
+		}
+		if( tolower(line[0]) == 'n')
+		{
+			printf("No output will be written so that \"%s\" isn't deleted.\n", outputFileName);
+			return;
+		}
+		else
+		{
+			printf("Overwriting %s.\n", outputFileName);
+		}
+
+	}
+
+	close(fd);
+
+	fd = open(outputFileName, O_WRONLY | O_CREAT, 00700);
 	errsv = errno;
 	// Error check for common file opening issues.
 	///////////////
