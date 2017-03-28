@@ -48,6 +48,7 @@ off_t lseek(int fd, off_t offset, int whence);
 char * extract(char * path);
 char * fileFixer(char * file);
 char * pathMake(char * currentPath, char * nextDir);
+char * fgets(char * s, int size, FILE * steam);
 treeNode * fileIterator(char * name, treeNode * head);
 treeNode * tokenize(char * fileContents, treeNode * head, char * currentFile);
 
