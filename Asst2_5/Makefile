@@ -11,4 +11,4 @@ part1_functions.o: part1_functions.c part1_functions.h
 	$(CC) $(CFLAGS) -c part1_functions.c
 
 clean:
-	$(RM) part1_main *.o
+	$(RM) p1 *.o
