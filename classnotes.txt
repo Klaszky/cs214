@@ -1,0 +1,767 @@
+classnotes.txt
+
+notes for midterm:
+
+learn how const works in all contexts
+
+diff between:
+p+1
+(&p)+1 <----- this takes the address and adds one to it.
+
+p+1 -> 10+sizeof(int)
+q+1 -> 20+sizeof(char)
+
+
+stuff like:
+
+char a[5]
+char b = 'c';
+
+char * p = a;
+char * p = &b;
+
+file descriptors:
+ O.S. abstraction for I/0 element
+
+redirecting output...
+>, >>
+
+>file creates/replaces file
+>>file appends to file
+
+2>
+2>>
+
+0 stdout
+1 stdin
+2 stderr
+
+fprintf(0, .....)
+
+
+function pointer example:
+
+int stuff(char b, float other)
+
+int (*fp)(char, float)
+
+use of function pointer:
+fp('a',1.2)
+
+more piping:
+ls "afile" | grep stuff
+
+Q: what good are void* if you can't dereference them.
+
+permissions
+
+directory|users|groups|owner
+
+	d|rwx|rwx|rwx
+	 drwxrwxrwx
+
+a - all
+o - owner
+u - users
+g - groups
+
+chmod a+r ~file
+-rw-r--r--
+chmod a-r ~file
+--w-------
+chmod o+r ~file
+--w----r--
+
+#####################
+I missed a whole class about threading and stuff
+#####################
+
+What will be on exam?
+-C stuff
+  -pointers
+  -arrays
+  -processes
+-functions pointers*
+
+Processes:
+	the os's abstraction for running code
+
+Where do processes come from?
+	fork() -- "duplicates the process"
+		now you have two copies of a process that are mostly 
+		the same except:
+			1. process ID
+			2. memory space
+			3. parent process ID
+
+child and parent just called fork() and are waiting for it to
+return, So .... who is the child and who is the parent?
+
+Purpose of child process it so run some other code
+child will exec
+
+int pid = fork()
+pid ... if == 0 -> I'm the child, exec("...")
+pid ... if > 0 -> I'm the parent, continue doing stff
+	wait(child's pid)
+
+if a parent doesn't wait() for a child, and finishes it
+execution. then that child process is now an orphan.
+This gets the cool name of a zombie processes.
+-Child runs all runnable code .... can't be wait()'d
+since there is no parent. Now a zombie. Rad.
+
+init/scheduler ... adopt and wait() on zombie-orphans
+
+fork() - returns to child and parent
+exec() - called, but isn't returned
+
+call / invoke .... what's the difference?
+calling a function:
+invoking a function: 
+
+try
+{
+	something
+}
+catch(Exception e)
+{
+	something else
+}
+
+signals are similar to exceptions, but it doesn't skip
+over blocks of code in the same way. The signal goes and
+handles what it needs to handle and then goes back to where 
+it left off. In other words you can catch a signal
+
+ex:
+signalHandler(int signum)
+{
+	
+}
+main()
+{
+	if signal #11 occurred .. run signalHandler
+}
+
+signal handler - no call, but does return (invoked on your
+behalf by OS when event occurs)
+
+####################################
+Review for midterm 1
+####################################
+
+What is a file descriptor?
+
+Makefiles:
+
+<directive>: <req0> .... <reqN>
+	<cmd>
+
+for each directive: it looks for a req0 file. if it doesn't
+	find it, it'll look for a directive called req0 and try 
+	to compile it.
+
+example.c
+lib.h
+lib.c
+
+//(if you run 'make' with no other args, the it executes 
+//all)
+all: example.c lib.h lib.o
+
+lib.o: lib.h lib.c
+	gcc -c lib.c
+
+clean: //used to clean up after a make
+	rm ./example; rm *.o 
+
+*He's been rambling about makefiles for quite a while with
+out saying anything helpful, it's all too specific to be on
+the exam*
+
+errno, system sets it to indicate that an error occurred 
+and what error occurred
+
+perror(errno); //to inform the user what actually happened
+strerr(errno); //returns the string (error)
+fprintf(stderr, "Bad stuff: %s\n", strerr(errno));
+
+how to pipe stderr to a file
+2 > error.txt
+
+preprocessing -> compilation -> assembling -> linking
+translation:
+text replacement /define namespace -> compile to assembly 
+-> assemble -> reference/link to libs, relocation
+
+########################################################
+I/O:
+
+blocking vs non-blocking:
+	blocking: function does not return until it is done
+	non-blocking: function returns ... before it is done (?)
+
+2 GigHz = 2^32 operations per seconds
+Time per operation for different pieces of hardware:
+CPU - 2*10^-10 seconds
+RAM - 2*10^-8  seconds
+HD  - 2*10^-2  seconds
+
+file descriptor = fd
+
+int fd = open("./somefile", <flags>);
+if(fd == -1)
+{
+	//opening didn't work
+}
+<flags>
+O_RDWR
+O_RDONLY //you can use this if you only have read only
+O_WRONLY //when making a file use this and o_creat
+O_CREAT
+//he also wrote this... i don't know what it really means
+//i think it's how you set multiple permissions
+//int fd = open("./somefile", O_RDWR | O_CREAT)
+
+char * ptr = (char*)malloc(sizeof(char)*100);
+int status - 0;
+
+status = read(fd, ptr, 100);
+
+status is an int saying how many bytes were actually read.
+Since this non-blocking this won't necessary read all 100
+bytes.
+
+while(readin < 100)
+{
+	status = read(fd, ptr, amount);
+	//must keep track of either amount or readin 
+	//could do while(amount > 0)
+	//{status = read(fd,ptr,amount)
+	//amount -= status;}
+}
+
+//or 
+
+while(amount > 0)
+{
+	offset += status;
+	status = read(fd, prt+offset, amount);
+	if(status >= 0)
+	{
+		ammount -= status;
+	}
+	else
+	{
+		?
+	}
+}
+
+close(fd);
+how to actually make a file descriptor:
+~open(path, flags)~
+
+*Note to self: learn to use errno....
+*Note to self: what is a file steam vs reading from a 
+socket or whatever he was talking about?
+
+//professor project suggestion: function call for file 
+reading/tokenizing and putting into data structure and just
+look over all the files
+
+//how to read from a directory
+opendir
+readdir
+//something about dirent struct (it's in man readdir)
+//seems like how you find how just whats actually in a 
+directory
+
+*Node: destructive process. every time readdir is call it
+will tell you about the next item
+- in type field, DT_DIR -> it is a directory
+- in type field, DT_REG -> it is a file
+- When you hit end of dir it readdir it returns null;
+//professor suggestion: functionalize file handling
+//when you get a filename from readdir it only give a
+//filename not a path
+
+example:
+main
+-open/read dir...
+	...thing is a dir...
+
+dirhandler(... "./thing")
+-open/read dir
+-first element is stuff...
+	...it is a directory
+
+	dirhandler(... "./thing/stuff")
+	-open/read dir
+	-first element is other.txt
+	.. it is a file
+	.... name[] is: "other.txt"
+
+	//need to open "/thing/stuff/other.txt"
+	//so a para should be char[] pathsofar
+
+//to get length he is saying use lseek *seek_end,
+//but this moves the cursor. So it'll either have to be
+//closed and reopened or the cursor moved to the beginning
+
+int filelength = lseek(fd, 0, SEEK_END);
+lseek(fd, -filelength, SEEK_CUR);
+lseek(fd, 0, SEEK_SET);
+
+Errors:
+	eacces - permission denied
+	enotdir
+
+do opendir, if error -> check errno
+errno should tell if there is a permissions problem or if
+it is a file and not a dir.
+
+#####################################################################
+
+Threads:
+	Separate stack in the same context.
+
+main()
+{
+	do : something
+	.
+	.
+	.
+	get result of something
+}
+
+Proc0:
+F&2
+decode
+exec
+F&3
+decode
+exec
+...
+F&30
+decode
+exec
+F&31
+decode
+exec
+
+Zoned out ... something about functions pointers
+pthread_create() takes a functions pointer 
+you can apparently tell because of the (void*)
+
+int somefunc(float a);
+
+int (*somefunctprt)(float)
+
+void * p ... a void * ptr
+void (* .... a fn pointer that returns nothing)
+void * (* ... a fn pointer that returns a void *)
+
+threads should not be the thing that return!
+
+exit()
+_exit()
+
+exit signal...
+
+signals(?)
+instr0
+instr1
+instr2
+ins ... stop!
+... OS takes over, pushes new stack frame on your stack, 
+updates PC and stores previous PC.
+
+If you have a signal handler, then when you get a signal
+the OS will run that code on your behalf, when the it's done
+it continues as if nothing ever happened
+
+If no signal handler is defined, then it runs default
+OS handler
+
+good - pthread_exit()
+meh - exit()
+bad - _exit()
+
+something about pthread() fork and join
+
+pthread_join( thread0, &threadstatus);
+pthread_join( thread1, &threadstatus);
+
+thread ~ execution context
+
+execution context:
+registers
+CPU flags
+stack ptr
+PC - program counter - keeps track of where you are in a program -- address of the instruction you're currently on.
+
+stack...
+
+... process has a pretty hard wall
+	- can only communicate between process with files system ... either through files directly, or 
+	shared memory (make a file look like memory), or a network socket.
+	-i.e. ... all involve file descriptors
+... threads share the same heap. 
+	- separate stack in the same process
+	- stack can reference the heap .. so ... both stacks can reference the heap. (!)
+	- can easily access the same memory from multiple threads. 
+
+add 100
+decrement 50
+sum is previous + 50
+
+T0                       T1
+balance += 100           balance += -50
+
+
+ld (%eax) %ebx           ld (%eax) %ebx
+addl %ebx $100 %ecx      subl (%ebx) $50 %ecx
+st (%eax) %ecx           st (%eax) %ecx
+
+T0                         T1
+used = pthread_mutex_init{
+lock(used);                lock(used);
+balance += 100;            balance += 50;
+unlock(used);              unlock(used);
+}
+
+critical section: area of code where you access/modify shared data
+mutex: mutual exclusion device
+critical sections should be kept as shore as possible to gain the most 
+benefit from the use of threads.
+race condition: nondeterministic code whose end result depends on the 
+order in which instructions run- namely - write back to memory
+
+#############################################################################
+
+wait() is a blocking call that will wait until a child process returns
+join() is similar, it won't pass anything to main until it is joined and an exit() is sent (i think)
+must join in order to make sure none are killed off
+Sometimes you want to detach a tread. I don't know why, but you can do it. It can't be joined after that.
+
+kernel threads - kernel schedules them (++)
+- extra time and space required to construct and switch between
+- each process gets an equal share of time
+- no customization, so you're at the mercy of the kernel
+- can do true parallelism (schedule threads on multiple cores)
+- can do blocking IO in one thread without affecting others
+
+user threads - user schedules them (--)
+- very fast to build, very fast to switch between (because you don't need to context switch)
+- kernel is unaware of them and only budgets time for the process that hosts them
+	- that process is responsible for sub-allocating its time over all its threads
+- can build your own scheduling and priority mechanisms 
+- any one thread blocking blocks WHOLE process (i.e. all user threads)
+- can not get true parallelism
+
+the way you can make it a user vs a kernel thread is by setting the scope
+with pthread_attr_setscope()
+	- setting scope to SYSTEM it's a kernel thread.
+	- setting scope to PROCESS it's a user thread.
+
+*note to self: learn how threads work... also function pointers still.
+
+########################################################################
+
+Sockets:
+
+How do you talk to a a file?
+	File descriptors.
+		How do you get a file descriptors?
+			open(fd)
+				what can do you with a file descriptors?
+					read()
+					write()
+					close()
+
+open("./afile.txt"...)
+read()
+write()
+close("./afile.txt"...)
+
+Want to talk to another machine.
+Need a way to identify this machine.
+IP address: identifies remote machine, but just the machine.
+Port: a number associated with a process that is running.
+Port: identifies process on remote machine to speak to.
+Multiple things run on the internet. They don't necessarily 'speak the same language'.
+ex: http can't 'talk to' ssh
+
+get IP address ... convert it into a hostent with gethostbyname()
+get port # ... convert it to an int with atoi()
+construct blank socket
+
+build a sockaddr_in
+	-initialize it (zero out bytes w/bzero)
+		-set address fmaily to AF_INET
+	-copy the representation of the IP from hostend into sockaddr_in
+
+should import 
+<netinet.h>
+<sys/socket.h>
+<netdb.h>
+
+
+#############################################################################
+some example stuff
+
+stuct hostent *serverIPAddress;
+struct sockaddr_in serverAddressInfo; 
+
+serverIPAddress = gethostbyname()
+if(serverIPAddress == NULL)
+{
+	ERROR
+	exit(0);
+}
+
+// this is a tcp socket
+sockfd = socket(AF_INET, SOCK_STREAM, 0)
+if(sockfd <)
+{
+	ERROR
+}
+
+//zero out the socket address
+bzero((char*)&serverAddressInfo, sizeof(severAddressInfo));
+
+//set a flag
+serverAddressInfo.sin_family = AF_INET;
+
+//set the remote port fronslate from a normal int to a network port int
+serverAddressInfo.sin_port = htons(portno);
+
+//do a raw copy of the bytes that rep sever IP add in
+// the 'serverIPAaddress' struct into our serverIPAddressInfo struct
+bcopy((char *)severIPAddress->h_addr, (char*)&serverAddressInfo.sin_addr.s_addr, severIPAddress->h_length);
+
+if(connect(sockfd.(stuct sockaddr*)&serverAddressInfo, sizeof(serverAddressInfo))<0)
+{
+	ERROR -no connection
+}
+
+/* prof's stuff
+//zero out the message buffer
+bzero(buffer, 256);
+
+//get a message from client
+fgets(buffer, 255, stdin);
+
+n = write(sockfd, buffer, strlen(?))
+*/
+
+// server size stuff:
+// sever size just need to bind to a port number
+// if(bind(sockfd, (struct sockaddr *)&serverAddressInfo, sizeof(serverAddressInfo)) < 0)
+// { ERROR - binging}
+
+//set up server sockt to listen for client connectiongs
+// listen(sockfd, 5);
+// clilen = sizeof(clientAddressInfo);
+// newsockfd = accept(sockfd, (struct sockaddr*)&clientAddressInfo &client);
+
+"unix socket client sever model architecture" on tutorialspoint.com where a lot of code
+above came from according to the prof.
+
+
+--------                											 --------   -----------
+|client|->netseverinit  											-|socket| <-|server   |
+--------     |          						        --------    |--------   -----------
+    |        -> builds socket, sets up any lib stuff -> |socket|    | ^     ^     |
+    |                                                   --------    | |		|     ->open("./", O_RDWR); -> err: -1 Notfound
+    |->netopen->mgs:"open ./ O_RDWR"<----------------------------------     ------------------------------------|
+
+
+netseverinit() sets up socket stuff. returns code to say if it worked. 
+netopen() -> gets a FD from the server, but that has no meaning on the client side. Make own FD
+	make it negative, but not negative 1 because that's already taken. Does this by sending a message
+	ex: msg: "open ./ O_RDWE"
+for msg sent: "14 open ./ O_RDWR" with the 14 being the size of the message after the number and the space
+server side need a table... could take the actual FD and just make it negative to return. The reason we want it neg
+	is it doesn't accidentally open something on client side.
+netread(-23, &buff, 100)
+	ex: msg: read(23, &stuff, 100)
+		write to sock: bytes
+		write bytes from sock into buff in netread()
+
+Apparently we need to use threads. 
+on accept(), make a new client service thread 
+
+pseudo code
+while(still running)
+{
+	newsockfd = accept(sockfd, (struct sock addr *) &clientAddressInfo, & clien);
+
+	...
+
+	if(newsockfd < 0)
+	{
+		error(error);
+	}
+	//make a new client service thread
+	pthread_creat(&threadN, &threadNattr, clientSerivceFn, (void*)socktPtr...);
+	//give it netsockfd
+}
+
+you can have multiple clients connection to multiple sockets
+
+//man setsocketkpt
+//socket options: nodelay (TCP_NODELAY), reuse address (SO_REUSEADDR), reuse port (SO_REUSEPORT), can be 
+	combined with |s they also return errors with they don't work. 
+TCP makes no guarantee that the bytes will actually be written if they're very small. It tries to be more
+	efficient because there is so much overhead to send that data. 
+
+ext B - use threads to each make a socket, send to client that you need multiple connections
+you have access to a certain number of sockets for multiplexing, say 10, and need to manage how you used them.
+
+################################
+new lecture:
+
+dealing with sockets
+(care, use and feeding)
+
+character devices - basically a steam of bytes (usb for example)
+block devices - can only write in a given size (HD for example)
+network devices - somewhere in between of previous two
+	you send of receive things kind of like  a character device, but it must be
+	of a certain size because of all the meta-data associated with it
+
+0. As much as possible use flat data types (floats or chars NOT arrays or pointers)
+	if you want to send a struct, just pull out the actual items in the struct and send them
+1. Set your expectations before you start - include message length as part of/before the message
+	(example: "12 12 hi stuff" he also suggested using a delimiter like ',' for something ...)	
+	1a. if (when) things go awry...
+	while(1)
+	read...
+		printf("%d: %X\n", count, buff); 
+	char * prt = malloc(100)...
+	bzero(ptr, 100)
+	memcp(ptr...)
+
+	to read in want:
+	"255"DIFIU)9apsfoP)Apdka;f...
+	The 255 in quotes is the ammt of data to be read in. 
+	"001"0
+	atoi("001") => 1
+
+2. Blocking read/write on network(?)
+	Not sure (yet)
+
+one socket per thread per function
+you run a thread, that thread uses a socket
+client side: just running main, No threads
+			 create a connection for each function
+
+server side: netopen -> make socket -> read message -> kill socket and free any assoc mem
+			 netread -> make socket -> read message -> dealloc
+			 read in from a socket -> create a thread -> do what it has to do -> store its stuff in the heap
+			 -> close socket -> dealloc -> pthread_exit()
+	* don't close server socket until we're done with the program
+
+int netsockfd = accept ....
+int passsock = (int*)malloc(sizeof(int));
+*passsock = netsockfd;
+threadargs = ... (void*)passsock
+...build pthread...
+
+int pthread_create(pthread_t *thread, const pthread_arrt_t , void (*start routine), void *arg);
+
+server size:
+	while true
+		listen
+		accept
+		build socket
+		make a thread
+			thread do stuff
+		continue
+
+./testserver 23984
+
+./testclient grep.cs.rutgers.edu 23984
+(server: try to read from client socket)
+client side: Please enter a message: Hello
+
+server side: Here is the message: Hello
+
+if another was connected: ERROR connection was reset by a peer
+
+in netserver init has mode argument
+
+give 50 byte buffer, user tells to netwrite(100 bytes), seg fault is user's fault
+	not an error that will be marked down.
+
+const int * p - locks down data it points to, can change address
+
+int * const p - locks down the pointer and you can't change the address
+
+use const ~~~ * ptr to lock down the data while netwrite() writes.
+
+server.c:
+main...
+{
+	while(true)
+	{
+		...
+		accept(...)
+		//make a client service thread
+		//give new socket to it
+		//make some space for the socket on the heap
+		//so that the threads can share information
+		/* this is bad because you need the sockets to be on the heap
+			sockets[i] = new socket;
+			int * ptr = &sockets[i];
+			pthread_create(pthread_t, attr, somepointer, (void*)ptr);
+				//creating a ref to an address in a difference scope ... won't ever work
+		*/
+	}
+}
+
+something about cloneserive system call
+every command is new connection
+use the void * to read and figure out which command it is
+
+void * clientService(void * client socket)
+{
+	int clisocket = *((int*)clientSockte);
+	// read from clisocket
+	///
+	// figure out which command i need to run
+	(case .. switch)
+	// run handler for that command with params i read from socket
+}
+
+"14,netread,./,100" //comma is a safe delimiter because we can't have commas
+	in a path or a number so there is no chance of confusion. 
+	14 is the number of bytes it
+	netread is the function
+	./ is the path
+	100 number of bytes to read
+
+//read until first comma, take those chars and atoi them, this is the message len
+//read until next comma those are the command
+(in this case i know i need to read) 
+
+case NETREAD....
+	// read until next comma... know those chars are path, save them as paramA 
+	// read until end of bytes ... know those chars are ammt to read atoi to an into and save as paramB
+	read(paramA, buffer, paramB); //run local command with remote params
+
+redux:
+"14,netread,-99,100" //comma is a safe delimiter because we can't have commas
+
+case NETREAD...
+	// read until next ocmma ... know those chars are a netFD.... look up newFD in state table, save local fd as paraA
+	// read until end of bytes ... know those chars are ammt to read atoi to an into and save as paramB
+	read(paramA, buffer, paramB); //run local command with remote params
+
+you have one global table -- what if two connections access at the same time?
+mutex per FD
+mutex the table while editing it
+count how many times something has been opened.
+if two people open the same resource then it should have two different fd
