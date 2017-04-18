@@ -765,3 +765,68 @@ mutex per FD
 mutex the table while editing it
 count how many times something has been opened.
 if two people open the same resource then it should have two different fd
+
+what do ineed to happen?
+netopen
+->
+	make a socket 
+	connect to server
+	send a message**
+		-> tell difference between functions (open, read, write, close)
+		-> pass parameters for functions
+		... establish protocol .. i.e. some set of rules to build and parse a string (byes) to send over the socket
+	get return values
+	set local stuff
+		return variable, errno
+	close socket
+	return
+
+#################################
+
+man atexit
+
+0. figure out what has to happen
+1. figure out what you need to learn more about 
+2. look up an example
+	2a. understand commands/functions in example with man pages and test code
+3. write the smallest possible program using the functions your need
+4. functionalize a working module and do not change it
+
+use assert() for testing
+
+##################################
+
+synchronization:
+
+mutex
+
+critical section: section of code where you need to access memory shared between threads
+
+Thread A              |Thread B
+stuff                 |thing
+morestuff             |lock(mutexX)
+lock(mutexX)          |x+=2:
+x=3                   |unlock(mutexX)
+unlock(mutexX)        |otherthing
+futherstuff           |finalthing
+
+mutexes: resolved in sequence based on lock order (first come, first served)
+
+0. based on identity of owner
+1. rigid ordering of mutex calls in time
+
+man signal
+signal takes a function pointer
+basically takes control of a program, runs a function then returns to current place in the program. 
+
+if you put a mutex in a signal handler it can cause a lof of issues apparently
+
+// worst idea ever:
+seghandle(int stuff)
+{
+	lock(mutexX);
+	x = 0;
+	unlock(mutexX);
+	return
+}
+
