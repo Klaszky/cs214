@@ -830,3 +830,15 @@ seghandle(int stuff)
 	return
 }
 
+Semaphore: apparently the answer to thread safety
+p()
+v()
+
+p()
+while value == 0, sleep
+decrement value
+v()
+increment value
+if there are any threads sleeping waiting for value to become non-zero wake up at least 1 thread
+
+semeinit() ?
