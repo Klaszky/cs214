@@ -842,3 +842,80 @@ increment value
 if there are any threads sleeping waiting for value to become non-zero wake up at least 1 thread
 
 semeinit() ?
+
+#################################3
+
+h_errno
+
+stateless server 
+request are self-contained
+better fault tolerance
+open close at client (few msgs)
+no space reserved for tables
+no limit to open files
+
+stateful server
+shorter messages
+better performance (info in mem until closE)
+open close at sever
+file locking possible
+read ahead possible
+
+
+Semaphores
+sychronized shared countin variables
+
+sychronization...
+(also mutexes)
+
+mustexs:            semaphore:
+inti
+destroy
+
+lock(mutex)         p()
+unlock(mutex)       v()
+
+diff(mutex, semaphore):
+
+
+threadA:                 threadB:
+lock(mutex)              lock(mutex)
+
+unlock(mutext)           unlock(mutex)
+-only one sequence: either thread A lock, unlock, XOR thread B lock, unlock
+
+thredA:                 threadB:
+p(sema)                 p(sema)
+
+V(sema)                 p(sema)
+-any number of interleaving possible ... thread A/B can lock/unlock in any order
+
+mutexes: rigid on identity - only thread that locks can unlock
+semaphores: fluid on identity - ANY thread (context) can call p() or v()
+
+mutexes: rigid on order - must only lock once in context and must only unlock once
+semaphores: fluid on order - any number of p() or v() calls in a given context
+
+semaphore: shared counter with a parameterizable max value (can be 1 - if so, gives mutex-like behavior)
+mutex: shared count that only be 0 or 1
+
+c0 \
+c1 |
+c2 |                                        >worker thread 0
+c3 >   server(--[c0,1 c1,0 c3,1 c2,1 c3,0]) >worker thread 1
+c4 |                                        >worker thread 2
+c5 /
+
+worker thread: do not pull from queue if empty (i.e length queue == 0)
+server: don not push to queue if full (i.e. length queue == max)
+
+>>semaphores are asynchronous, thread-safe synchronization mechanisms<<
+
+//OS and gcc will not stop this - machine does not understand your code.... it can only run it 
+// only you can prevent desychroniztion 
+threadA:             threadB:
+lock(mutex)
+++i;                 ++i;
+unlock(mutex)
+
+signal handler: code that is never (usually) called, but invoked on your behalf by the OS
