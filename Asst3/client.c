@@ -50,29 +50,31 @@ int main(int argc, char *argv[])
 		printf("couldn't connect \n");
 		return -1;
 	}
-
-	printf("Eneter a msg: ");
-	bzero(buffer, 256);
-	fgets(buffer, 255, stdin);
-
-	n = write(socketFD,buffer,strlen(buffer));
-
-	if(n < 0)
+	while(1)
 	{
-		printf("couldn't write to socket\n");
-		return -1;
+		printf("Eneter a msg: ");
+		bzero(buffer, 256);
+		fgets(buffer, 255, stdin);
+
+		n = write(socketFD,buffer,strlen(buffer));
+
+		if(n < 0)
+		{
+			printf("couldn't write to socket\n");
+			return -1;
+		}
+
+		bzero(buffer,256);
+
+		n = read(socketFD, buffer, 255);
+
+		if(n < 0)
+		{
+			printf("Couldn't read from socket\n");
+			return -1;
+		}
+
+
+		printf("%s\n",buffer);
 	}
-
-	bzero(buffer,256);
-
-	n = read(socketFD, buffer, 255);
-
-	if(n < 0)
-	{
-		printf("Couldn't read from socket\n");
-		return -1;
-	}
-
-
-	printf("%s\n",buffer);
 }

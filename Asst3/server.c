@@ -47,38 +47,42 @@ int main(int argc, char *argv[])
 
 	if(bind(socketFD, (struct sockaddr *) &serverAddressInfo, sizeof(serverAddressInfo)) < 0)
 	{
-		printf("can't bring socket\n");
+		printf("can't bind socket\n");
 		return -1;
 	}
 
-	listen(socketFD, 5);
 
-	client = sizeof(clientAddressInfo);
-	newSocketFD = accept(socketFD, (struct sockaddr *) &clientAddressInfo, &client);
-
-	if(newSocketFD < 0)
+	while(1)
 	{
-		printf("coudln't accept connection\n");
+		listen(socketFD, 5);
+
+		client = sizeof(clientAddressInfo);
+		newSocketFD = accept(socketFD, (struct sockaddr *) &clientAddressInfo, &client);
+
+		if(newSocketFD < 0)
+		{
+			printf("coudln't accept connection\n");
+		}
+
+		bzero(buffer, 256);
+		n = read(newSocketFD, buffer, 255);
+
+		if(n < 0)
+		{
+			printf("couldn't read from socket\n");
+			return -1;
+		}
+
+		printf("Message: %s\n", buffer);
+
+		n = write(newSocketFD, "Message recieved", 18);
+
+		if(n < 0)
+		{
+			printf("couldn't write out to new socket\n");
+			return -1;
+		}
+
 	}
-
-	bzero(buffer, 256);
-	n = read(newSocketFD, buffer, 255);
-
-	if(n < 0)
-	{
-		printf("couldn't read from socket\n");
-		return -1;
-	}
-
-	printf("Message: %s\n", buffer);
-
-	n = write(newSocketFD, "Message recieved", 18);
-
-	if(n < 0)
-	{
-		printf("couldn't write out to new socket\n");
-		return -1;
-	}
-
 	return 0;
 }	
