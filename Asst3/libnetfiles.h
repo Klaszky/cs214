@@ -7,3 +7,4 @@
 int nopen(char * buffer);
 int intLen(int x);
 char * pullString(int start, int end, int size, char * originalString);
+char ** argPull(char * buffer);

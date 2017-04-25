@@ -106,23 +106,98 @@ int main(int argc, char *argv[])
 
 int nopen(char * buffer)
 {
-	// char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
-	// printf("Path: %s\n", path);
-	int returnFD = open("./test", O_RDONLY);
-	printf("%d\n", errno);
-	return returnFD;
+	char ** args = argPull(buffer);
+	printf("%s\n",args[0]);
+	printf("%s\n",args[1]);
+	// int returnFD = open("./test", O_RDONLY);
+	// printf("%d\n", errno);
+	return -1;
 }
 
-// char * pullString(int start, int end, int size, char * originalString)
-// {
-// 	int x, y;
-// 	char * toReturn = (char*)calloc(size, sizeof(char));
-// 	for(x = 0, y = start; y < end; x++, y++)
-// 	{
-// 		toReturn[x] = originalString[y];
-// 	}
-// 	return toReturn;
-// }
+char ** argPull(char * buffer)
+{
+	int counter = 0;
+	int i = 0;
+	char * tempString;
+	for(i = 0; i < strlen(buffer); i++)
+	{
+		if(buffer[i] == ',')
+		{
+			counter++;
+		}
+	}
+	
+	char ** returnArray = malloc( counter * sizeof( char*));
+	counter = 0;
+
+	for(i = 0; i < strlen(buffer); i++)
+	{
+
+		int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+		len = strlen(buffer);
+
+		// Main loop of the program, goes over every
+		// character of the input.
+		///////////////////
+		for(i = 0; i <= len; i++)
+		{
+			// Check if current character isalpha and then
+			// makes some decisions based on that.
+			///////////////////
+			if(buffer[i] == ',')
+			{
+				// Nothing to do if current string is empty 
+				///////////////////
+				if(sizeOfString == 0)
+				{
+					continue;
+				}
+				// Grabs the current string from input and puts it into the tree.
+				///////////////////
+				else
+				{
+					endingPos = i;
+					tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+					returnArray[counter] = tempString;
+					counter++;		
+					startingPos = -1;
+					sizeOfString = 0;	
+				}
+			}
+			// Book keeping for current string.
+			///////////////////
+			else
+			{
+				if(startingPos == -1)
+				{
+					startingPos = i;
+					sizeOfString++;
+				}
+				else
+				{
+					sizeOfString++;
+
+				}
+			}
+		}
+	}
+	return returnArray;
+}
+
+char * pullString(int start, int end, int size, char * originalString)
+{
+	int x, y;
+	char * temp = (char*)calloc(size + 1, sizeof(char));
+	for(x = 0, y = start; y < end; x++, y++)
+	{
+		temp[x] = originalString[y];
+	}
+
+	return temp;
+}
+
+
+
 
 int intLen(int x)
 {	
