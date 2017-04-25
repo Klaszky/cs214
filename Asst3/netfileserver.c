@@ -75,13 +75,14 @@ int main(int argc, char *argv[])
 		}
 ///////////////////////////////////////////////////////////////
 		// printf("%d\n", strlen(buffer));
-		if(strlen(buffer) > 4 && strncmp("open", buffer, 4) == 1)
+		if(strlen(buffer) > 4)// && strncmp("open", buffer, 4) == 1)
 		{
-			int FD = nopen(buffer);
-			int fdLen = intLen(FD);
-			char * writeString = (char*)malloc(fdLen+1);
-			sprintf(writeString,"%d",FD);
-			n = write(newSocketFD, writeString, strlen(writeString));
+			printf("yes\n");
+			// int FD = nopen(buffer);
+			// int fdLen = intLen(FD);
+			// char * writeString = (char*)malloc(fdLen+1);
+			// sprintf(writeString,"%d",FD);
+			// n = write(newSocketFD, writeString, strlen(writeString));
 		}
 
 ///////////////////////////////////////////////////////////////
