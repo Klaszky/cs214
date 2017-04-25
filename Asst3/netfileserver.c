@@ -106,23 +106,23 @@ int main(int argc, char *argv[])
 
 int nopen(char * buffer)
 {
-	char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
-	printf("Path: %s\n", path);
-	int returnFD = open(path, O_RDONLY);
+	// char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
+	// printf("Path: %s\n", path);
+	int returnFD = open("./test", O_RDONLY);
 	printf("%d\n", errno);
 	return returnFD;
 }
 
-char * pullString(int start, int end, int size, char * originalString)
-{
-	int x, y;
-	char * toReturn = (char*)calloc(size, sizeof(char));
-	for(x = 0, y = start; y < end; x++, y++)
-	{
-		toReturn[x] = originalString[y];
-	}
-	return toReturn;
-}
+// char * pullString(int start, int end, int size, char * originalString)
+// {
+// 	int x, y;
+// 	char * toReturn = (char*)calloc(size, sizeof(char));
+// 	for(x = 0, y = start; y < end; x++, y++)
+// 	{
+// 		toReturn[x] = originalString[y];
+// 	}
+// 	return toReturn;
+// }
 
 int intLen(int x)
 {	
