@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
 int nopen(char * buffer)
 {
 	char ** args = argPull(buffer);
-	printf("%s\n",args[0][0]);
-	printf("%s\n",args[0][1]);
+	printf("%s\n",*args[0]);
+	printf("%s\n",*args[1]);
 	// int returnFD = open("./test", O_RDONLY);
 	// printf("%d\n", errno);
 	return -1;
