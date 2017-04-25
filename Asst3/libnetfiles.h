@@ -1,6 +1,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <errno.h>
 
 // int open(const char *pathname, int flags);
 int nopen(char * buffer);

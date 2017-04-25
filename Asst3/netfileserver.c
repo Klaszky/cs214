@@ -109,6 +109,7 @@ int nopen(char * buffer)
 	char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
 	printf("Path: %s\n", path);
 	int returnFD = open(path, O_RDONLY);
+	printf("%d\n", errno)
 	return returnFD;
 }
 
