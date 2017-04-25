@@ -107,8 +107,8 @@ int main(int argc, char *argv[])
 int nopen(char * buffer)
 {
 	char ** args = argPull(buffer);
-	printf("%s\n",*args[0]);
-	printf("%s\n",*args[1]);
+	printf("%s\n", args[0]);
+	printf("%s\n", args[1]);
 	// int returnFD = open("./test", O_RDONLY);
 	// printf("%d\n", errno);
 	return -1;
@@ -119,6 +119,7 @@ char ** argPull(char * buffer)
 	int counter = 0;
 	int i = 0;
 	char * tempString;
+	char * addString;
 	for(i = 0; i < strlen(buffer); i++)
 	{
 		if(buffer[i] == ',')
@@ -127,7 +128,7 @@ char ** argPull(char * buffer)
 		}
 	}
 	
-	char ** returnArray = malloc( counter * sizeof( char*));
+	char ** returnArray = malloc( sizeof *returnArray * counter);
 	counter = 0;
 
 	for(i = 0; i < strlen(buffer); i++)
@@ -158,6 +159,7 @@ char ** argPull(char * buffer)
 				{
 					endingPos = i;
 					tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+					addString = malloc( sizeof *returnArray[i] * sizeOfString);
 					returnArray[counter] = tempString;
 					counter++;		
 					startingPos = -1;
