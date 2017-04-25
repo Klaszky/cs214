@@ -160,7 +160,9 @@ char ** argPull(char * buffer)
 					endingPos = i;
 					tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
 					addString = malloc( sizeof *returnArray[i] * sizeOfString);
-					returnArray[counter] = tempString;
+					memcpy(addString, tempString, sizeOfString);
+					returnArray[counter] = addString;
+					free(tempString);
 					counter++;		
 					startingPos = -1;
 					sizeOfString = 0;	
