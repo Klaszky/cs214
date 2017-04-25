@@ -72,6 +72,11 @@ int main(int argc, char *argv[])
 			printf("couldn't read from socket\n");
 			return -1;
 		}
+///////////////////////////////////////////////////////////////
+		printf("%d\n", strlen(buffer));
+
+///////////////////////////////////////////////////////////////
+
 
 		printf("Message: %s\n", buffer);
 
@@ -84,5 +89,7 @@ int main(int argc, char *argv[])
 		}
 
 	}
+
+
 	return 0;
 }	
