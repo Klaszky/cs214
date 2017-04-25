@@ -116,7 +116,7 @@ int nopen(char * buffer)
 char * pullString(int start, int end, int size, char * originalString)
 {
 	int x, y;
-	char * toReturn = (char*)calloc(size + 1, sizeof(char));
+	char * toReturn = (char*)calloc(size, sizeof(char));
 	for(x = 0, y = start; y < end; x++, y++)
 	{
 		toReturn[x] = originalString[y];
