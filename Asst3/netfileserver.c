@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
 int nopen(char * buffer)
 {
 	char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
+	printf("Path: %s\n", path);
 	int returnFD = open(path, O_RDONLY);
 	return returnFD;
 }
@@ -119,7 +120,6 @@ char * pullString(int start, int end, int size, char * originalString)
 	{
 		toReturn[x] = originalString[y];
 	}
-	printf("%s\n", toReturn);
 	return toReturn;
 }
 
