@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
 			int fdLen = intLen(FD);
 			char * writeString = (char*)malloc(fdLen+1);
 			sprintf(writeString,"%d",FD);
+			printf("%s\n", writeString);
 			n = write(newSocketFD, writeString, strlen(writeString));
 		}
 
