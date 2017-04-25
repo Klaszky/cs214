@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include "libnetfiles.h"
 
 int main(int argc, char *argv[])
 {
@@ -73,23 +74,63 @@ int main(int argc, char *argv[])
 			return -1;
 		}
 ///////////////////////////////////////////////////////////////
-		printf("%d\n", strlen(buffer));
+		// printf("%d\n", strlen(buffer));
+		if(strlen(buffer) > 4 && strncmp("open", buffer, 4) == 1)
+		{
+			int FD = nopen(buffer);
+			int fdLen = intLen(FD);
+			char * writeString = (char*)malloc(fdLen+1);
+			sprintf(writeString,"%d",FD);
+			n = write(newSocketFD, writeString, strlen(writeString));
+		}
 
 ///////////////////////////////////////////////////////////////
 
-
-		printf("Message: %s\n", buffer);
-
-		n = write(newSocketFD, "Message recieved", 18);
-
-		if(n < 0)
+		else
 		{
-			printf("couldn't write out to new socket\n");
-			return -1;
-		}
+			printf("Message: %s\n", buffer);
 
+			n = write(newSocketFD, "Message recieved", 18);
+
+			if(n < 0)
+			{
+				printf("couldn't write out to new socket\n");
+				return -1;
+			}
+		}
 	}
 
 
 	return 0;
-}	
+}
+
+int nopen(char * buffer)
+{
+	char * path = pullString(4, strlen(buffer), strlen(buffer)-4, buffer);
+	int returnFD = open(path, O_RDONLY);
+	return returnFD;
+}
+
+char * pullString(int start, int end, int size, char * originalString)
+{
+	int x, y;
+	char * toReturn = (char*)calloc(size + 1, sizeof(char));
+	for(x = 0, y = start; y < end; x++, y++)
+	{
+		toReturn[x] = originalString[y];
+	}
+
+	return toReturn;
+}
+
+int intLen(int x)
+{	
+	int toReturn = 0;
+	while(x > 0)
+	{
+		toReturn++;
+		x /= 10;
+	}
+
+	return toReturn;
+}
