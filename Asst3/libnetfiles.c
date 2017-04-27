@@ -26,7 +26,7 @@ int networkserverinit(char * hostname)
 
 }
 
-int conn()
+int getSockFD()
 {
 	// All connection and setup stuff
 	/////////////////////////////////
@@ -57,7 +57,7 @@ int conn()
 int netopen(char * path, int mode)
 {	
 	char sendBuffer[256];
-	int socketFD = conn();
+	int socketFD = getSockFD();
 	int n;
 	int toReturn;
 
