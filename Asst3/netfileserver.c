@@ -76,6 +76,15 @@ int main()
 		{
 			char * toWrite = nopen(path);
 			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
+			free(toWrite);
+		}
+		else if(strncmp("close", cmd, 5) == 0)
+		{
+			int result = nclose(path);
+			char * toWrite = malloc(sizeof(char) * intLen(result) + 1);
+			sprintf(toWrite, "%d", result);
+			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
+			free(toWrite);
 		}
 
 		n = write(newSocketFD, "Didn't get it", 14);
@@ -99,6 +108,15 @@ char * nopen(char * path)
 	char * returnStr = malloc(sizeof(char) * size + 1);
 	sprintf(returnStr, "%d,%d,", err, newFD);
 	return returnStr;
+}
+
+int nclose(char * fd)
+{
+	int returnVal;
+	int intfd = atoi(fd);
+	intfd *= -1;
+	returnVal = close(intfd);
+	return returnVal;
 }
 
 nLink * createLink(char * arg)

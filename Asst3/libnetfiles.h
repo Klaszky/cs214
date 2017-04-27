@@ -16,12 +16,14 @@ typedef struct nLink
 	struct nLink * next;
 }nLink;
 
-char * nopen(char * buffer);
 int intLen(int x);
 char * pullString(int start, int end, int size, char * originalString);
 nLink * createLink(char * arg);
 nLink * addToLL(nLink * head, nLink * newnLink);
 nLink * argPull(char * buffer, nLink * head);
-int netopen(char * path, int mode);
 void destroyList(nLink * head);
 int networkserverinit(char * hostname);
+char * nopen(char * buffer);
+int netopen(char * path, int mode);
+int nclose(char * fd);
+int netclose(int fd);

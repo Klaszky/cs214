@@ -110,3 +110,46 @@ int netopen(char * path, int mode)
 	// toReturn = atoi(sendBuffer);
 	return 1;
 }
+
+int netclose(int fd)
+{
+	// Set up for our message to send to server
+	/////////////////////////////////
+	char sendBuffer[256];
+	int socketFD = getSockFD();
+	int n;
+	int toReturn;
+
+	// Constuction of message to be sent. It'll need to be changed a bit
+	///////////////////////////////////
+	bzero(sendBuffer, 256);
+	sprintf(sendBuffer, "close,%d,", fd);
+
+	// Send message
+	///////////////////////////////////
+	n = write(socketFD, sendBuffer, strlen(sendBuffer));
+
+	// Error check
+	//////////////////////////////////
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		return -1;
+	}
+
+	// Read from return socket
+	////////////////////////////////
+	bzero(sendBuffer,256);
+	n = read(socketFD, sendBuffer, 255);
+
+	// Error check of return socket
+	////////////////////////////////
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't read from socket.\n");
+		return -1;
+	}
+
+	toReturn = atoi(sendBuffer);
+	return toReturn;
+}
