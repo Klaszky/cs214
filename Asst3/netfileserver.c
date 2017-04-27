@@ -208,7 +208,7 @@ nLink * argPull(char * buffer, nLink * head)
 char * pullString(int start, int end, int size, char * originalString)
 {
 	int x, y;
-	char * temp = (char*)calloc(size + 1, sizeof(char));
+	char * temp = (char*)calloc(size, sizeof(char));
 	for(x = 0, y = start; y < end; x++, y++)
 	{
 		temp[x] = originalString[y];
