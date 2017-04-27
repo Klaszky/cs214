@@ -114,10 +114,14 @@ char * nopen(char * path)
 	int size;
 	int err;
 	int newFD = open(path, 0x0000);
+	if(newFD != -1)
+	{
+		newFD *= -1;
+	}
 	err = errno;
 	size = intLen(err) + intLen(newFD);
 	char * returnStr = malloc(sizeof(char) * size + 1);
-	sprintf(returnStr, "%d,%d,", err, -1*newFD);
+	sprintf(returnStr, "%d,%d,", err, newFD);
 	return returnStr;
 }
 
