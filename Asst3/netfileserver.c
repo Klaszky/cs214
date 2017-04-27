@@ -7,26 +7,24 @@
 #include <string.h>
 #include "libnetfiles.h"
 
+
 int main(int argc, char *argv[])
 {
-	int socketFD;
-	int newSocketFD;
-	int portNum;
-	int client;
-	int n;
+	int socketFD = -1;
+	int newSocketFD = -1;
+	int client = -1;
+	int n = -1;
 	char buffer[256];
+	int portNum = 42942;
 
 	struct sockaddr_in serverAddressInfo;
 	struct sockaddr_in clientAddressInfo;
 
-	if(argc < 2)
-	{
-		printf("won't number of cmd line args\n");
-		return -1;
-	}
-
-	portNum = atoi(argv[1]);
 	socketFD = socket(AF_INET, SOCK_STREAM, 0);
+	if (setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int)) < 0)
+	{
+	    printf("setsockopt(SO_REUSEADDR) failed");
+	}
 
 	if(socketFD < 0)
 	{
@@ -106,85 +104,105 @@ int main(int argc, char *argv[])
 
 int nopen(char * buffer)
 {
-	char ** args = argPull(buffer);
-	printf("%s\n", args[1]);
-	printf("%s\n", args[2]);
-	// int returnFD = open("./test", O_RDONLY);
-	// printf("%d\n", errno);
-	return -1;
+	nLink * head = NULL;
+	head = argPull(buffer, head);
+	printf("%s\n", head->arg);
+	head = head->next;
+	printf("%s\n", head->arg);
+	int returnFD = open(head->arg, O_RDONLY);
+	printf("%d\n", errno);
+	return returnFD;
 }
 
-char ** argPull(char * buffer)
+nLink * createLink(char * arg)
 {
-	int counter = 1;
-	int i = 0;
-	char * tempString;
-	char * addString;
-	for(i = 0; i < strlen(buffer); i++)
+	nLink * temp = (nLink*)malloc(sizeof(nLink));
+	temp->arg = strdup(arg);
+	temp->next = NULL;
+	return temp;
+}
+
+nLink * addToLL(nLink * head, nLink * newnLink)
+{
+	// Hit the end of the list, simply add the node
+	/////////////////
+	nLink * temp;
+	if(head == NULL)
 	{
-		if(buffer[i] == ',')
-		{
-			counter++;
-		}
+		head = newnLink;
+		return head;
 	}
-	
-	char ** returnArray = malloc( sizeof *returnArray * counter);
-	counter = 0;
 
-	for(i = 0; i < strlen(buffer); i++)
+	else
 	{
+		head->next = addToLL(head->next, newnLink);
+		return head;
+	}
+}
 
-		int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
-		len = strlen(buffer);
+nLink * argPull(char * buffer, nLink * head)
+{
+	char * tempString;
+	nLink * tempnLink;
+	int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	len = strlen(buffer);
 
-		// Main loop of the program, goes over every
-		// character of the input.
+	for(i = 0; i <= len; i++)
+	{
+		// Check if current character isalpha and then
+		// makes some decisions based on that.
 		///////////////////
-		for(i = 0; i <= len; i++)
+		if(buffer[i] == ',' || buffer[i] == '\0')
 		{
-			// Check if current character isalpha and then
-			// makes some decisions based on that.
+			// Nothing to do if current string is empty 
 			///////////////////
-			if(buffer[i] == ',')
+			if(sizeOfString == 0)
 			{
-				// Nothing to do if current string is empty 
-				///////////////////
-				if(sizeOfString == 0)
-				{
-					continue;
-				}
-				// Grabs the current string from input and puts it into the tree.
-				///////////////////
-				else
-				{
-					endingPos = i;
-					tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
-					addString = malloc( sizeof *returnArray[i] * sizeOfString);
-					memcpy(addString, tempString, sizeOfString);
-					returnArray[counter] = addString;
-					counter++;		
-					startingPos = -1;
-					sizeOfString = 0;	
-				}
+				continue;
 			}
-			// Book keeping for current string.
+			// Grabs the current string from input and puts it into the tree.
 			///////////////////
 			else
 			{
-				if(startingPos == -1)
-				{
-					startingPos = i;
-					sizeOfString++;
-				}
-				else
-				{
-					sizeOfString++;
+				endingPos = i;
+				tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+				tempnLink = createLink(tempString);
+				head = addToLL(head, tempnLink);
+				free(tempString);
+				startingPos = -1;
+				sizeOfString = 0;	
 
-				}
+				// endingPos = i;
+
+				// tempString = pullString(startingPos, endingPos, sizeOfString, inputString);
+				// tempNode = createNode(tempString);
+
+				// tempLink = createLinkNode(currentFile);
+
+				// head = addToTree(head, tempNode, tempLink);
+				// free(tempString);
+				// startingPos = -1;
+				// sizeOfString = 0;
+			}
+		}
+		// Book keeping for current string.
+		///////////////////
+		else
+		{
+			if(startingPos == -1)
+			{
+				startingPos = i;
+				sizeOfString++;
+			}
+			else
+			{
+				sizeOfString++;
+
 			}
 		}
 	}
-	return returnArray;
+
+	return head;
 }
 
 char * pullString(int start, int end, int size, char * originalString)
@@ -198,9 +216,6 @@ char * pullString(int start, int end, int size, char * originalString)
 
 	return temp;
 }
-
-
-
 
 int intLen(int x)
 {	
