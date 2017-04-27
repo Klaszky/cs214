@@ -2,22 +2,21 @@
 
 static const int portNum = 42942;
 
-int netopen(char * path)
+int conn()
 {
+	// All connection and setup stuff
+	/////////////////////////////////
 	struct sockaddr_in serverAddressInfo;
 	struct hostent *serverIPAddress = gethostbyname("grep.cs.rutgers.edu");
 
-	char sendBuffer[256];
-	
+	int socketFD;
+
 	if(serverIPAddress == NULL)
 	{
 		fprintf(stderr, "Can't find host\n");
 		return -1;
 	}
 	
-	int socketFD;
-	int n;
-	int toReturn;
 	socketFD = socket(AF_INET, SOCK_STREAM, 0);
 	
 	if(socketFD < 0)
@@ -39,11 +38,23 @@ int netopen(char * path)
 		return -1;
 	}
 
+	return socketFD;
+
+	// End of connection and setup stuff
+	/////////////////////////////////////
+	
+}
+
+int netopen(char * path, int mode)
+{	
+	char sendBuffer[256];
+	int socketFD = conn();
+	int n;
+	int toReturn;
+
 	bzero(sendBuffer, 256);
-	// fgets(sendBuffer, 255, stdin);
-	///////////////////////////////////////////////////////////
-	sprintf(sendBuffer, "open,%s,", path);
-	//////////////////////////////////////////////////////////
+	sprintf(sendBuffer, "open,%s,%d,", path, mode);
+
 	
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
 

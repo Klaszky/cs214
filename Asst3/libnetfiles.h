@@ -23,5 +23,5 @@ char * pullString(int start, int end, int size, char * originalString);
 nLink * createLink(char * arg);
 nLink * addToLL(nLink * head, nLink * newnLink);
 nLink * argPull(char * buffer, nLink * head);
-int netopen(char * path);
+int netopen(char * path, int mode);
 void destroyList(nLink * head);

@@ -117,7 +117,7 @@ char * nopen(char * path)
 	err = errno;
 	size = intLen(err) + intLen(newFD);
 	char * returnStr = malloc(sizeof(char) * size + 1);
-	sprintf(returnStr, "%d,%d,", err, newFD);
+	sprintf(returnStr, "%d,%d,", err, -1*newFD);
 	return returnStr;
 }
 

@@ -2,8 +2,10 @@
 
 int main()
 {
-	int i = netopen("./test");
-	printf("%d\n", i);
+	
+	printf("%d\n", netopen("./test", O_RDONLY));
+	printf("%d\n", netopen("./test", O_RDONLY));
+	printf("%d\n", netopen("./test2", O_RDONLY));
 	return 0;
 	// int socketFD;
 	// int portNum = 42942;
