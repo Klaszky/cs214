@@ -76,6 +76,8 @@ int main()
 		{
 			char * toWrite = nopen(path);
 			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
+			free(cmd);
+			free(path);
 			free(toWrite);
 		}
 		else if(strncmp("close", cmd, 5) == 0)
@@ -84,6 +86,8 @@ int main()
 			char * toWrite = malloc(sizeof(char) * intLen(result) + 1);
 			sprintf(toWrite, "%d", result);
 			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
+			free(cmd);
+			free(path);
 			free(toWrite);
 		}
 
@@ -231,7 +235,6 @@ void destroyList(nLink * head)
 	else
 	{
 		destroyList(head->next);
-		free(head->arg);
 		free(head);
 	}
 }
