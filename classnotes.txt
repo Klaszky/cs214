@@ -912,7 +912,7 @@ server: don not push to queue if full (i.e. length queue == max)
 >>semaphores are asynchronous, thread-safe synchronization mechanisms<<
 
 //OS and gcc will not stop this - machine does not understand your code.... it can only run it 
-// only you can prevent desychroniztion 
+// only you can prevent desychroniztion (dumb smokey the bear joke that the professor made ...)
 threadA:             threadB:
 lock(mutex)
 ++i;                 ++i;
