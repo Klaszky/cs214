@@ -220,3 +220,16 @@ int intLen(int x)
 
 	return toReturn;
 }
+
+void destroyList(nLink * head)
+{
+	if(head == NULL)
+	{
+		return;
+	}
+	else
+	{
+		destroyList(head->next);
+		free(head);
+	}
+}
