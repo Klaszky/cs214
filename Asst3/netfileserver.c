@@ -181,18 +181,6 @@ nLink * argPull(char * buffer, nLink * head)
 				free(tempString);
 				startingPos = -1;
 				sizeOfString = 0;	
-
-				// endingPos = i;
-
-				// tempString = pullString(startingPos, endingPos, sizeOfString, inputString);
-				// tempNode = createNode(tempString);
-
-				// tempLink = createLinkNode(currentFile);
-
-				// head = addToTree(head, tempNode, tempLink);
-				// free(tempString);
-				// startingPos = -1;
-				// sizeOfString = 0;
 			}
 		}
 		// Book keeping for current string.

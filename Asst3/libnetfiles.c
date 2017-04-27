@@ -2,26 +2,16 @@
 
 static const int portNum = 42942;
 
-int conn()
+struct sockaddr_in serverAddressInfo;
+struct hostent *serverIPAddress;
+
+int networkserverinit(char * hostname)
 {
-	// All connection and setup stuff
-	/////////////////////////////////
-	struct sockaddr_in serverAddressInfo;
-	struct hostent *serverIPAddress = gethostbyname("grep.cs.rutgers.edu");
-
-	int socketFD;
-
+	serverIPAddress = gethostbyname(hostname);
+	
 	if(serverIPAddress == NULL)
 	{
 		fprintf(stderr, "Can't find host\n");
-		return -1;
-	}
-	
-	socketFD = socket(AF_INET, SOCK_STREAM, 0);
-	
-	if(socketFD < 0)
-	{
-		fprintf(stderr, "Couldn't make a socket.\n");
 		return -1;
 	}
 
@@ -31,6 +21,25 @@ int conn()
 	serverAddressInfo.sin_port = htons(portNum);
 
 	bcopy((char *) serverIPAddress->h_addr, (char *)&serverAddressInfo.sin_addr.s_addr, serverIPAddress->h_length);
+
+	return 0;
+
+}
+
+int conn()
+{
+	// All connection and setup stuff
+	/////////////////////////////////
+
+	int socketFD;
+
+	socketFD = socket(AF_INET, SOCK_STREAM, 0);
+	
+	if(socketFD < 0)
+	{
+		fprintf(stderr, "Couldn't make a socket.\n");
+		return -1;
+	}
 
 	if(connect(socketFD, (struct sockaddr *)&serverAddressInfo, sizeof(serverAddressInfo)) < 0)
 	{

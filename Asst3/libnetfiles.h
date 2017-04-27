@@ -25,3 +25,4 @@ nLink * addToLL(nLink * head, nLink * newnLink);
 nLink * argPull(char * buffer, nLink * head);
 int netopen(char * path, int mode);
 void destroyList(nLink * head);
+int networkserverinit(char * hostname);
