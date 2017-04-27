@@ -64,30 +64,6 @@ int main()
 			printf("couldn't read from socket\n");
 			return -1;
 		}
-///////////////////////////////////////////////////////////////
-		// printf("%d\n", strlen(buffer));
-		// if(strlen(buffer) > 4 && strncmp("open", buffer, 4) == 0)
-		// {
-		// 	int FD = nopen(buffer);
-		// 	int fdLen = intLen(FD);
-		// 	char * writeString = (char*)malloc(fdLen+1);
-		// 	sprintf(writeString,"%d",FD);
-		// 	n = write(newSocketFD, writeString, strlen(writeString));
-		// }
-
-///////////////////////////////////////////////////////////////
-
-	// 	else
-	// 	{
-	// 		printf("Message: %s\n", buffer);
-
-
-	// 		if(n < 0)
-	// 		{
-	// 			printf("couldn't write out to new socket\n");
-	// 			return -1;
-	// 		}
-	// 	}
 
 		nLink * head = NULL;
 		head = argPull(buffer, head);

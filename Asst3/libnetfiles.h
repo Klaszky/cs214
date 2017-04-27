@@ -16,7 +16,6 @@ typedef struct nLink
 	struct nLink * next;
 }nLink;
 
-// int open(const char *pathname, int flags);
 char * nopen(char * buffer);
 int intLen(int x);
 char * pullString(int start, int end, int size, char * originalString);
