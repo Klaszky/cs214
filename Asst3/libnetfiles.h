@@ -1,7 +1,14 @@
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 typedef struct nLink
 {
@@ -16,3 +23,4 @@ char * pullString(int start, int end, int size, char * originalString);
 nLink * createLink(char * arg);
 nLink * addToLL(nLink * head, nLink * newnLink);
 nLink * argPull(char * buffer, nLink * head);
+int netOpen(char * path);

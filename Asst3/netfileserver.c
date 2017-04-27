@@ -1,19 +1,12 @@
-#include <stdio.h>
-#include <sys/types.h> 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
 #include "libnetfiles.h"
 
 
-int main(int argc, char *argv[])
+int main()
 {
-	int socketFD = -1;
-	int newSocketFD = -1;
-	int client = -1;
-	int n = -1;
+	socklen_t client;
+	int socketFD;
+	int newSocketFD;
+	int n;
 	char buffer[256];
 	int portNum = 42942;
 
@@ -126,7 +119,6 @@ nLink * addToLL(nLink * head, nLink * newnLink)
 {
 	// Hit the end of the list, simply add the node
 	/////////////////
-	nLink * temp;
 	if(head == NULL)
 	{
 		head = newnLink;
