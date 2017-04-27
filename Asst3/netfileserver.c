@@ -66,45 +66,59 @@ int main()
 		}
 ///////////////////////////////////////////////////////////////
 		// printf("%d\n", strlen(buffer));
-		if(strlen(buffer) > 4 && strncmp("open", buffer, 4) == 0)
-		{
-			int FD = nopen(buffer);
-			int fdLen = intLen(FD);
-			char * writeString = (char*)malloc(fdLen+1);
-			sprintf(writeString,"%d",FD);
-			n = write(newSocketFD, writeString, strlen(writeString));
-		}
+		// if(strlen(buffer) > 4 && strncmp("open", buffer, 4) == 0)
+		// {
+		// 	int FD = nopen(buffer);
+		// 	int fdLen = intLen(FD);
+		// 	char * writeString = (char*)malloc(fdLen+1);
+		// 	sprintf(writeString,"%d",FD);
+		// 	n = write(newSocketFD, writeString, strlen(writeString));
+		// }
 
 ///////////////////////////////////////////////////////////////
 
-		else
+	// 	else
+	// 	{
+	// 		printf("Message: %s\n", buffer);
+
+
+	// 		if(n < 0)
+	// 		{
+	// 			printf("couldn't write out to new socket\n");
+	// 			return -1;
+	// 		}
+	// 	}
+
+		nLink * head = NULL;
+		head = argPull(buffer, head);
+		nLink * temp = head;
+		char * cmd = temp->arg;
+		temp = temp->next;
+		char * path = temp->arg;
+		destroyList(head);
+		if(strncmp("open", cmd, 4) == 0)
 		{
-			printf("Message: %s\n", buffer);
-
-			n = write(newSocketFD, "Message recieved", 18);
-
-			if(n < 0)
-			{
-				printf("couldn't write out to new socket\n");
-				return -1;
-			}
+			char * toWrite = nopen(path);
+			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
 		}
+
+		n = write(newSocketFD, "Didn't get it", 14);
 	}
 
-
+	
 	return 0;
 }
 
-int nopen(char * buffer)
+char * nopen(char * path)
 {
-	nLink * head = NULL;
-	head = argPull(buffer, head);
-	printf("%s\n", head->arg);
-	head = head->next;
-	printf("%s\n", head->arg);
-	int returnFD = open(head->arg, O_RDONLY);
-	printf("%d\n", errno);
-	return returnFD;
+	int size;
+	int err;
+	int newFD = open(path, 0x0000);
+	err = errno;
+	size = intLen(err) + intLen(newFD);
+	char * returnStr = malloc(sizeof(char) * size + 1)
+	sprintf(returnStr, "%d,%d,", err, newFD)
+	return returnStr;
 }
 
 nLink * createLink(char * arg)
