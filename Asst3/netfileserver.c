@@ -115,6 +115,7 @@ int nclose(char * fd)
 	int returnVal;
 	int intfd = atoi(fd);
 	intfd *= -1;
+	printf("%d\n", intfd);
 	returnVal = close(intfd);
 	return returnVal;
 }
