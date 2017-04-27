@@ -4,6 +4,7 @@ int main()
 {
 	int i = netopen("./test");
 	printf("%d\n", i);
+	return 0;
 	// int socketFD;
 	// int portNum = 42942;
 	// int n;

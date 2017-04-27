@@ -64,7 +64,7 @@ int netopen(char * path)
 		return -1;
 	}
 
-	
-	toReturn = atoi(sendBuffer);
-	return toReturn;
+	printf("%s\n", sendBuffer);
+	// toReturn = atoi(sendBuffer);
+	return 1;
 }
