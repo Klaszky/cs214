@@ -215,7 +215,6 @@ int nread(nLink * head, int socketFD)
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
 	
 	printf("4\n");
-	free(buffer);
 
 	printf("5\n");
 	n = write(socketFD, message, strlen(message) + 1);
