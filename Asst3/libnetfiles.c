@@ -83,7 +83,7 @@ int netopen(char * path, int mode)
 	err = atoi(head->arg);
 	fd = atoi(head->next->arg);
 	destroyList(head);
-	
+
 	return fd;
 }
 
@@ -94,7 +94,10 @@ int netclose(int fd)
 	char sendBuffer[256];
 	int socketFD = getSockFD();
 	int n;
+	
+	nLink * head = NULL;
 	int result;
+	int err;
 
 	// Constuction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
@@ -126,7 +129,9 @@ int netclose(int fd)
 		return -1;
 	}
 
-	result = atoi(sendBuffer);
+	head = argPull(sendBuffer, head);
+	err = atoi(head->arg);
+	result = atoi(head->next->arg);
 	return result;
 }
 
@@ -308,4 +313,9 @@ void destroyList(nLink * head)
 		free(head->arg);
 		free(head);
 	}
+}
+
+void errNoChk()
+{
+	return;
 }

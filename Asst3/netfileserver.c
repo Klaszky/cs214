@@ -66,11 +66,10 @@ int main()
 
 		nLink * head = NULL;
 		head = argPull(buffer, head);
+
 		nLink * temp = head;
 		char * cmd = temp->arg;
-		// temp = temp->next;
-		// char * path = temp->arg;
-		// destroyList(head);
+
 		if(strncmp("open", cmd, 4) == 0)
 		{
 			nopen(head, newSocketFD);
@@ -79,16 +78,10 @@ int main()
 		// {
 		// 	return 0;
 		// }
-		// else if(strncmp("close", cmd, 5) == 0)
-		// {
-		// 	int result = nclose(path);
-		// 	char * toWrite = malloc(sizeof(char) * intLen(result) + 1);
-		// 	sprintf(toWrite, "%d", result);
-		// 	n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
-		// 	free(cmd);
-		// 	free(path);
-		// 	free(toWrite);
-		// }
+		else if(strncmp("close", cmd, 5) == 0)
+		{
+			nclose(head, newSocketFD);
+		}
 
 		n = write(newSocketFD, "Didn't get it", 14);
 	}
@@ -146,15 +139,37 @@ int nopen(nLink * head, int socketFD)
 	return 0;
 }
 
-int nclose(nLink * head)
+
+int nclose(nLink * head, int socketFD)
 {
+	// Var set up
+	//////////////
+	int n;
+	int result;
+	int intFD = atoi(head->next->arg);
+	
+	// Change to local FD
+	//////////////
+	if(intFD != -1)
+	{
+		intFD *= -1;
+	}
+	
+	// Actually closing and checking errno
+	//////////////
+	result = close(intFD);
+	err = errno
+	errno = 0;
+	
+	char * message = malloc(sizeof(char) * (intLen(result) + intLen(err) + 1));
+	sprintf(message, "%d,%d,", err, result);
+	
+	n = write(newSocketFD, message, strlen(message) + 1);
+
+	free(message);
 	destroyList(head);
-	// int returnVal;
-	// int intFD = atoi(fd);
-	// intFD *= -1;
-	// returnVal = close(intFD);
-	// return returnVal;
-	return -1;
+
+	return result;
 }
 
 char * nread(char * fd, char * size)
