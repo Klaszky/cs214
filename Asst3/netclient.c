@@ -12,6 +12,9 @@ int main()
 	status = netread(fd, readTest, btr);
 	printf("%s\n", readTest);
 	printf("%d\n", status);
+	status = netread(fd, readTest, btr);
+	printf("%s\n", readTest);
+	printf("%d\n", status);
 	printf("%d\n", netclose(fd));
 	printf("%d\n", netopen("./test", O_RDONLY));
 	printf("%d\n", netopen("./test2", O_RDONLY));
