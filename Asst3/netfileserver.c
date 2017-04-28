@@ -145,6 +145,7 @@ int nclose(nLink * head, int socketFD)
 	// Var set up
 	//////////////
 	int n;
+	int err;
 	int result;
 	int intFD = atoi(head->next->arg);
 	
@@ -158,13 +159,19 @@ int nclose(nLink * head, int socketFD)
 	// Actually closing and checking errno
 	//////////////
 	result = close(intFD);
-	err = errno
+	err = errno;
 	errno = 0;
 	
 	char * message = malloc(sizeof(char) * (intLen(result) + intLen(err) + 1));
 	sprintf(message, "%d,%d,", err, result);
 	
-	n = write(newSocketFD, message, strlen(message) + 1);
+	n = write(socketFD, message, strlen(message) + 1);
+
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		return -1;
+	}
 
 	free(message);
 	destroyList(head);

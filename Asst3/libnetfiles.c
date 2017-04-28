@@ -132,6 +132,7 @@ int netclose(int fd)
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
 	result = atoi(head->next->arg);
+	
 	return result;
 }
 

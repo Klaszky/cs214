@@ -26,7 +26,7 @@ void destroyList(nLink * head);
 int networkserverinit(char * hostname);
 int nopen(nLink * head, int socketFD);
 int netopen(char * path, int mode);
-int nclose(nLink * head);
+int nclose(nLink * head, int socketFD);
 int netclose(int fd);
 ssize_t netread(int fildes, void *buf, size_t nbyte);
 ssize_t netwrite(int fildes, const void *buf, size_t nbyte);
