@@ -126,6 +126,7 @@ int nopen(nLink * head, int socketFD)
 	// Setting errno and getting my message ready to send
 	////////////////
 	err = errno;
+	errno = 0;
 	msgSize = intLen(err) + intLen(newFD);
 
 	char * message = malloc(sizeof(char) * msgSize + 1);

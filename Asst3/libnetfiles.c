@@ -44,7 +44,7 @@ int netopen(char * path, int mode)
 	int socketFD = getSockFD();
 	int n;
 	
-	nLink * head;
+	nLink * head = NULL;
 	int err;
 	int fd;
 
@@ -70,7 +70,7 @@ int netopen(char * path, int mode)
 	bzero(sendBuffer,256);
 	n = read(socketFD, sendBuffer, 255);
 
-	// head = argPull(sendBuffer, head);
+	head = argPull(sendBuffer, head);
 
 	// Error check of return socket
 	////////////////////////////////
