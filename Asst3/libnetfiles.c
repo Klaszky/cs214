@@ -43,10 +43,10 @@ int netopen(char * path, int mode)
 	char sendBuffer[256];
 	int socketFD = getSockFD();
 	int n;
+	
+	nLink * head;
 	int err;
 	int fd;
-	nLink * messageHead;
-	// int toReturn;
 
 	// Constuction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
@@ -70,6 +70,8 @@ int netopen(char * path, int mode)
 	bzero(sendBuffer,256);
 	n = read(socketFD, sendBuffer, 255);
 
+	// head = argPull(sendBuffer, head);
+
 	// Error check of return socket
 	////////////////////////////////
 	if(n < 0)
@@ -78,17 +80,13 @@ int netopen(char * path, int mode)
 		return -1;
 	}
 
-	messageHead = argPull(sendBuffer, messageHead);
-
-	errno = atoi(messageHead->arg);
-	fd = atoi(messageHead->next->arg);
-	destroyList(messageHead);
 	// At this point we'll need to do another arg pull. Once args are pulled
 	// we'll need to set errno and out return value. Current print statement and
 	// return value is just for testing.
 	////////////////////////////////
+	printf("%s\n", sendBuffer);
 	// toReturn = atoi(sendBuffer);
-	return fd;
+	return 1;
 }
 
 int netclose(int fd)
@@ -144,7 +142,6 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	sprintf(sendBuffer, "read,%d,%d,", fd, nbyte);
 
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
-
 
 	if(n < 0)
 	{
