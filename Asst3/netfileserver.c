@@ -74,10 +74,10 @@ int main()
 		{
 			nopen(head, newSocketFD);
 		}
-		// else if(strncmp("read", cmd, 4) == 0)
-		// {
-		// 	return 0;
-		// }
+		else if(strncmp("read", cmd, 4) == 0)
+		{
+			nread(head, newSocketFD);
+		}
 		else if(strncmp("close", cmd, 5) == 0)
 		{
 			nclose(head, newSocketFD);
