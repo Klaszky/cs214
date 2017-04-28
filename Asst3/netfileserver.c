@@ -73,7 +73,7 @@ int main()
 		// destroyList(head);
 		if(strncmp("open", cmd, 4) == 0)
 		{
-			return 0;
+			nopen(head, newSocketFD);
 		}
 		// else if(strncmp("read", cmd, 4) == 0)
 		// {

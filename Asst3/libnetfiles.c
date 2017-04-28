@@ -138,6 +138,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
 
+
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
