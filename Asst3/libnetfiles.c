@@ -133,6 +133,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	int socketFD = getSockFD();
 	int n;
 	int bytesRead;
+	nLink * head;
 	sprintf(sendBuffer, "read,%d,%d,", fd, nbyte);
 
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));

@@ -3,6 +3,8 @@
 
 int main()
 {
+	// Set up vars to use in our program
+	//////////////////////////////////
 	socklen_t client;
 	int socketFD;
 	int newSocketFD;
@@ -10,6 +12,8 @@ int main()
 	char buffer[256];
 	int portNum = 42942;
 
+	// Setting up our connection
+	////////////////////////////////
 	struct sockaddr_in serverAddressInfo;
 	struct sockaddr_in clientAddressInfo;
 
@@ -25,16 +29,9 @@ int main()
 		return -1;
 	}
 
-	// clean out buffer
 	bzero((char *) &serverAddressInfo, sizeof(serverAddressInfo));
-
-	//what the hell is htons? is it changing the int to a network int?
 	serverAddressInfo.sin_port = htons(portNum);
-
-	// not sure what this does.
 	serverAddressInfo.sin_family = AF_INET;
-
-	// not sure what this does.
 	serverAddressInfo.sin_addr.s_addr = INADDR_ANY;
 
 	if(bind(socketFD, (struct sockaddr *) &serverAddressInfo, sizeof(serverAddressInfo)) < 0)
@@ -43,6 +40,8 @@ int main()
 		return -1;
 	}
 
+	// End of connection set up
+	////////////////////////////////
 
 	while(1)
 	{
@@ -69,27 +68,27 @@ int main()
 		head = argPull(buffer, head);
 		nLink * temp = head;
 		char * cmd = temp->arg;
-		temp = temp->next;
-		char * path = temp->arg;
-		destroyList(head);
+		// temp = temp->next;
+		// char * path = temp->arg;
+		// destroyList(head);
 		if(strncmp("open", cmd, 4) == 0)
 		{
-			char * toWrite = nopen(path);
-			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
-			free(cmd);
-			free(path);
-			free(toWrite);
+			return 0;
 		}
-		else if(strncmp("close", cmd, 5) == 0)
-		{
-			int result = nclose(path);
-			char * toWrite = malloc(sizeof(char) * intLen(result) + 1);
-			sprintf(toWrite, "%d", result);
-			n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
-			free(cmd);
-			free(path);
-			free(toWrite);
-		}
+		// else if(strncmp("read", cmd, 4) == 0)
+		// {
+		// 	return 0;
+		// }
+		// else if(strncmp("close", cmd, 5) == 0)
+		// {
+		// 	int result = nclose(path);
+		// 	char * toWrite = malloc(sizeof(char) * intLen(result) + 1);
+		// 	sprintf(toWrite, "%d", result);
+		// 	n = write(newSocketFD, toWrite, strlen(toWrite) + 1);
+		// 	free(cmd);
+		// 	free(path);
+		// 	free(toWrite);
+		// }
 
 		n = write(newSocketFD, "Didn't get it", 14);
 	}
@@ -98,29 +97,75 @@ int main()
 	return 0;
 }
 
-char * nopen(char * path)
+int nopen(nLink * head, int socketFD)
 {
-	int size;
+	// Var set up 
+	//////////////////
+	int msgSize;
 	int err;
-	int newFD = open(path, 0x0000);
+	int n;
+
+	// Pulling out of arguments from linked list
+	/////////////////
+	nLink * tmp = head;
+	tmp = tmp->next;
+
+	char * path = tmp->arg;
+	tmp = tmp->next;
+
+	int mode = atoi(tmp->arg);
+	
+	// Actually opening the file and error check
+	/////////////////
+	int newFD = open(path, mode);
 	if(newFD != -1)
 	{
 		newFD *= -1;
 	}
+	
+	// Setting errno and getting my message ready to send
+	////////////////
 	err = errno;
-	size = intLen(err) + intLen(newFD);
-	char * returnStr = malloc(sizeof(char) * size + 1);
-	sprintf(returnStr, "%d,%d,", err, newFD);
-	return returnStr;
+	msgSize = intLen(err) + intLen(newFD);
+
+	char * message = malloc(sizeof(char) * msgSize + 1);
+	sprintf(message, "%d,%d,", err, newFD);
+	
+	// Writing new socket and error check
+	////////////////
+	n = write(socketFD, message, strlen(message) + 1);
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		return -1;
+	}
+
+	free(message);
+	destroyList(head);
+	return 0;
 }
 
-int nclose(char * fd)
+int nclose(nLink * head)
 {
-	int returnVal;
-	int intfd = atoi(fd);
-	intfd *= -1;
-	printf("%d\n", intfd);
-	returnVal = close(intfd);
-	return returnVal;
+	destroyList(head);
+	// int returnVal;
+	// int intFD = atoi(fd);
+	// intFD *= -1;
+	// returnVal = close(intFD);
+	// return returnVal;
+	return -1;
 }
 
+char * nread(char * fd, char * size)
+{
+	int intFD = atoi(fd);
+	int intSize = atoi(size);
+	int status;
+	char * buffer = malloc(sizeof(char) * intSize + 1);
+	status = read(intFD, buffer, intSize);
+	char * message = malloc(sizeof(char) * (strlen(buffer) + intLen(status)) );
+	sprintf(message, "%d,%s,", status, buffer);
+	free(buffer);
+	return message;
+
+}
