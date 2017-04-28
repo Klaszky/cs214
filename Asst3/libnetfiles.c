@@ -80,13 +80,11 @@ int netopen(char * path, int mode)
 		return -1;
 	}
 
-	// At this point we'll need to do another arg pull. Once args are pulled
-	// we'll need to set errno and out return value. Current print statement and
-	// return value is just for testing.
-	////////////////////////////////
-	printf("%s\n", sendBuffer);
-	// toReturn = atoi(sendBuffer);
-	return 1;
+	err = atoi(head->arg);
+	fd = atoi(head->next->arg);
+	destroyList(head);
+	
+	return fd;
 }
 
 int netclose(int fd)
@@ -307,6 +305,7 @@ void destroyList(nLink * head)
 	else
 	{
 		destroyList(head->next);
+		free(head->arg);
 		free(head);
 	}
 }
