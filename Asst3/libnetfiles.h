@@ -29,4 +29,5 @@ int netopen(char * path, int mode);
 int nclose(nLink * head, int socketFD);
 int netclose(int fd);
 ssize_t netread(int fildes, void *buf, size_t nbyte);
+int nread(nLink * head, int socketFD);
 ssize_t netwrite(int fildes, const void *buf, size_t nbyte);

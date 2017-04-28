@@ -179,16 +179,53 @@ int nclose(nLink * head, int socketFD)
 	return result;
 }
 
-char * nread(char * fd, char * size)
+int nread(nLink * head, int socketFD)
 {
-	int intFD = atoi(fd);
-	int intSize = atoi(size);
+	// Var set up
+	////////////////
+	int n;
+	int err;
+	
+	// Gettting proper FD
+	////////////////	
+	int intFD = atoi(head->next->arg);
+	if(intFD != -1)
+	{
+		intFD *= -1;
+	}
+
+	// I know this is lazy, but it's getting late.
+	/////////////////
+	int intSize = atoi(head->next->next->arg);
 	int status;
+
+	// Reading the file
+	/////////////////	
 	char * buffer = malloc(sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
-	char * message = malloc(sizeof(char) * (strlen(buffer) + intLen(status)) );
-	sprintf(message, "%d,%s,", status, buffer);
+	err = errno;
+	if(status < 0)
+	{
+		fprintf(stderr, "Error reading from file\n");
+		return -1;
+	}
+
+	char * message = malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
+	sprintf(message, "%d,%d,%s,", err, status, buffer);
+	
 	free(buffer);
-	return message;
+
+	n = write(socketFD, message, strlen(message) + 1);
+
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		return -1;
+	}
+
+	free(message);
+	destroyList(head);
+
+	return 0;
 
 }

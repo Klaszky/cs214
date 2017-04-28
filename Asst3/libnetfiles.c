@@ -131,8 +131,12 @@ int netclose(int fd)
 
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
+	if(err == -1)
+	{
+		fprintf(stderr, "Couldn't close file.\n");
+	}
 	result = atoi(head->next->arg);
-	
+
 	return result;
 }
 
@@ -141,10 +145,13 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	char sendBuffer[256];
 	int socketFD = getSockFD();
 	int n;
-	int bytesRead;
-	nLink * head;
-	sprintf(sendBuffer, "read,%d,%d,", fd, nbyte);
 
+	int err;
+	int bytesRead;
+	char * readBuf;
+	nLink * head = NULL;
+
+	sprintf(sendBuffer, "read,%d,%d,", fd, nbyte);
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
 
 	if(n < 0)
@@ -158,6 +165,13 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	bzero(sendBuffer,256);
 	n = read(socketFD, sendBuffer, 255);
 
+	head = argPull(sendBuffer, head);
+	err = atoi(head->arg);
+	bytesRead = atoi(head->next->arg);
+	readBuf = head->next->next->arg;
+	sprintf(buf, "%s%s", (char*)buf, readBuf);
+
+
 	// Error check of return socket
 	////////////////////////////////
 	if(n < 0)
@@ -166,7 +180,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 		return -1;
 	}	
 
-	return 1;
+	return bytesRead;
 }
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
