@@ -202,7 +202,6 @@ int nclose(nLink * head, int socketFD)
 
 int nread(nLink * head, int socketFD)
 {
-	printf("testing one two three\n");
 	// Var set up
 	////////////////
 	int n;
@@ -224,7 +223,6 @@ int nread(nLink * head, int socketFD)
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
 	pthread_mutex_lock(&readMutex);
 	status = read(intFD, buffer, intSize);
-	printf("status: %d\n", status);
 	pthread_mutex_unlock(&readMutex);
 
 	err = errno;
