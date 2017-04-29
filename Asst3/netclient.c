@@ -26,12 +26,12 @@ int main()
 	printf("%s\n",fileContents);
 
 
-	while(amtToWrite > 0)
-	{
+	// while(amtToWrite > 0)
+	// {
 		status = write(fd2, fileContents, amtToWrite);
 		printf("status: %d", status);
-		amtToWrite -= status;
-	}
+	// 	amtToWrite -= status;
+	// }
 
 
 	// printf("%s\n", fileContents);

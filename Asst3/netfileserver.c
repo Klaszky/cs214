@@ -189,12 +189,13 @@ int nread(nLink * head, int socketFD)
 	// Gettting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
-	printf("strFd: %s\n", head->next->arg);
-	printf("strFd: %d\n", intFD);
 	if(intFD != -1)
 	{
 		intFD *= -1;
 	}
+	printf("strFd: %s\n", head->next->arg);
+	printf("strFd: %d\n", intFD);
+	printf("socketFD: %d\n", socketFD);
 
 	// I know this is lazy, but it's getting late.
 	/////////////////
@@ -208,6 +209,7 @@ int nread(nLink * head, int socketFD)
 	char * buffer = (char*)malloc(sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
 	printf("status on server: %d", status);
+
 	err = errno;
 	if(status < 0)
 	{
