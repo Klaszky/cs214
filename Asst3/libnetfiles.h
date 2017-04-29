@@ -32,3 +32,4 @@ ssize_t netread(int fildes, void *buf, size_t nbyte);
 int nread(nLink * head, int socketFD);
 ssize_t netwrite(int fildes, const void *buf, size_t nbyte);
 int nwrite(nLink * head, int socketFD);
+nLink * readPull(char * buffer, nLink * head);

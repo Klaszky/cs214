@@ -169,7 +169,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	bzero(sendBuffer, 10000);
 	n = read(socketFD, sendBuffer, 10000);
 
-	head = argPull(sendBuffer, head);
+	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
 	bytesRead = atoi(head->next->arg);
 	readBuf = head->next->next->arg;
@@ -328,6 +328,62 @@ nLink * argPull(char * buffer, nLink * head)
 	}
 
 	return head;
+}
+
+nLink * readPull(char * buffer, nLink * head)
+{
+	char * tempString;
+	nLink * tempnLink;
+	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	len = strlen(buffer);
+
+	for(i = 0; i < strlen(buffer); i++)
+	{
+		if(buffer[i] == ',')
+		{
+			endingPos = i;
+			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+			tempnLink = createLink(tempString);
+			head = addToLL(head, tempnLink);
+			free(tempString);
+			startingPos = i++;
+			sizeOfString = 0;
+			break;
+		}
+		else
+		{
+			sizeOfString++;
+		}
+	}
+	for(i; i < strlen(buffer); i++)
+	{
+		if(buffer[i] == ',')
+		{
+			endingPos = i;
+			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+			tempnLink = createLink(tempString);
+			head = addToLL(head, tempnLink);
+			free(tempString);
+			startingPos = i+1;
+			sizeOfString = 0;
+			break;
+		}
+		else
+		{
+			sizeOfString++;
+		}
+	}
+
+	endingPos = strlen(buffer);
+	tempString = pullString(startingPos, endingPos, strlen(buffer) - startingPos, buffer);
+	tempnLink = createLink(tempString);
+	head = addToLL(head, tempnLink);
+	free(tempString);
+	startingPos = i+1;
+	sizeOfString = 0;
+
+	return head;
+
 }
 
 char * pullString(int start, int end, int size, char * originalString)
