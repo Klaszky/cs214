@@ -437,7 +437,11 @@ void destroyList(nLink * head)
 
 void errNoChk(int err)
 {
-	if(err == 1)
+	if(err == 0)
+	{
+		return;
+	}
+	else if(err == 1)
 	{
 		fprintf(stderr, "Error EPERM: Operation not permitted.\n");
 	}
