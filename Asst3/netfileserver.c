@@ -115,6 +115,8 @@ int nopen(nLink * head, int socketFD)
 	{
 		newFD *= -1;
 	}
+
+	printf("%d\n", newFD);
 	
 	// Setting errno and getting my message ready to send
 	////////////////
@@ -128,6 +130,7 @@ int nopen(nLink * head, int socketFD)
 	// Writing new socket and error check
 	////////////////
 	n = write(socketFD, message, strlen(message));
+	
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
