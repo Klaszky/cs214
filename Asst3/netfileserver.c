@@ -1,3 +1,5 @@
+#include "libnetfiles.h"
+
 int main()
 {
 	// Set up vars to use in our program
