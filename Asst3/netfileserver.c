@@ -189,6 +189,8 @@ int nread(nLink * head, int socketFD)
 	// Gettting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
+	printf("strFd: %s\n", head->next->arg);
+	printf("strFd: %d\n", intFD);
 	if(intFD != -1)
 	{
 		intFD *= -1;
