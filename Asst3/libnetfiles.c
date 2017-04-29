@@ -427,7 +427,6 @@ void destroyList(nLink * head)
 	else
 	{
 		destroyList(head->next);
-		free(head->arg);
 		free(head);
 	}
 }
