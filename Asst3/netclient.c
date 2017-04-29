@@ -16,15 +16,15 @@ int main()
 	int fd = netopen("./oz.txt", O_RDONLY);
 	printf("%d\n", fd);
 
-	// while(amtToRead > 0)
-	// {
+	while(amtToRead > 0)
+	{
 		status = netread(fd, readIn, amtToRead);
 		amtToRead -= status;
 		printf("status: %d\n", status);
 		printf("amtToRead: %d\n", amtToRead);
-	// }
+	}
 
-	printf("%s\n", readIn);
+	// printf("%s\n", readIn);
 
 	printf("%d\n", netclose(fd));
 	// int fd = netopen("./test", O_WRONLY);
