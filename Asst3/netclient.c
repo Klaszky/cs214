@@ -2,8 +2,8 @@
 
 int main()
 {	
-	char * readIn = (char*)malloc(sizeof(char) * 210);
-	int amtToRead = 200;
+	char * readIn = (char*)malloc(sizeof(char) * 2000);
+	int amtToRead = 2000;
 	int status = 0;
 
 	networkserverinit("grep.cs.rutgers.edu");
@@ -14,9 +14,14 @@ int main()
 	int fd = netopen("./oz", O_RDONLY);
 	printf("%d\n", fd);
 
-	status = netread(fd, readIn, amtToRead);
-	printf("%d\n", status);
-	printf("%d\n", amtToRead);
+	while(amtToRead > 0)
+	{
+		status = netread(fd, readIn, amtToRead);
+		amtToRead -= status;
+		printf("status: %d\n", status);
+		printf("amtToRead: %d\n", amtToRead);
+	}
+
 	printf("%s\n", readIn);
 
 	printf("%d\n", netclose(fd));

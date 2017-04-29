@@ -192,23 +192,15 @@ int nread(nLink * head, int socketFD)
 	{
 		intFD *= -1;
 	}
-	printf("strFd: %s\n", head->next->arg);
-	printf("intFd: %d\n", intFD);
-	printf("socketFD: %d\n", socketFD);
 
 	// I know this is lazy, but it's getting late.
 	/////////////////
 	int intSize = atoi(head->next->next->arg);
-	printf("intSize as str: %s\n", head->next->next->arg);
-	printf("intSize: %d\n", intSize);
 	int status;
 	// Reading the file
 	/////////////////	
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
-	printf("status on server: %d", status);
-
-	printf("After status\n");
 
 	err = errno;
 	if(status < 0)
