@@ -4,8 +4,8 @@ int main()
 {
 	char * fileContents = (char*)malloc((sizeof(char) * 3000) + 1);
 	
-	int amtToRead = 3000;
-	int amtToWrite = 3000;
+	int amtToRead = 200;
+	int amtToWrite = 200;
 	int status;
 	int fd;
 	
@@ -22,8 +22,10 @@ int main()
 	printf("amtToRead: %d\n", amtToRead);
 	// }
 
-	int fd2 = open("./test", O_WRONLY);
 	printf("%s\n",fileContents);
+
+	int fd2 = open("./test", O_WRONLY);
+	printf("%d\n",fd2);
 
 
 	// while(amtToWrite > 0)
