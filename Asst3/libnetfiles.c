@@ -184,7 +184,9 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 		return -1;
 	}	
 
+	close(socketFD);
 	return bytesRead;
+
 }
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
