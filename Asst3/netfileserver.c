@@ -134,6 +134,8 @@ int nopen(nLink * head, int socketFD)
 	// Actually opening the file and error check
 	/////////////////
 	int newFD = open(path, mode);
+	err = errno;
+	errno = 0;
 	if(newFD != -1)
 	{
 		newFD *= -1;
@@ -141,8 +143,6 @@ int nopen(nLink * head, int socketFD)
 	
 	// Setting errno and getting my message ready to send
 	////////////////
-	err = errno;
-	errno = 0;
 	msgSize = intLen(err) + intLen(newFD);
 
 	char * message = (char*)malloc(sizeof(char) * msgSize + 1);
