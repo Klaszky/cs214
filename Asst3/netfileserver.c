@@ -242,7 +242,7 @@ int nwrite(nLink * head, int socketFD)
 	////////////////	
 	int intFD = atoi(temp->arg);
 	if(intFD != -1)
-	{%s
+	{
 		intFD *= -1;
 	}
 
