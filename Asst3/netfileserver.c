@@ -204,6 +204,7 @@ int nread(nLink * head, int socketFD)
 	/////////////////	
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
+	printf("status %d", status);
 
 	err = errno;
 	if(status < 0)
@@ -241,7 +242,7 @@ int nwrite(nLink * head, int socketFD)
 	////////////////	
 	int intFD = atoi(temp->arg);
 	if(intFD != -1)
-	{
+	{%s
 		intFD *= -1;
 	}
 
@@ -256,7 +257,6 @@ int nwrite(nLink * head, int socketFD)
 	/////////////////	
 	char * buffer = temp->arg;
 	status = write(intFD, buffer, intSize);
-	printf("status %d", status);
 
 	err = errno;
 	if(status < 0)
