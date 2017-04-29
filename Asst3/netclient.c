@@ -2,6 +2,7 @@
 
 int main()
 {	
+	netserverinti("grep.cs.rutgers.edu");
 	// int fd = open("./oz", atoi("O_RDONLY"));
 	// printf("%d\n", fd);
 	// printf("%d\n", close(fd));
