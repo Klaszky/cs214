@@ -5,6 +5,7 @@ int main()
 {
 	// Set up vars to use in our program
 	//////////////////////////////////
+	
 	socklen_t client;
 	int socketFD;
 	int newSocketFD;

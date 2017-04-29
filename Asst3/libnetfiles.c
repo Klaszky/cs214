@@ -189,6 +189,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 }
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
+	
 	// Set up vars.
 	/////////////////
 	int size = intLen(fd) + strlen((char*)buf) + intLen(nbyte) + 6;
