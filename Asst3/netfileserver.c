@@ -122,7 +122,7 @@ int nopen(nLink * head, int socketFD)
 	errno = 0;
 	msgSize = intLen(err) + intLen(newFD);
 
-	char * message = malloc(sizeof(char) * msgSize + 1);
+	char * message = (char*)malloc(sizeof(char) * msgSize + 1);
 	sprintf(message, "%d,%d,", err, newFD);
 	
 	// Writing new socket and error check
@@ -162,7 +162,7 @@ int nclose(nLink * head, int socketFD)
 	err = errno;
 	errno = 0;
 	
-	char * message = malloc(sizeof(char) * (intLen(result) + intLen(err) + 1));
+	char * message = (char*)malloc(sizeof(char) * (intLen(result) + intLen(err) + 1));
 	sprintf(message, "%d,%d,", err, result);
 	
 	n = write(socketFD, message, strlen(message) + 1);
@@ -201,7 +201,7 @@ int nread(nLink * head, int socketFD)
 	printf("2\n");
 	// Reading the file
 	/////////////////	
-	char * buffer = malloc(sizeof(char) * intSize + 1);
+	char * buffer = (char*)malloc(sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
 	err = errno;
 	if(status < 0)
@@ -211,7 +211,7 @@ int nread(nLink * head, int socketFD)
 	}
 	printf("3\n");
 
-	char * message = malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
+	char * message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
 	
 	printf("4\n");

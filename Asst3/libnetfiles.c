@@ -142,7 +142,8 @@ int netclose(int fd)
 
 ssize_t netread(int fd, void *buf, size_t nbyte)
 {
-	//
+	// Set up vars.
+	/////////////////
 	char sendBuffer[256];
 	int socketFD = getSockFD();
 	int n;
@@ -152,6 +153,8 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	char * readBuf;
 	nLink * head = NULL;
 
+	// Send message And error check
+	///////////////////
 	sprintf(sendBuffer, "read,%d,%d,", fd, nbyte);
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
 
