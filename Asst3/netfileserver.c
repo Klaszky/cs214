@@ -134,8 +134,8 @@ int nopen(nLink * head, int socketFD)
 		return -1;
 	}
 
-	free(message);
 	destroyList(head);
+	close(socketFD);
 	return 0;
 }
 
@@ -173,9 +173,8 @@ int nclose(nLink * head, int socketFD)
 		return -1;
 	}
 
-	free(message);
 	destroyList(head);
-
+	close(socketFD);
 	return result;
 }
 
