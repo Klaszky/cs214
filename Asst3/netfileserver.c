@@ -1,11 +1,12 @@
 #include "libnetfiles.h"
 
+pthread_mutex_t writeMutex;
+pthread_mutex_t readMutex;
 
 int main()
 {
 	// Set up vars to use in our program
 	//////////////////////////////////
-	
 	socklen_t client;
 	int socketFD;
 	int * newSocketFD = malloc(sizeof(int));
@@ -219,10 +220,12 @@ int nread(nLink * head, int socketFD)
 	int intSize = atoi(head->next->next->arg);
 	int status;
 	// Reading the file
-	/////////////////	
+	/////////////////
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
+	pthread_mutex_lock(&readMutex);
 	status = read(intFD, buffer, intSize);
 	printf("status: %d\n", status);
+	pthread_mutex_unlock(&readMutex);
 
 	err = errno;
 	if(status < 0)
@@ -274,7 +277,9 @@ int nwrite(nLink * head, int socketFD)
 	// Reading the file
 	/////////////////	
 	char * buffer = temp->arg;
+	pthread_mutex_lock(&writeMutex);
 	status = write(intFD, buffer, intSize);
+	pthread_mutex_unlock(&writeMutex);
 
 	err = errno;
 	if(status < 0)

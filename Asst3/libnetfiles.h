@@ -35,3 +35,5 @@ ssize_t netwrite(int fildes, const void *buf, size_t nbyte);
 int nwrite(nLink * head, int socketFD);
 nLink * readPull(char * buffer, nLink * head);
 void * threadMain(int * args);
+int pthread_mutex_lock(pthread_mutex_t *mutex);
+int pthread_mutex_unlock(pthread_mutex_t *mutex);
