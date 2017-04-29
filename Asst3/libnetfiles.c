@@ -191,12 +191,13 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
 	// Set up vars.
 	/////////////////
-	char sendBuffer[256];
+	int size = intLen(fd) + strlen((char*)buf) + intLen(nbyte) + 6;
+	char sendBuffer[size];
 	int socketFD = getSockFD();
 	int n;
 
 	int err;
-	int bytesRead;
+	int bytesWritten;
 	char * readBuf;
 	nLink * head = NULL;
 
@@ -213,12 +214,14 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 
 	// Read from return socket
 	////////////////////////////////
-	bzero(sendBuffer,256);
-	n = read(socketFD, sendBuffer, 255);
+	bzero(sendBuffer,size);
+	n = read(socketFD, sendBuffer, size);
 
+	head = argPull(sendBuffer, head);
+	err = atoi(head->arg);
+	bytesWritten = atoi(head->next->arg);
 
-
-	return 1;
+	return bytesWritten;
 }
 
 int getSockFD()

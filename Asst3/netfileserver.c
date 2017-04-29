@@ -20,12 +20,12 @@ int main()
 	socketFD = socket(AF_INET, SOCK_STREAM, 0);
 	if (setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int)) < 0)
 	{
-	    printf("setsockopt(SO_REUSEADDR) failed");
+	    fprintf(stderr, "setsockopt(SO_REUSEADDR) failed");
 	}
 
 	if(socketFD < 0)
 	{
-		printf("Can't open FD\n");
+		fprintf(stderr, "Can't open FD\n");
 		return -1;
 	}
 
@@ -36,7 +36,7 @@ int main()
 
 	if(bind(socketFD, (struct sockaddr *) &serverAddressInfo, sizeof(serverAddressInfo)) < 0)
 	{
-		printf("can't bind socket\n");
+		fprintf(stderr, "Can't bind socket\n");
 		return -1;
 	}
 
@@ -52,7 +52,7 @@ int main()
 
 		if(newSocketFD < 0)
 		{
-			printf("coudln't accept connection\n");
+			fprintf(stderr, "Coudln't accept connection\n");
 		}
 
 		bzero(buffer, 256);
@@ -60,7 +60,7 @@ int main()
 
 		if(n < 0)
 		{
-			printf("couldn't read from socket\n");
+			fprintf(stderr, "Couldn't read from socket\n");
 			return -1;
 		}
 
@@ -81,6 +81,10 @@ int main()
 		else if(strncmp("close", cmd, 5) == 0)
 		{
 			nclose(head, newSocketFD);
+		}
+		else if(strncmp("write", cmd, 5) == 0)
+		{
+			nwrite(head, newSocketFD);
 		}
 
 		n = write(newSocketFD, "Didn't get it", 14);
@@ -115,8 +119,6 @@ int nopen(nLink * head, int socketFD)
 	{
 		newFD *= -1;
 	}
-
-	printf("%d\n", newFD);
 	
 	// Setting errno and getting my message ready to send
 	////////////////
@@ -224,5 +226,56 @@ int nread(nLink * head, int socketFD)
 	destroyList(head);
 
 	return 0;
+}
 
+int nwrite(nLink * head, int socketFD)
+{
+	// Var set up
+	////////////////
+	int n;
+	int err;
+	nLink * temp = head;
+	temp = temp->next;
+	// Gettting proper FD
+	////////////////	
+	int intFD = atoi(temp->arg);
+	if(intFD != -1)
+	{
+		intFD *= -1;
+	}
+
+	temp = temp->next;
+
+	// I know this is lazy, but it's getting late.
+	/////////////////
+	int intSize = atoi(temp->arg);
+	temp = temp->next;
+	int status;
+	// Reading the file
+	/////////////////	
+	char * buffer = temp->arg;
+	status = write(intFD, buffer, intSize);
+
+	err = errno;
+	if(status < 0)
+	{
+		fprintf(stderr, "Error writing to file\n");
+		return -1;
+	}
+
+	char * message = (char*)malloc(sizeof(char) * intLen(status) + 1);
+	sprintf(message, "%d,%d,%s,", err, status, buffer);
+	
+
+	n = write(socketFD, message, strlen(message) + 1);
+
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		return -1;
+	}
+
+	destroyList(head);
+
+	return 0;
 }
