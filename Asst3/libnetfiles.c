@@ -355,7 +355,7 @@ nLink * readPull(char * buffer, nLink * head)
 			tempnLink = createLink(tempString);
 			head = addToLL(head, tempnLink);
 			free(tempString);
-			startingPos = i++;
+			startingPos = endingPos + 1;
 			sizeOfString = 0;
 			break;
 		}
@@ -368,20 +368,26 @@ nLink * readPull(char * buffer, nLink * head)
 	{
 		if(buffer[i] == ',')
 		{
-			endingPos = i;
-			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
-			tempnLink = createLink(tempString);
-			head = addToLL(head, tempnLink);
-			printf("i: %d\n", i);
-			printf("startingPos: %d\n", startingPos);
-			printf("endingPos: %d\n", endingPos);
-			printf("sizeOfString: %d\n", sizeOfString);
-			printf("tempString: %s\n", tempString);
-			free(tempString);
-			i += 2;
-			startingPos = i;
-			sizeOfString = 0;
-			break;
+			if(sizeOfString == 0)
+			{
+				continue;
+			}
+			else
+			{
+				endingPos = i;
+				tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+				tempnLink = createLink(tempString);
+				head = addToLL(head, tempnLink);
+				printf("i: %d\n", i);
+				printf("startingPos: %d\n", startingPos);
+				printf("endingPos: %d\n", endingPos);
+				printf("sizeOfString: %d\n", sizeOfString);
+				printf("tempString: %s\n", tempString);
+				free(tempString);
+				startingPos = endingPos + 1;
+				sizeOfString = 0;
+				break;
+			}
 		}
 		else
 		{
