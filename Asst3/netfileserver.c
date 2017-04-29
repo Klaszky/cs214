@@ -75,7 +75,6 @@ void * threadMain(int * args)
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't read from socket\n");
-		free(args);
 		pthread_exit(NULL);
 	}
 
@@ -107,11 +106,9 @@ void * threadMain(int * args)
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
-		free(args);
 		pthread_exit(NULL);
 	}
 
-	free(args);
 	pthread_exit(NULL);
 }
 
