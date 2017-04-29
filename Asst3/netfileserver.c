@@ -197,6 +197,7 @@ int nread(nLink * head, int socketFD)
 	// I know this is lazy, but it's getting late.
 	/////////////////
 	int intSize = atoi(head->next->next->arg);
+	printf("intSize: %d", intSize);
 	int status;
 	printf("2\n");
 	// Reading the file
