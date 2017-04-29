@@ -7,8 +7,8 @@ default: netclient netfileserver
 netclient: netclient.o libnetfiles.o
 	$(CC) $(CLFAGS) -o netclient netclient.o libnetfiles.o
 
-netfileserver: netfileserver.o libnetfiles.o
-	$(CC) $(CLFAGS) -o netfileserver netfileserver.o libnetfiles.o 
+netfileserver: netfileserver.o libnetfiles.o 
+	$(CC) $(CLFAGS) -o netfileserver netfileserver.o libnetfiles.o -lpthread
 
 libnetfiles.o: libnetfiles.c libnetfiles.h
 	$(CC) $(CLFAGS) -c libnetfiles.c 

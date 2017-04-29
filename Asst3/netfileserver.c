@@ -8,10 +8,9 @@ int main()
 	
 	socklen_t client;
 	int socketFD;
-	int newSocketFD;
-	int n;
-	char buffer[256];
+	int * newSocketFD = malloc(sizeof(int));
 	int portNum = 42942;
+	pthread_t netpthread;
 
 	// Setting up our connection
 	////////////////////////////////
@@ -49,50 +48,71 @@ int main()
 		listen(socketFD, 5);
 
 		client = sizeof(clientAddressInfo);
-		newSocketFD = accept(socketFD, (struct sockaddr *) &clientAddressInfo, &client);
+		*newSocketFD = accept(socketFD, (struct sockaddr *) &clientAddressInfo, &client);
 
-		if(newSocketFD < 0)
+		if(*newSocketFD < 0)
 		{
 			fprintf(stderr, "Coudln't accept connection\n");
 		}
 
-		bzero(buffer, 256);
-		n = read(newSocketFD, buffer, 255);
+		pthread_create(&netpthread, NULL, (void*)threadMain, newSocketFD);
+		pthread_detach(netpthread);
 
-		if(n < 0)
-		{
-			fprintf(stderr, "Couldn't read from socket\n");
-			return -1;
-		}
 
-		nLink * head = NULL;
-		head = argPull(buffer, head);
-
-		nLink * temp = head;
-		char * cmd = temp->arg;
-
-		if(strncmp("open", cmd, 4) == 0)
-		{
-			nopen(head, newSocketFD);
-		}
-		else if(strncmp("read", cmd, 4) == 0)
-		{
-			nread(head, newSocketFD);
-		}
-		else if(strncmp("close", cmd, 5) == 0)
-		{
-			nclose(head, newSocketFD);
-		}
-		else if(strncmp("write", cmd, 5) == 0)
-		{
-			nwrite(head, newSocketFD);
-		}
-
-		n = write(newSocketFD, "Didn't get it", 14);
 	}
-
 	
 	return 0;
+}
+
+void * threadMain(int * args)
+{
+	int n;
+	int newSocketFD = (int)*args;
+	char buffer[256];
+	bzero(buffer, 256);
+	n = read(newSocketFD, buffer, 255);
+
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't read from socket\n");
+		free(args);
+		pthread_exit(NULL);
+	}
+
+	nLink * head = NULL;
+	head = argPull(buffer, head);
+
+	nLink * temp = head;
+	char * cmd = temp->arg;
+
+	if(strncmp("open", cmd, 4) == 0)
+	{
+		nopen(head, newSocketFD);
+	}
+	else if(strncmp("read", cmd, 4) == 0)
+	{
+		nread(head, newSocketFD);
+	}
+	else if(strncmp("close", cmd, 5) == 0)
+	{
+		nclose(head, newSocketFD);
+	}
+	else if(strncmp("write", cmd, 5) == 0)
+	{
+		nwrite(head, newSocketFD);
+	}
+
+	n = write(newSocketFD, "Didn't get it", 14);
+
+	if(n < 0)
+	{
+		fprintf(stderr, "Couldn't write to socket.\n");
+		free(args);
+		pthread_exit(NULL);
+	}
+
+	free(args);
+	pthread_exit(NULL);
 }
 
 int nopen(nLink * head, int socketFD)

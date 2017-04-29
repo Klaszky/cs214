@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <pthread.h>
 
 typedef struct nLink
 {
@@ -33,3 +34,4 @@ int nread(nLink * head, int socketFD);
 ssize_t netwrite(int fildes, const void *buf, size_t nbyte);
 int nwrite(nLink * head, int socketFD);
 nLink * readPull(char * buffer, nLink * head);
+void * threadMain(int * args);
