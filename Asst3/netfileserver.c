@@ -135,7 +135,6 @@ int nopen(nLink * head, int socketFD)
 	}
 
 	destroyList(head);
-	close(socketFD);
 	return 0;
 }
 
@@ -174,7 +173,6 @@ int nclose(nLink * head, int socketFD)
 	}
 
 	destroyList(head);
-	close(socketFD);
 	return result;
 }
 
@@ -184,7 +182,6 @@ int nread(nLink * head, int socketFD)
 	////////////////
 	int n;
 	int err;
-	printf("1\n");
 	// Gettting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
@@ -202,7 +199,6 @@ int nread(nLink * head, int socketFD)
 	printf("intSize as str: %s\n", head->next->next->arg);
 	printf("intSize: %d\n", intSize);
 	int status;
-	printf("2\n");
 	// Reading the file
 	/////////////////	
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
@@ -215,14 +211,11 @@ int nread(nLink * head, int socketFD)
 		fprintf(stderr, "Error reading from file\n");
 		return -1;
 	}
-	printf("3\n");
 
 	char * message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
 	
-	printf("4\n");
 
-	printf("5\n");
 	n = write(socketFD, message, strlen(message) + 1);
 
 	if(n < 0)
@@ -231,7 +224,6 @@ int nread(nLink * head, int socketFD)
 		return -1;
 	}
 
-	printf("6\n");
 	destroyList(head);
 
 	return 0;
