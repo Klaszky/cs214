@@ -11,7 +11,7 @@ int networkserverinit(char * hostname)
 	/////////////////////////////////
 	serverIPAddress = gethostbyname(hostname);
 	
-	// Error check to see if the host exsists. I'll have to set h_errno at some point
+	// Error check to see if the host exists. I'll have to set h_errno at some point
 	/////////////////////////////////
 	if(serverIPAddress == NULL)
 	{
@@ -48,7 +48,7 @@ int netopen(char * path, int mode)
 	int err;
 	int fd;
 
-	// Constuction of message to be sent. It'll need to be changed a bit
+	// Construction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
 	bzero(sendBuffer, 256);
 	sprintf(sendBuffer, "open,%s,%d,", path, mode);
@@ -81,6 +81,7 @@ int netopen(char * path, int mode)
 	}
 
 	err = atoi(head->arg);
+	errNoChk(err);
 	fd = atoi(head->next->arg);
 	destroyList(head);
 
@@ -99,7 +100,7 @@ int netclose(int fd)
 	int result;
 	int err;
 
-	// Constuction of message to be sent. It'll need to be changed a bit
+	// Construction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
 	bzero(sendBuffer, 256);
 	sprintf(sendBuffer, "close,%d,", fd);
@@ -131,6 +132,7 @@ int netclose(int fd)
 
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
+	errNoChk(err);
 	if(err == -1)
 	{
 		fprintf(stderr, "Couldn't close file.\n");
@@ -171,6 +173,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
+	errNoChk(err);
 	bytesRead = atoi(head->next->arg);
 	readBuf = head->next->next->arg;
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
@@ -219,6 +222,7 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
+	errNoChk(err);
 	bytesWritten = atoi(head->next->arg);
 
 	return bytesWritten;
@@ -431,7 +435,46 @@ void destroyList(nLink * head)
 	}
 }
 
-void errNoChk()
+void errNoChk(int err)
 {
-	return;
+	if(err == 1)
+	{
+		fprintf(stderr, "Error EPERM: Operation not permitted.\n");
+	}
+	else if(err == 2)
+	{
+		fprintf(stderr, "Error ENOENT: No such file.\n");
+	}
+	else if(err == 4)
+	{
+		fprintf(stderr, "Error EINTR: Interrupted system call.\n");
+	}
+	else if(err == 9)
+	{
+		fprintf(stderr, "Error EBADF: Bad file descriptor.\n");
+	}
+	else if(err == 13)
+	{
+		fprintf(stderr, "Error EACCES: You don't have permission to access that file.\n");
+	}
+	else if(err == 21)
+	{
+		fprintf(stderr, "Error EISDIR: Given path is a directory, not a file.\n");
+	}
+	else if(err = 23)
+	{
+		fprintf(stderr, "Error ENFILE: File table overflow.\n");
+	}
+	else if(err == 30)
+	{
+		fprintf(stderr, "Error EROFS: Read-only file system.\n" );
+	}
+	else if(err == 104)
+	{
+		fprintf(stderr, "Error ECONNRESET: Connection reset by peer.\n");
+	}
+	else if(err == 110)
+	{
+		fprintf(stderr, "Error ETIMEDOUT: Connection times out.\n");
+	}
 }

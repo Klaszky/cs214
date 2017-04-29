@@ -226,6 +226,7 @@ int nread(nLink * head, int socketFD)
 	pthread_mutex_unlock(&readMutex);
 
 	err = errno;
+	errno = 0;
 	if(status < 0)
 	{
 		fprintf(stderr, "Error reading from file\n");
@@ -280,6 +281,8 @@ int nwrite(nLink * head, int socketFD)
 	pthread_mutex_unlock(&writeMutex);
 
 	err = errno;
+	errno = 0;
+	
 	if(status < 0)
 	{
 		fprintf(stderr, "Error writing to file\n");
