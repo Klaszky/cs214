@@ -2,24 +2,35 @@
 
 int main()
 {
-	char * fileContents = (char*)malloc((sizeof(char) * 5000) + 1);
+	char * fileContents = (char*)malloc((sizeof(char) * 3000) + 1);
 	
-	char * readTest = (char*)malloc(sizeof(char) * 50);
-	
-	int btr = 20;
-	int amtToRead = 5000;
+	int amtToRead = 3000;
+	int amtToWrite = 3000;
 	int status;
 	int fd;
 	
 	printf("%d\n", networkserverinit("grep.cs.rutgers.edu"));
 	fd = netopen("./oz", O_RDONLY);
 	printf("%d\n", fd);
-	status = netread(fd, fileContents, btr);
+
 	while(amtToRead > 0)
 	{
-		status = read(fd, fileContents, amtToRead);
+		status = netread(fd, fileContents, amtToRead);
+		printf("status: %d\n", status);
 		amtToRead -= status;
 	}
+
+	int fd2 = open("./test", O_WRONLY);
+
+
+
+	while(amtToWrite > 0)
+	{
+		status = write(fd2, fileContents, amtToWrite);
+		amtToWrite -= status;
+	}
+
+
 	printf("%s\n", fileContents);
 	printf("%d\n", status);
 	printf("%d\n", netclose(fd));

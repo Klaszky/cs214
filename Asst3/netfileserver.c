@@ -226,7 +226,6 @@ int nread(nLink * head, int socketFD)
 	}
 
 	printf("6\n");
-	free(message);
 	destroyList(head);
 
 	return 0;
