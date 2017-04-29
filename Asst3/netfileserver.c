@@ -256,6 +256,7 @@ int nwrite(nLink * head, int socketFD)
 	/////////////////	
 	char * buffer = temp->arg;
 	status = write(intFD, buffer, intSize);
+	printf("status %d", status);
 
 	err = errno;
 	if(status < 0)

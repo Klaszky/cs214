@@ -175,6 +175,10 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	readBuf = head->next->next->arg;
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
 
+	printf("err %d\n", err);
+	printf("bytesRead %d\n", bytesRead);
+	printf("readbuf %s\n", readBuf);
+
 
 	// Error check of return socket
 	////////////////////////////////
