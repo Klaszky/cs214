@@ -203,6 +203,7 @@ int nread(nLink * head, int socketFD)
 	/////////////////	
 	char * buffer = (char*)malloc(sizeof(char) * intSize + 1);
 	status = read(intFD, buffer, intSize);
+	printf("status on server: %d", status);
 	err = errno;
 	if(status < 0)
 	{
