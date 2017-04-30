@@ -335,6 +335,7 @@ nLink * argPull(char * buffer, nLink * head)
 
 nLink * readPull(char * buffer, nLink * head)
 {
+	printf("Testing one two three\n");
 	char * tempString;
 	nLink * tempnLink;
 	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
@@ -486,7 +487,8 @@ nLink * writePull(char * buffer, nLink * head)
 
 
 	endingPos = strlen(buffer);
-	tempString = pullString(startingPos, endingPos, strlen(buffer), buffer);
+	tempString = pullString(startingPos, endingPos, strlen(buffer) - startingPos, buffer);
+	printf("%s\n", tempString);
 	tempnLink = createLink(tempString);
 	head = addToLL(head, tempnLink);
 	free(tempString);
