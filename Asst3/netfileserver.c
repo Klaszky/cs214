@@ -224,6 +224,7 @@ int nread(nLink * head, int socketFD)
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
 	pthread_mutex_lock(&readMutex);
 	status = read(intFD, buffer, intSize);
+	printf("%d\n", status);
 	pthread_mutex_unlock(&readMutex);
 
 	err = errno;
