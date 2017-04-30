@@ -146,7 +146,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 {
 	// Set up vars.
 	/////////////////
-	char sendBuffer[5000];
+	char sendBuffer[1000];
 	char * recBuffer;
 	int socketFD = getSockFD();
 	int n;
@@ -169,24 +169,25 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	// Read from return socket
 	////////////////////////////////
-	bzero(sendBuffer, 5000);
+	bzero(sendBuffer, 1000);
 
 
-	n = read(socketFD, sendBuffer, 5000);
-
-	printf("n = %d\n", n);
+	n = read(socketFD, sendBuffer, 1000);
 
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
 	errNoChk(err);
-	bytesRead = head->next->arg;
-	readBuf = head->next->next->arg;
+	bytesRead = atoi(head->next->arg);
+	readBuf = malloc(sizeof(char) * bytesRead + 1);
+	bzero(readBuf, bytesRead+1);
+	sprintf(readBuf, "%s", head->next->next->arg);
 
 	while(1)
 	{
-		if(strlen(readBuf) < bytesRead - 20)
+		if(strlen(readBuf) < bytesRead - 25)
 		{
-			n = read(socketFD, sendBuffer, 5000);
+			bzero(sendBuffer, 1000);
+			n = read(socketFD, sendBuffer, 1000);
 			sprintf(readBuf, "%s%s", readBuf, sendBuffer);
 		}
 		else
@@ -194,8 +195,10 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 			break;
 		}
 	}
-	printf("%d\n", (int)strlen(readBuf));
+	// printf("len of readbuf: %d\n", (int)strlen(readBuf));
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
+
+	// printf("%s\n", readBuf);
 
 	// Error check of return socket
 	////////////////////////////////
@@ -427,28 +430,6 @@ nLink * readPull(char * buffer, nLink * head)
 
 }
 
-// int pullSize(char * buffer)
-// {
-// 	char * tempString;
-// 	int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
-// 	for(i; i < strlen(buffer); i++)
-// 	{
-// 		if(buffer[i] == '(')
-// 		{
-// 			startingPos == i+1;
-// 			sizeOfString++;
-// 		}
-// 		else if(buffer[i] == ')')
-// 		{
-// 			endingPos = i;
-// 			tempString = pullString(startingPos, endingPos, endingPos - startingPos, buffer);
-// 			printf("\n\n%s\n\n", tempString);
-// 			return atoi(tempString);
-// 		}
-// 	}
-
-// 	return -1;
-// }
 
 ////////////////////////////////////////////////////////////
 

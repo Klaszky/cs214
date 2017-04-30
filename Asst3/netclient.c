@@ -2,8 +2,8 @@
 
 int main()
 {	
-	char * readIn = (char*)malloc(sizeof(char) * 3500);
-	int amtToRead = 3500;
+	char * readIn = (char*)malloc(sizeof(char) * 15000);
+	int amtToRead = 10000;
 	int status = 0;
 	char * buf = "I don't know what to type blah, blah blah";
 
@@ -20,7 +20,8 @@ int main()
 	amtToRead -= status;
 	printf("status: %d\n", status);
 	printf("amtToRead: %d\n", amtToRead);
-	// printf("%s\n", readIn);
+	printf("\n\n\n\n\n\n");
+	printf("%s\n", readIn);
 
 	printf("%d\n", netclose(fd));
 	// int fd2 = netopen("./test", O_WRONLY);
