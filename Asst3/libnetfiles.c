@@ -335,7 +335,6 @@ nLink * argPull(char * buffer, nLink * head)
 
 nLink * readPull(char * buffer, nLink * head)
 {
-	printf("Testing one two three\n");
 	char * tempString;
 	nLink * tempnLink;
 	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
