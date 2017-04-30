@@ -314,8 +314,11 @@ int nwrite(char * buffer, int socketFD)
 	char * message = (char*)malloc(sizeof(char) * intLen(status) + 1);
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
 	
+	printf("message: %s\n", message);
+	printf("message len: %d\n", strlen(message));
+	n = write(socketFD, message, strlen(message));
+	printf("n after write %d\n", n);
 
-	n = write(socketFD, message, strlen(message) + 1);
 
 	if(n < 0)
 	{
