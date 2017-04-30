@@ -175,12 +175,19 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	n = read(socketFD, sendBuffer, 5000);
 
 	bytesRead = pullSize(sendBuffer);
+	printf("bytesRead: %d\n", bytesRead);
 
 	recBuffer = malloc(sizeof(char) * bytesRead + 10);
 	sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
 
+	printf("%s\n", recBuffer);
+	printf("%d\n", strlen(recBuffer));
+
+
 	while(strlen(recBuffer) < bytesRead)
 	{
+		printf("%s\n", recBuffer);
+		printf("%d\n", strlen(recBuffer));
 		n = read(socketFD, sendBuffer, 5000);
 		sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
 	}
