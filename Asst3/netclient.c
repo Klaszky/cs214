@@ -23,11 +23,11 @@ int main()
 	printf("%s\n", readIn);
 
 	printf("%d\n", netclose(fd));
-	int fd2 = netopen("./test", O_WRONLY);
-	status = netwrite(fd2, buf, strlen(buf));
-	printf("status 2: %d\n", status);
-	printf("%d\n", netopen("./test2", O_RDONLY));
-	printf("%d\n", netopen("./testing", O_RDONLY));
+	// int fd2 = netopen("./test", O_WRONLY);
+	// status = netwrite(fd2, buf, strlen(buf));
+	// printf("status 2: %d\n", status);
+	// printf("%d\n", netopen("./test2", O_RDONLY));
+	// printf("%d\n", netopen("./testing", O_RDONLY));
 
 	return 0;
 }
