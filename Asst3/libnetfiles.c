@@ -174,28 +174,27 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	n = read(socketFD, sendBuffer, 5000);
 
-	bytesRead = pullSize(sendBuffer);
-	printf("bytesRead: %d\n", bytesRead);
-
-	recBuffer = malloc(sizeof(char) * bytesRead + 10);
-	sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
-
-	printf("%s\n", recBuffer);
-	printf("%d\n", strlen(recBuffer));
-
-
-	while(strlen(recBuffer) < bytesRead)
-	{
-		printf("%s\n", recBuffer);
-		printf("%d\n", strlen(recBuffer));
-		n = read(socketFD, sendBuffer, 5000);
-		sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
-	}
+	printf("n = %d\n", n);
 
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
 	errNoChk(err);
+	bytesRead = head->next->arg;
 	readBuf = head->next->next->arg;
+
+	while(1)
+	{
+		if(strlen(readBuf) < bytesRead - 20)
+		{
+			n = read(socketFD, sendBuffer, 5000);
+			sprintf(readBuf, "%s%s", readBuf, sendBuffer);
+		}
+		else
+		{
+			break;
+		}
+	}
+	printf("%d\n", (int)strlen(readBuf));
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
 
 	// Error check of return socket
@@ -428,31 +427,28 @@ nLink * readPull(char * buffer, nLink * head)
 
 }
 
-int pullSize(char * buffer)
-{
-	char * tempString;
-	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
-	for(i; i < strlen(buffer); i++)
-	{
-		if(buffer[i] == '(')
-		{
-			startingPos == i;
-			sizeOfString++;
-		}
-		else if(buffer[i] == ')')
-		{
-			endingPos = i;
-			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
-			return atoi(tempString);
-		}
-		else if(sizeOfString != 0)
-		{
-			sizeOfString++;
-		}
-	}
+// int pullSize(char * buffer)
+// {
+// 	char * tempString;
+// 	int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+// 	for(i; i < strlen(buffer); i++)
+// 	{
+// 		if(buffer[i] == '(')
+// 		{
+// 			startingPos == i+1;
+// 			sizeOfString++;
+// 		}
+// 		else if(buffer[i] == ')')
+// 		{
+// 			endingPos = i;
+// 			tempString = pullString(startingPos, endingPos, endingPos - startingPos, buffer);
+// 			printf("\n\n%s\n\n", tempString);
+// 			return atoi(tempString);
+// 		}
+// 	}
 
-	return -1;
-}
+// 	return -1;
+// }
 
 ////////////////////////////////////////////////////////////
 
