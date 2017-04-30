@@ -239,6 +239,8 @@ int nread(nLink * head, int socketFD)
 
 	n = write(socketFD, message, strlen(message));
 	printf("n = %d\n", n);
+	printf("message: %s\n", message);
+	printf("message len: %d\n", strlen(message));
 
 	if(n < 0)
 	{
@@ -313,11 +315,8 @@ int nwrite(char * buffer, int socketFD)
 
 	char * message = (char*)malloc(sizeof(char) * intLen(status) + 1);
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
-	
-	printf("message: %s\n", message);
-	printf("message len: %d\n", strlen(message));
+
 	n = write(socketFD, message, strlen(message));
-	printf("n after write %d\n", n);
 
 
 	if(n < 0)
