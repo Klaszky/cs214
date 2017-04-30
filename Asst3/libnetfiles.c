@@ -146,7 +146,8 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 {
 	// Set up vars.
 	/////////////////
-	char sendBuffer[10000];
+	char sendBuffer[5000];
+	char * recBuffer;
 	int socketFD = getSockFD();
 	int n;
 
@@ -168,13 +169,25 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	// Read from return socket
 	////////////////////////////////
-	bzero(sendBuffer, 10000);
-	n = read(socketFD, sendBuffer, 10000);
+	bzero(sendBuffer, 5000);
+
+
+	n = read(socketFD, sendBuffer, 5000);
+
+	bytesRead = pullSize(sendBuffer);
+
+	recBuffer = malloc(sizeof(char) * bytesRead + 10);
+	sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
+
+	while(strlen(recBuffer) < bytesRead)
+	{
+		n = read(socketFD, sendBuffer, 5000);
+		sprintf(recBuffer, "%s%s", recBuffer, sendBuffer);
+	}
 
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
 	errNoChk(err);
-	bytesRead = atoi(head->next->arg);
 	readBuf = head->next->next->arg;
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
 
@@ -189,6 +202,9 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	return bytesRead;
 
 }
+
+//////////////////////////////////////////////////
+
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
 	
@@ -403,6 +419,32 @@ nLink * readPull(char * buffer, nLink * head)
 
 	return head;
 
+}
+
+int pullSize(char * buffer)
+{
+	char * tempString;
+	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	for(i; i < strlen(buffer); i++)
+	{
+		if(buffer[i] == '(')
+		{
+			startingPos == i;
+			sizeOfString++;
+		}
+		else if(buffer[i] == ')')
+		{
+			endingPos = i;
+			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+			return atoi(tempString);
+		}
+		else if(sizeOfString != 0)
+		{
+			sizeOfString++;
+		}
+	}
+
+	return -1;
 }
 
 ////////////////////////////////////////////////////////////
