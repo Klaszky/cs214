@@ -486,7 +486,7 @@ nLink * writePull(char * buffer, nLink * head)
 
 
 	endingPos = strlen(buffer);
-	tempString = pullString(startingPos, endingPos, strlen(buffer) - startingPos, buffer);
+	tempString = pullString(startingPos, endingPos, strlen(buffer), buffer);
 	tempnLink = createLink(tempString);
 	head = addToLL(head, tempnLink);
 	free(tempString);
