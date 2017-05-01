@@ -258,20 +258,16 @@ int nwrite(char * buffer, int socketFD)
 	// Var set up
 	////////////////
 	nLink * head = NULL;
-	printf("1\n");
 	head = writePull(buffer, head);
-	printf("2\n");
 	nLink * temp = head;
-	printf("3\n");
 	temp = temp->next;
 	int n;
 	int err;
 	int status;
 	int intFD;
 	int intSize;
-	// char * backupbuffer;
+	char * writeBuffer;
 
-	printf("4\n");
 
 
 
@@ -284,34 +280,40 @@ int nwrite(char * buffer, int socketFD)
 	}
 
 	temp = temp->next;
-	printf("5\n");
 
 	// I know this is lazy, but it's getting late.
 	/////////////////
 	intSize = atoi(temp->arg);
 	temp = temp->next;
 	buffer = temp->arg;
-	printf("6\n");	
-	// if(intSize > 200)
-	// {
-	// 	backupbuffer = (char*)malloc(sizeof(char) * intSize + 1);
-	// }
 
-	// printf("7\n");
-	// sprintf(backupbuffer, "%s", buffer);
+	writeBuffer = (char*)malloc(sizeof(char) * intSize + 1);
 
-	// n = read(socketFD, backupbuffer, 255);
+	sprintf(writeBuffer, "%s%s", writeBuffer, buffer);
+
+	while(1)
+	{
+		if(strlen(writeBuffer) < intSize)
+		{
+			bzero(buffer, 256);
+			n = read(socketFD, buffer, 255);
+			sprintf(writeBuffer, "%s%s", writeBuffer, buffer);
+		}
+		else
+		{
+			break;
+		}
+	}
+
 
 	// Reading the file
 	/////////////////	
 	pthread_mutex_lock(&writeMutex);
-	status = write(intFD, buffer, intSize);
+	status = write(intFD, writeBuffer, intSize);
 	pthread_mutex_unlock(&writeMutex);
 
 	err = errno;
 	errno = 0;
-
-	printf("8\n");
 
 	if(status < 0)
 	{
@@ -319,14 +321,10 @@ int nwrite(char * buffer, int socketFD)
 		return -1;
 	}
 
-	printf("9\n");
-
-	char * message = (char*)malloc(sizeof(char) * intLen(status) + 1);
-	sprintf(message, "%d,%d,%s,", err, status, buffer);
+	char * message = (char*)malloc(sizeof(char) * intLen(status) + intLen(err));
+	sprintf(message, "%d,%d,", err, status);
 
 	n = write(socketFD, message, strlen(message));
-
-	printf("10\n");
 
 	if(n < 0)
 	{
