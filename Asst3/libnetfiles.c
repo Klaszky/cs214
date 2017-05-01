@@ -184,7 +184,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	while(1)
 	{
-		if(strlen(readBuf) < bytesRead - 25)
+		if(strlen(readBuf) < bytesRead)
 		{
 			bzero(sendBuffer, 1000);
 			n = read(socketFD, sendBuffer, 1000);
@@ -231,7 +231,7 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 
 	// Send message And error check
 	///////////////////
-	sprintf(sendBuffer, "write,%d,%d,%s,", fd, nbyte, (char*)buf);
+	sprintf(sendBuffer, "write,%d,%d,%s", fd, nbyte, (char*)buf);
 	n = write(socketFD, sendBuffer, strlen(sendBuffer));
 
 	if(n < 0)
