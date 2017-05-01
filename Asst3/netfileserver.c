@@ -269,7 +269,7 @@ int nwrite(char * buffer, int socketFD)
 	int status;
 	int intFD;
 	int intSize;
-	char * backupbuffer;
+	// char * backupbuffer;
 
 	printf("4\n");
 
@@ -292,15 +292,15 @@ int nwrite(char * buffer, int socketFD)
 	temp = temp->next;
 	buffer = temp->arg;
 	printf("6\n");	
-	if(intSize > 200)
-	{
-		backupbuffer = (char*)malloc(sizeof(char) * intSize + 1);
-	}
+	// if(intSize > 200)
+	// {
+	// 	backupbuffer = (char*)malloc(sizeof(char) * intSize + 1);
+	// }
 
-	printf("7\n");
-	sprintf(backupbuffer, "%s", buffer);
+	// printf("7\n");
+	// sprintf(backupbuffer, "%s", buffer);
 
-	n = read(socketFD, backupbuffer, 255);
+	// n = read(socketFD, backupbuffer, 255);
 
 	// Reading the file
 	/////////////////	
