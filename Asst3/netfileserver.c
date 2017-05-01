@@ -1,7 +1,6 @@
 #include "libnetfiles.h"
 
-pthread_mutex_t writeMutex;
-pthread_mutex_t readMutex;
+pthread_mutex_t mutex;
 
 int main()
 {
@@ -222,9 +221,9 @@ int nread(nLink * head, int socketFD)
 	// Reading the file
 	/////////////////
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
-	pthread_mutex_lock(&readMutex);
+	pthread_mutex_lock(&mutex);
 	status = read(intFD, buffer, intSize);
-	pthread_mutex_unlock(&readMutex);
+	pthread_mutex_unlock(&mutex);
 
 	err = errno;
 	errno = 0;
@@ -302,9 +301,9 @@ int nwrite(char * buffer, int socketFD)
 
 	// Reading the file
 	/////////////////	
-	pthread_mutex_lock(&writeMutex);
+	pthread_mutex_lock(&mutex);
 	status = write(intFD, writeBuffer, intSize);
-	pthread_mutex_unlock(&writeMutex);
+	pthread_mutex_unlock(&mutex);
 
 	err = errno;
 	errno = 0;
