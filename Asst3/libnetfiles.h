@@ -38,5 +38,5 @@ nLink * writePull(char * buffer, nLink * head);
 void * threadMain(int * args);
 int pthread_mutex_lock(pthread_mutex_t *mutex);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
-void errNoChk(int err);
+int errNoChk(int err);
 int pullSize(char * buffer);

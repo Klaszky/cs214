@@ -5,7 +5,7 @@ int main()
 	// char * readIn = (char*)malloc(sizeof(char) * 400);
 	// int amtToRead = 500;
 	int status = 0;
-	char * buf = "I don't know what to type blah, blah blah";
+	char * buf = "hello";
 
 
 	networkserverinit("grep.cs.rutgers.edu");
@@ -25,6 +25,7 @@ int main()
 
 	// printf("%d\n", netclose(fd));
 	int fd2 = netopen("./test", O_WRONLY);
+	printf("fd2 %d\n", fd2);
 	status = netwrite(fd2, buf, strlen(buf));
 	printf("status 2: %d\n", status);
 	// printf("%d\n", netopen("./test2", O_RDONLY));

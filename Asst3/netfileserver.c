@@ -268,9 +268,6 @@ int nwrite(char * buffer, int socketFD)
 	int intSize;
 	char * writeBuffer;
 
-
-
-
 	// Gettting proper FD
 	////////////////	
 	intFD = atoi(temp->arg);

@@ -82,6 +82,12 @@ int netopen(char * path, int mode)
 
 	err = atoi(head->arg);
 	errNoChk(err);
+
+	if(errNoChk(err) == 0)
+	{
+		return -1;
+	}
+	
 	fd = atoi(head->next->arg);
 	destroyList(head);
 
@@ -132,11 +138,11 @@ int netclose(int fd)
 
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
-	errNoChk(err);
 	if(err == -1)
 	{
 		fprintf(stderr, "Couldn't close file.\n");
 	}
+
 	result = atoi(head->next->arg);
 
 	return result;
@@ -146,6 +152,11 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 {
 	// Set up vars.
 	/////////////////
+	if(fd == -1)
+	{
+		fprintf(stderr, "Error: Bad file descriptor\n");
+		return -1;
+	}
 	char sendBuffer[1000];
 	char * recBuffer;
 	int socketFD = getSockFD();
@@ -176,7 +187,12 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
-	errNoChk(err);
+	
+	if(errNoChk(err) == 0)
+	{
+		return -1;
+	}
+
 	bytesRead = atoi(head->next->arg);
 	readBuf = malloc(sizeof(char) * bytesRead + 1);
 	bzero(readBuf, bytesRead+1);
@@ -195,10 +211,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 			break;
 		}
 	}
-	// printf("len of readbuf: %d\n", (int)strlen(readBuf));
 	sprintf(buf, "%s%s", (char*)buf, readBuf);
-
-	// printf("%s\n", readBuf);
 
 	// Error check of return socket
 	////////////////////////////////
@@ -216,7 +229,11 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
-	
+	if(fd == -1)
+	{
+		fprintf(stderr, "Error: Bad file descriptor\n");
+		return -1;
+	}
 	// Set up vars.
 	/////////////////
 	int size = intLen(fd) + strlen((char*)buf) + intLen(nbyte) + 6;
@@ -247,9 +264,13 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
-	errNoChk(err);
-	bytesWritten = atoi(head->next->arg);
 
+	if(errNoChk(err) == 0)
+	{
+		return -1;
+	}
+
+	bytesWritten = atoi(head->next->arg);
 	return bytesWritten;
 }
 
@@ -572,11 +593,12 @@ void destroyList(nLink * head)
 	}
 }
 
-void errNoChk(int err)
+int errNoChk(int err)
 {
+	printf("%d\n", err);
 	if(err == 0)
 	{
-		return;
+		return 1;
 	}
 	else if(err == 1)
 	{
@@ -602,7 +624,7 @@ void errNoChk(int err)
 	{
 		fprintf(stderr, "Error EISDIR: Given path is a directory, not a file.\n");
 	}
-	else if(err = 23)
+	else if(err == 23)
 	{
 		fprintf(stderr, "Error ENFILE: File table overflow.\n");
 	}
@@ -618,4 +640,6 @@ void errNoChk(int err)
 	{
 		fprintf(stderr, "Error ETIMEDOUT: Connection times out.\n");
 	}
+
+	return 0;
 }
