@@ -258,8 +258,11 @@ int nwrite(char * buffer, int socketFD)
 	// Var set up
 	////////////////
 	nLink * head = NULL;
+	printf("1\n");
 	head = writePull(buffer, head);
+	printf("2\n");
 	nLink * temp = head;
+	printf("3\n");
 	temp = temp->next;
 	int n;
 	int err;
@@ -267,6 +270,8 @@ int nwrite(char * buffer, int socketFD)
 	int intFD;
 	int intSize;
 	char * backupbuffer;
+
+	printf("4\n");
 
 
 
@@ -279,6 +284,7 @@ int nwrite(char * buffer, int socketFD)
 	}
 
 	temp = temp->next;
+	printf("5\n");
 
 	// I know this is lazy, but it's getting late.
 	/////////////////

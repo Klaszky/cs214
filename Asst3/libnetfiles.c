@@ -427,7 +427,6 @@ nLink * readPull(char * buffer, nLink * head)
 
 
 	return head;
-
 }
 
 
@@ -439,9 +438,12 @@ nLink * writePull(char * buffer, nLink * head)
 	nLink * tempnLink;
 	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
+	printf("%s\n", buffer);
 
 	for(i = 0; i < strlen(buffer); i++)
 	{
+		// Getting the command out
+		///////////////
 		if(buffer[i] == ',')
 		{
 			endingPos = i;
@@ -458,6 +460,8 @@ nLink * writePull(char * buffer, nLink * head)
 			sizeOfString++;
 		}
 	}
+	// Getting the FD out
+	//////////////////
 	for(i; i < strlen(buffer); i++)
 	{
 		if(buffer[i] == ',')
@@ -484,9 +488,6 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
-	// Getting out the size
-	/////////////////////
-
 	for(i; i < strlen(buffer); i++)
 	{
 		if(buffer[i] == ',')
@@ -513,10 +514,10 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
-
+	// Getting the rest of the message
+	/////////////////
 	endingPos = strlen(buffer);
 	tempString = pullString(startingPos, endingPos, strlen(buffer) - startingPos, buffer);
-
 	tempnLink = createLink(tempString);
 	head = addToLL(head, tempnLink);
 	free(tempString);
@@ -526,6 +527,97 @@ nLink * writePull(char * buffer, nLink * head)
 
 
 	return head;
+	// char * tempString;
+	// nLink * tempnLink;
+	// int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	// len = strlen(buffer);
+
+	// for(i = 0; i < strlen(buffer); i++)
+	// {
+	// 	if(buffer[i] == ',')
+	// 	{
+	// 		endingPos = i;
+	// 		tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+	// 		tempnLink = createLink(tempString);
+	// 		head = addToLL(head, tempnLink);
+	// 		free(tempString);
+	// 		startingPos = endingPos + 1;
+	// 		sizeOfString = 0;
+	// 		break;
+	// 	}
+	// 	else
+	// 	{
+	// 		sizeOfString++;
+	// 	}
+	// }
+	// for(i; i < strlen(buffer); i++)
+	// {
+	// 	if(buffer[i] == ',')
+	// 	{
+	// 		if(sizeOfString == 0)
+	// 		{
+	// 			continue;
+	// 		}
+	// 		else
+	// 		{
+	// 			endingPos = i;
+	// 			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+	// 			tempnLink = createLink(tempString);
+	// 			head = addToLL(head, tempnLink);
+	// 			free(tempString);
+	// 			startingPos = endingPos + 1;
+	// 			sizeOfString = 0;
+	// 			break;
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		sizeOfString++;
+	// 	}
+	// }
+
+	// // Getting out the size
+	// /////////////////////
+
+	// for(i; i < strlen(buffer); i++)
+	// {
+	// 	if(buffer[i] == ',')
+	// 	{
+	// 		if(sizeOfString == 0)
+	// 		{
+	// 			continue;
+	// 		}
+	// 		else
+	// 		{
+	// 			endingPos = i;
+	// 			tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
+	// 			tempnLink = createLink(tempString);
+	// 			head = addToLL(head, tempnLink);
+	// 			free(tempString);
+	// 			startingPos = endingPos + 1;
+	// 			sizeOfString = 0;
+	// 			break;
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		sizeOfString++;
+	// 	}
+	// }
+
+
+	// endingPos = strlen(buffer);
+	// tempString = pullString(startingPos, endingPos, strlen(buffer) - startingPos, buffer);
+
+	// tempnLink = createLink(tempString);
+	// head = addToLL(head, tempnLink);
+	// free(tempString);
+	// i += 2;
+	// startingPos = i;
+	// sizeOfString = 0;
+
+
+	// return head;
 
 }
 
