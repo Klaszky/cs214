@@ -247,9 +247,10 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't read from socket.\n");
+		free(readBuf);
 		return -1;
 	}	
-
+	free(readBuf);
 	return bytesRead;
 }
 

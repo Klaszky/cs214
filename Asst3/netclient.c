@@ -2,8 +2,8 @@
 
 int main()
 {	
-	char * readIn = (char*)malloc(sizeof(char) * 500);
-	size_t amtToRead = 500;
+	char * readIn = (char*)malloc(sizeof(char) * 5000);
+	size_t amtToRead = 5000;
 	size_t status = 0;
 	char * buf = "grep.cs.rutgers.edu\n";
 
