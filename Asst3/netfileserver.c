@@ -102,7 +102,7 @@ void * threadMain(int * args)
 		nwrite(buffer, newSocketFD);
 	}
 
-	n = write(newSocketFD, "Didn't get it", 14);
+	n = write(newSocketFD, "Error: Can't parse incoming packet.", 36);
 
 	if(n < 0)
 	{
@@ -120,20 +120,24 @@ int nopen(nLink * head, int socketFD)
 	int msgSize;
 	int err;
 	int n;
+	int mode;
+	int newFD;
+	char * path;
+	char * message;
 
 	// Pulling out of arguments from linked list
 	/////////////////
 	nLink * tmp = head;
 	tmp = tmp->next;
 
-	char * path = tmp->arg;
+	path = tmp->arg;
 	tmp = tmp->next;
 
-	int mode = atoi(tmp->arg);
+	mode = atoi(tmp->arg);
 	
 	// Actually opening the file and error check
 	/////////////////
-	int newFD = open(path, mode);
+	newFD = open(path, mode);
 	err = errno;
 	errno = 0;
 	if(newFD != -1)
@@ -145,7 +149,7 @@ int nopen(nLink * head, int socketFD)
 	////////////////
 	msgSize = intLen(err) + intLen(newFD);
 
-	char * message = (char*)malloc(sizeof(char) * msgSize + 1);
+	message = (char*)malloc(sizeof(char) * msgSize + 1);
 	sprintf(message, "%d,%d,", err, newFD);
 	
 	// Writing new socket and error check
@@ -206,9 +210,11 @@ int nread(nLink * head, int socketFD)
 	////////////////
 	int n;
 	int err;
+	char * message;
 	// Gettting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
+
 	if(intFD != -1)
 	{
 		intFD *= -1;
@@ -216,7 +222,7 @@ int nread(nLink * head, int socketFD)
 
 	// I know this is lazy, but it's getting late.
 	/////////////////
-	int intSize = atoi(head->next->next->arg);
+	size_t intSize = atoi(head->next->next->arg);
 	int status;
 	// Reading the file
 	/////////////////
@@ -233,7 +239,7 @@ int nread(nLink * head, int socketFD)
 		return -1;
 	}
 
-	char * message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
+	message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
 	sprintf(message, "%d,%d,%s", err, status, buffer);
 
 	n = write(socketFD, message, strlen(message));
@@ -261,7 +267,7 @@ int nwrite(char * buffer, int socketFD)
 	int err;
 	int status;
 	int intFD;
-	int intSize;
+	size_t intSize;
 	char * writeBuffer;
 
 	// Gettting proper FD

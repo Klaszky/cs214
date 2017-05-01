@@ -163,7 +163,7 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	int n;
 
 	int err;
-	int bytesRead;
+	size_t bytesRead;
 	char * readBuf;
 	nLink * head = NULL;
 
@@ -236,13 +236,13 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 	}
 	// Set up vars.
 	/////////////////
-	int size = intLen(fd) + strlen((char*)buf) + intLen(nbyte) + 6;
+	size_t size = intLen(fd) + strlen((char*)buf) + intLen(nbyte) + 6;
 	char sendBuffer[size];
 	int socketFD = getSockFD();
 	int n;
 
 	int err;
-	int bytesWritten;
+	size_t bytesWritten;
 	char * readBuf;
 	nLink * head = NULL;
 
@@ -330,7 +330,7 @@ nLink * argPull(char * buffer, nLink * head)
 {
 	char * tempString;
 	nLink * tempnLink;
-	int startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	size_t startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
 
 	for(i = 0; i <= len; i++)
@@ -383,7 +383,7 @@ nLink * readPull(char * buffer, nLink * head)
 {
 	char * tempString;
 	nLink * tempnLink;
-	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	size_t startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
 
 	for(i = 0; i < strlen(buffer); i++)
@@ -456,7 +456,7 @@ nLink * writePull(char * buffer, nLink * head)
 {
 	char * tempString;
 	nLink * tempnLink;
-	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
+	size_t startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
 
 	for(i = 0; i < strlen(buffer); i++)
