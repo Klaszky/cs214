@@ -385,7 +385,6 @@ nLink * readPull(char * buffer, nLink * head)
 	nLink * tempnLink;
 	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
-	printf("%s\n", buffer);
 
 	for(i = 0; i < strlen(buffer); i++)
 	{
@@ -459,7 +458,6 @@ nLink * writePull(char * buffer, nLink * head)
 	nLink * tempnLink;
 	int startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
-	printf("%s\n", buffer);
 
 	for(i = 0; i < strlen(buffer); i++)
 	{
@@ -482,7 +480,6 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
-	printf("%s\n", head->arg);
 	// Getting the FD out
 	//////////////////
 	for(i; i < strlen(buffer); i++)
@@ -510,7 +507,6 @@ nLink * writePull(char * buffer, nLink * head)
 			sizeOfString++;
 		}
 	}
-	printf("%s\n", head->next->arg);
 
 	for(i; i < strlen(buffer); i++)
 	{
@@ -538,7 +534,6 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
-	printf("%s\n", head->next->next->arg);
 
 	// Getting the rest of the message
 	/////////////////
@@ -551,7 +546,6 @@ nLink * writePull(char * buffer, nLink * head)
 	startingPos = i;
 	sizeOfString = 0;
 
-	printf("%s\n", head->next->next->next->arg);
 	return head;
 
 }
@@ -595,7 +589,6 @@ void destroyList(nLink * head)
 
 int errNoChk(int err)
 {
-	printf("%d\n", err);
 	if(err == 0)
 	{
 		return 1;

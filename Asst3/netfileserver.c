@@ -238,9 +238,6 @@ int nread(nLink * head, int socketFD)
 	sprintf(message, "%d,%d,%s", err, status, buffer);
 
 	n = write(socketFD, message, strlen(message));
-	printf("n = %d\n", n);
-	printf("message: %s\n", message);
-	printf("message len: %d\n", strlen(message));
 
 	if(n < 0)
 	{
