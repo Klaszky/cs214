@@ -130,7 +130,6 @@ void * threadMain(int * args)
 		pthread_exit(NULL);
 	}
 
-	free(args);
 	pthread_exit(NULL);
 }
 
@@ -192,8 +191,6 @@ int nopen(nLink * head, int socketFD)
 		return -1;
 	}
 
-	free(message);
-
 	destroyList(head);
 	return 0;
 }
@@ -234,8 +231,6 @@ int nclose(nLink * head, int socketFD)
 		fprintf(stderr, "Couldn't write to socket.\n");
 		return -1;
 	}
-
-	free(message);
 
 	destroyList(head);
 	return result;
@@ -289,8 +284,6 @@ int nread(nLink * head, int socketFD)
 	sprintf(message, "%d,%d,%s", err, status, buffer);
 
 	n = write(socketFD, message, strlen(message));
-	free(message);
-	free(buffer);
 
 	if(n < 0)
 	{
@@ -382,9 +375,6 @@ int nwrite(char * buffer, int socketFD)
 	sprintf(message, "%d,%d,", err, status);
 
 	n = write(socketFD, message, strlen(message));
-
-	free(writeBuffer);
-	free(message);
 
 	if(n < 0)
 	{
