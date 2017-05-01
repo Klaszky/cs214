@@ -460,6 +460,8 @@ nLink * writePull(char * buffer, nLink * head)
 			sizeOfString++;
 		}
 	}
+
+	printf("%s\n", head->arg);
 	// Getting the FD out
 	//////////////////
 	for(i; i < strlen(buffer); i++)
@@ -487,6 +489,7 @@ nLink * writePull(char * buffer, nLink * head)
 			sizeOfString++;
 		}
 	}
+	printf("%s\n", head->next->arg);
 
 	for(i; i < strlen(buffer); i++)
 	{
@@ -514,6 +517,8 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
+	printf("%s\n", head->next->next->arg);
+
 	// Getting the rest of the message
 	/////////////////
 	endingPos = strlen(buffer);
@@ -525,7 +530,7 @@ nLink * writePull(char * buffer, nLink * head)
 	startingPos = i;
 	sizeOfString = 0;
 
-
+	printf("%s\n", head->next->next->next->arg);
 	return head;
 	// char * tempString;
 	// nLink * tempnLink;

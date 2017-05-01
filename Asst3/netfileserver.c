@@ -291,19 +291,17 @@ int nwrite(char * buffer, int socketFD)
 	intSize = atoi(temp->arg);
 	temp = temp->next;
 	buffer = temp->arg;
-	
+	printf("6\n");	
 	if(intSize > 200)
 	{
 		backupbuffer = (char*)malloc(sizeof(char) * intSize + 1);
 	}
 
+	printf("7\n");
 	sprintf(backupbuffer, "%s", buffer);
-	while(n > 0)
-	{
-		n = read(socketFD, backupbuffer, 255);
-	}
 
-	buffer = backupbuffer;
+	n = read(socketFD, backupbuffer, 255);
+
 	// Reading the file
 	/////////////////	
 	pthread_mutex_lock(&writeMutex);
@@ -313,17 +311,22 @@ int nwrite(char * buffer, int socketFD)
 	err = errno;
 	errno = 0;
 
+	printf("8\n");
+
 	if(status < 0)
 	{
 		fprintf(stderr, "Error writing to file\n");
 		return -1;
 	}
 
+	printf("9\n");
+
 	char * message = (char*)malloc(sizeof(char) * intLen(status) + 1);
 	sprintf(message, "%d,%d,%s,", err, status, buffer);
 
 	n = write(socketFD, message, strlen(message));
 
+	printf("10\n");
 
 	if(n < 0)
 	{
