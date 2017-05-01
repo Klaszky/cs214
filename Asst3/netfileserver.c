@@ -246,20 +246,24 @@ int nread(nLink * head, int socketFD)
 	int err;
 	char * message;
 
+	printf("1\n");
+
 	// Getting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
 
+	printf("2\n");
 	if(intFD != -1)
 	{
 		intFD *= -1;
 	}
 
+	printf("3\n");
 	// I know this is lazy, but it's getting late.
 	/////////////////
 	size_t intSize = atoi(head->next->next->arg);
 	int status;
-
+	printf("4\n");
 	// Reading the file
 	/////////////////
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
@@ -267,7 +271,7 @@ int nread(nLink * head, int socketFD)
 	pthread_mutex_lock(&mutex);
 	status = read(intFD, buffer, intSize);
 	pthread_mutex_unlock(&mutex);
-
+	printf("5\n");
 	// Pulling out an error info from last call
 	/////////////////
 	err = errno;
@@ -277,12 +281,12 @@ int nread(nLink * head, int socketFD)
 		fprintf(stderr, "Error reading from file\n");
 		return -1;
 	}
-
+	printf("6\n");
 	// Assembling the return packet.
 	////////////////////
 	message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
 	sprintf(message, "%d,%d,%s", err, status, buffer);
-
+	printf("7\n");
 	n = write(socketFD, message, strlen(message));
 
 	if(n < 0)
@@ -290,9 +294,9 @@ int nread(nLink * head, int socketFD)
 		fprintf(stderr, "Couldn't write to socket.\n");
 		return -1;
 	}
-
+	printf("8\n");
 	destroyList(head);
-
+	printf("9\n");
 	return 0;
 }
 
