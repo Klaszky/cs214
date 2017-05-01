@@ -16,6 +16,7 @@ int networkserverinit(char * hostname)
 	if(serverIPAddress == NULL)
 	{
 		fprintf(stderr, "Can't find host\n");
+		h_errno = HOST_NOT_FOUND;
 		return -1;
 	}
 
@@ -45,8 +46,19 @@ int netopen(char * path, int mode)
 	int n;
 	
 	nLink * head = NULL;
+	errno = 0;
 	int err;
 	int fd;
+
+
+	// Error check for unsupported modes
+	/////////////////////////////
+
+	if(mode != O_RDONLY && mode != O_WRONLY && mode != O_RDWR)
+	{
+		fprintf(stderr, "Error: Trying to open file with a non-supported read/write mode.\n");
+		return -1;
+	}
 
 	// Construction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
@@ -70,6 +82,8 @@ int netopen(char * path, int mode)
 	bzero(sendBuffer,256);
 	n = read(socketFD, sendBuffer, 255);
 
+	// Parses the message from the socket and stores the data in a Linked list
+	//////////////////////////////
 	head = argPull(sendBuffer, head);
 
 	// Error check of return socket
@@ -80,7 +94,10 @@ int netopen(char * path, int mode)
 		return -1;
 	}
 
+	// Checking on any errors from server side.
+	////////////////////////////
 	err = atoi(head->arg);
+	errno = err;
 	errNoChk(err);
 
 	if(errNoChk(err) == 0)
@@ -88,6 +105,8 @@ int netopen(char * path, int mode)
 		return -1;
 	}
 	
+	// Getting our actual return value and freeing some stuff
+	////////////////////////////
 	fd = atoi(head->next->arg);
 	destroyList(head);
 
@@ -105,6 +124,7 @@ int netclose(int fd)
 	nLink * head = NULL;
 	int result;
 	int err;
+	errno = 0;
 
 	// Construction of message to be sent. It'll need to be changed a bit
 	///////////////////////////////////
@@ -136,8 +156,11 @@ int netclose(int fd)
 		return -1;
 	}
 
+	// Parsing the message from the socket, setting errno and reporting errors
+	//////////////////////////////
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
+	errno = err;
 	if(err == -1)
 	{
 		fprintf(stderr, "Couldn't close file.\n");
@@ -150,18 +173,19 @@ int netclose(int fd)
 
 ssize_t netread(int fd, void *buf, size_t nbyte)
 {
-	// Set up vars.
-	/////////////////
 	if(fd == -1)
 	{
 		fprintf(stderr, "Error: Bad file descriptor\n");
 		return -1;
 	}
+	// Set up vars.
+	/////////////////
 	char sendBuffer[1000];
 	char * recBuffer;
 	int socketFD = getSockFD();
 	int n;
 
+	errno = 0;
 	int err;
 	size_t bytesRead;
 	char * readBuf;
@@ -182,9 +206,10 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	////////////////////////////////
 	bzero(sendBuffer, 1000);
 
-
 	n = read(socketFD, sendBuffer, 1000);
 
+	// Parse return message and do some error checking
+	////////////////////////////////
 	head = readPull(sendBuffer, head);
 	err = atoi(head->arg);
 	
@@ -193,6 +218,10 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 		return -1;
 	}
 
+	// Making a new buffer of the proper size of the return message
+	// then reading from socket stream into new buffer until we've gotten everything
+	// out of the stream.
+	///////////////////////////////
 	bytesRead = atoi(head->next->arg);
 	readBuf = malloc(sizeof(char) * bytesRead + 1);
 	bzero(readBuf, bytesRead+1);
@@ -222,13 +251,12 @@ ssize_t netread(int fd, void *buf, size_t nbyte)
 	}	
 
 	return bytesRead;
-
 }
-
-//////////////////////////////////////////////////
 
 ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 {
+	// Bad fd check
+	///////////////////////
 	if(fd == -1)
 	{
 		fprintf(stderr, "Error: Bad file descriptor\n");
@@ -241,6 +269,7 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 	int socketFD = getSockFD();
 	int n;
 
+	errno = 0;
 	int err;
 	size_t bytesWritten;
 	char * readBuf;
@@ -262,18 +291,25 @@ ssize_t netwrite(int fd, const void *buf, size_t nbyte)
 	bzero(sendBuffer,size);
 	n = read(socketFD, sendBuffer, size);
 
+	// Parse message, set errno, report errors
+	/////////////////////////////////
 	head = argPull(sendBuffer, head);
 	err = atoi(head->arg);
+	errno = err;
 
 	if(errNoChk(err) == 0)
 	{
 		return -1;
 	}
 
+	// Get final data out and return it
+	///////////////////////////////
 	bytesWritten = atoi(head->next->arg);
 	return bytesWritten;
 }
 
+// Gets a socket for the user to and returns a socket FD
+////////////////////
 int getSockFD()
 {
 	// Socket set up
@@ -303,6 +339,8 @@ int getSockFD()
 
 nLink * createLink(char * arg)
 {
+	// Used as a poor man's object constructor
+	////////////////////////
 	nLink * temp = (nLink*)malloc(sizeof(nLink));
 	temp->arg = strdup(arg);
 	temp->next = NULL;
@@ -312,7 +350,8 @@ nLink * createLink(char * arg)
 nLink * addToLL(nLink * head, nLink * newnLink)
 {
 	// Hit the end of the list, simply add the node
-	/////////////////
+	// Recursive.
+	//////////////////////////
 	if(head == NULL)
 	{
 		head = newnLink;
@@ -328,6 +367,9 @@ nLink * addToLL(nLink * head, nLink * newnLink)
 
 nLink * argPull(char * buffer, nLink * head)
 {
+	// Set up vars we'll need to pull strings from a buffer and 
+	// add them to a linked list.
+	//////////////////////////
 	char * tempString;
 	nLink * tempnLink;
 	size_t startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
@@ -335,7 +377,7 @@ nLink * argPull(char * buffer, nLink * head)
 
 	for(i = 0; i <= len; i++)
 	{
-		// Check if current character isalpha and then
+		// Check if current character is not a comma or a null term. 
 		// makes some decisions based on that.
 		///////////////////
 		if(buffer[i] == ',' || buffer[i] == '\0')
@@ -346,7 +388,7 @@ nLink * argPull(char * buffer, nLink * head)
 			{
 				continue;
 			}
-			// Grabs the current string from input and puts it into the tree.
+			// Grabs the current string from input and puts it into the list.
 			///////////////////
 			else
 			{
@@ -381,15 +423,20 @@ nLink * argPull(char * buffer, nLink * head)
 
 nLink * readPull(char * buffer, nLink * head)
 {
+	// So I'm going to admit, this function and the next are bad.
+	// I should have just be able to change argPull() to do what I wanted, but
+	// I felt like I wanted very specific data out of these buffers and wanted
+	// to do it this way.
+	///////////////////
 	char * tempString;
 	nLink * tempnLink;
 	size_t startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
 
+	// Getting the command out
+	///////////////
 	for(i = 0; i < strlen(buffer); i++)
 	{
-		// Getting the command out
-		///////////////
 		if(buffer[i] == ',')
 		{
 			endingPos = i;
@@ -406,6 +453,7 @@ nLink * readPull(char * buffer, nLink * head)
 			sizeOfString++;
 		}
 	}
+
 	// Getting the FD out
 	//////////////////
 	for(i; i < strlen(buffer); i++)
@@ -448,21 +496,20 @@ nLink * readPull(char * buffer, nLink * head)
 
 	return head;
 }
-
-
-////////////////////////////////////////////////////////////
 
 nLink * writePull(char * buffer, nLink * head)
 {
+	// Another bad function that's not the way I usually like to code.
+	//////////////////////////
 	char * tempString;
 	nLink * tempnLink;
 	size_t startingPos = 0, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
 
+	// Getting the command out
+	///////////////
 	for(i = 0; i < strlen(buffer); i++)
 	{
-		// Getting the command out
-		///////////////
 		if(buffer[i] == ',')
 		{
 			endingPos = i;
@@ -508,6 +555,8 @@ nLink * writePull(char * buffer, nLink * head)
 		}
 	}
 
+	// Getting the number of bytes to read out
+	////////////////////////
 	for(i; i < strlen(buffer); i++)
 	{
 		if(buffer[i] == ',')
@@ -547,9 +596,10 @@ nLink * writePull(char * buffer, nLink * head)
 	sizeOfString = 0;
 
 	return head;
-
 }
 
+// Helper method for my parsing methods
+/////////////////
 char * pullString(int start, int end, int size, char * originalString)
 {
 	int x, y;
@@ -562,6 +612,8 @@ char * pullString(int start, int end, int size, char * originalString)
 	return temp;
 }
 
+// Helper method for my parsing methods
+/////////////////
 int intLen(int x)
 {	
 	int toReturn = 0;
@@ -574,6 +626,8 @@ int intLen(int x)
 	return toReturn;
 }
 
+// Freeing some data from linked list
+///////////////////////
 void destroyList(nLink * head)
 {
 	if(head == NULL)
@@ -583,10 +637,14 @@ void destroyList(nLink * head)
 	else
 	{
 		destroyList(head->next);
+		free(head->arg);
 		free(head);
 	}
 }
 
+// Error reporting and checking ugly and bad and I'm not even sure I should
+// include it.
+/////////////////////////
 int errNoChk(int err)
 {
 	if(err == 0)
