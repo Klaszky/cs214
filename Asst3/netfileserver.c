@@ -109,6 +109,7 @@ void * threadMain(int * args)
 	else if(strncmp("read", cmd, 4) == 0)
 	{
 		nread(head, newSocketFD);
+		destroyList(head);
 	}
 	else if(strncmp("close", cmd, 5) == 0)
 	{
@@ -295,7 +296,6 @@ int nread(nLink * head, int socketFD)
 		return -1;
 	}
 	printf("8\n");
-	destroyList(head);
 	printf("9\n");
 	return 0;
 }
