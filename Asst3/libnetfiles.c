@@ -57,6 +57,7 @@ int netopen(char * path, int mode)
 	if(mode != O_RDONLY && mode != O_WRONLY && mode != O_RDWR)
 	{
 		fprintf(stderr, "Error: Trying to open file with a non-supported read/write mode.\n");
+		n = write(socketFD, "Error,BadInput,", 16);	
 		return -1;
 	}
 
@@ -411,6 +412,7 @@ nLink * argPull(char * buffer, nLink * head)
 		///////////////////
 		else
 		{
+			printf("6");
 			if(startingPos == -1)
 			{
 				startingPos = i;
