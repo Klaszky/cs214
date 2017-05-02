@@ -91,13 +91,16 @@ void * threadMain(int * args)
 	printf("44\n");
 	if(n < 0)
 	{
+		printf("441\n");
 		fprintf(stderr, "Couldn't read from socket\n");
 		pthread_exit(NULL);
 	}
 
 	// Parse incoming packet
 	//////////////////////
+	printf("442\n");
 	nLink * head = NULL;
+	printf("443\n");
 	head = argPull(buffer, head);
 
 	nLink * temp = head;
