@@ -373,12 +373,10 @@ nLink * argPull(char * buffer, nLink * head)
 	// Set up vars we'll need to pull strings from a buffer and 
 	// add them to a linked list.
 	//////////////////////////
-	printf("1\n");
 	char * tempString;
 	nLink * tempnLink;
 	size_t startingPos = -1, endingPos = 0, sizeOfString = 0, len = 0, i = 0;
 	len = strlen(buffer);
-	printf("2\n");
 	for(i = 0; i <= len; i++)
 	{
 		// Check if current character is not a comma or a null term. 
@@ -386,20 +384,17 @@ nLink * argPull(char * buffer, nLink * head)
 		///////////////////
 		if(buffer[i] == ',' || buffer[i] == '\0')
 		{
-			printf("3\n");
-			// Nothing to do if current string is empty 
+					// Nothing to do if current string is empty 
 			///////////////////
 			if(sizeOfString == 0)
 			{
-				printf("4\n");
-				continue;
+							continue;
 			}
 			// Grabs the current string from input and puts it into the list.
 			///////////////////
 			else
 			{
-				printf("5\n");
-				endingPos = i;
+							endingPos = i;
 				tempString = pullString(startingPos, endingPos, sizeOfString, buffer);
 				tempnLink = createLink(tempString);
 				head = addToLL(head, tempnLink);
@@ -412,7 +407,6 @@ nLink * argPull(char * buffer, nLink * head)
 		///////////////////
 		else
 		{
-			printf("6");
 			if(startingPos == -1)
 			{
 				startingPos = i;
