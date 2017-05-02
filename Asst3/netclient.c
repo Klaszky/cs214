@@ -13,29 +13,27 @@ int main()
 
 	networkserverinit("grep.cs.rutgers.edu");
 	
-	// int fd = open("./oz", atoi("O_RDONLY"));
-	// printf("%d\n", fd);
-	// printf("%d\n", close(fd));
-	// int fd = netopen("./oz.txt", O_RDONLY);
-	int fd = netopen("./test", O_RDONLY);
+	int fd3 = netopen("./notarealpath", O_RDONLY);
+	netclose(fd3);
+	int fd = netopen("./oz.txt", O_RDONLY);
+	int fd2 = netopen("./test", O_RDWR);
 	printf("fd %d\n", fd);
-	// printf("fd2 %d\n", fd2);
+	printf("fd2 %d\n", fd2);
 
 	status = netread(fd, readIn, (int)amtToRead);
-	// status2 = netread(fd2, readIn2, (int)amt2Read);
+	status2 = netread(fd2, readIn2, (int)amt2Read);
 
-	// amtToRead -= status;
-	// printf("status: %d\n", status);
-	// printf("amtToRead: %d\n", (int)amtToRead);
-	// printf("status2: %d\n", status2);
-	// printf("\n\n\n\n\n\n");
-	// printf("%s\n", readIn);
-	// printf("%s\n", readIn2);
+	printf("status: %d\n", status);
+	printf("status2: %d\n", status2);
+	printf("\n\n\n\n\n\n");
+	printf("%s\n", readIn);
+	printf("%s\n", readIn2);
 
-	// status = netwrite(fd2, buf, strlen(buf));
-	// printf("status 2: %d\n", status);
-	// printf("close fd: %d\n", netclose(fd));
-	// printf("close fd2: %d\n", netclose(fd2));
+	status = netwrite(fd2, buf, strlen(buf));
+	printf("status 2: %d\n", status);
+	printf("close fd: %d\n", netclose(fd));
+	printf("close fd: %d\n", netclose(fd));
+	printf("close fd2: %d\n", netclose(fd2));
 	// printf("%d\n", netopen("./test2", O_RDONLY));
 	// printf("%d\n", netopen("./testing", O_RDONLY));
 
