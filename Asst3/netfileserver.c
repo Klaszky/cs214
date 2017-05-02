@@ -84,7 +84,6 @@ void * threadMain(int * args)
 	int newSocketFD = (int)*args;
 	char buffer[256];
 	bzero(buffer, 256);
-	
 	n = read(newSocketFD, buffer, 255);
 	if(n < 0)
 	{
@@ -99,7 +98,6 @@ void * threadMain(int * args)
 
 	nLink * temp = head;
 	char * cmd = temp->arg;
-
 	// Checking which function to call
 	//////////////////////
 	if(strncmp("open", cmd, 4) == 0)
@@ -122,9 +120,7 @@ void * threadMain(int * args)
 
 	// Not one of the above, just write back and error
 	///////////////////////
-
 	n = write(newSocketFD, "Error: Can't parse incoming packet.", 36);
-
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
@@ -247,27 +243,27 @@ int nread(nLink * head, int socketFD)
 	int err;
 	char * message;
 
-// Getting proper FD
+	// Getting proper FD
 	////////////////	
 	int intFD = atoi(head->next->arg);
 
-f(intFD != -1)
+	if(intFD != -1)
 	{
 		intFD *= -1;
 	}
 
-/ I know this is lazy, but it's getting late.
+	// I know this is lazy, but it's getting late.
 	/////////////////
 	size_t intSize = atoi(head->next->next->arg);
 	int status;
-/ Reading the file
+	// Reading the file
 	/////////////////
 	char * buffer = (char*)malloc( sizeof(char) * intSize + 1);
 
 	pthread_mutex_lock(&mutex);
 	status = read(intFD, buffer, intSize);
 	pthread_mutex_unlock(&mutex);
-/ Pulling out an error info from last call
+	// Pulling out an error info from last call
 	/////////////////
 	err = errno;
 	errno = 0;
@@ -276,18 +272,18 @@ f(intFD != -1)
 		fprintf(stderr, "Error reading from file\n");
 		return -1;
 	}
-/ Assembling the return packet.
+	// Assembling the return packet.
 	////////////////////
 	message = (char*)malloc(sizeof(char) * (strlen(buffer) + intLen(status) + intLen(err) + 1) );
 	sprintf(message, "%d,%d,%s", err, status, buffer);
- = write(socketFD, message, strlen(message));
+	n = write(socketFD, message, strlen(message));
 
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
 		return -1;
 	}
-eturn 0;
+	return 0;
 }
 
 int nwrite(char * buffer, int socketFD)
