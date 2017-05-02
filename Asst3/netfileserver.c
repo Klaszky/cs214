@@ -102,31 +102,36 @@ void * threadMain(int * args)
 
 	nLink * temp = head;
 	char * cmd = temp->arg;
-
+	printf("55\n");
 	// Checking which function to call
 	//////////////////////
 	if(strncmp("open", cmd, 4) == 0)
 	{
+		printf("66\n");
 		nopen(head, newSocketFD);
 	}
 	else if(strncmp("read", cmd, 4) == 0)
 	{
+		printf("77\n");
 		nread(head, newSocketFD);
 	}
 	else if(strncmp("close", cmd, 5) == 0)
 	{
+		printf("88\n");
 		nclose(head, newSocketFD);
 	}
 	else if(strncmp("write", cmd, 5) == 0)
 	{
+		printf("99\n");
 		destroyList(head);
 		nwrite(buffer, newSocketFD);
 	}
 
 	// Not one of the above, just write back and error
 	///////////////////////
+	printf("1010\n");
 	n = write(newSocketFD, "Error: Can't parse incoming packet.", 36);
-
+	printf("1111\n");
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't write to socket.\n");
