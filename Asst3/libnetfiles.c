@@ -173,17 +173,18 @@ int netclose(int fd)
 
 ssize_t netread(int fd, void *buf, size_t nbyte)
 {
+	int n;
+	int socketFD = getSockFD();
 	if(fd == -1)
 	{
 		fprintf(stderr, "Error: Bad file descriptor\n");
+		n = write(socketFD, "Error,BadInput", 5);
 		return -1;
 	}
 	// Set up vars.
 	/////////////////
 	char sendBuffer[1000];
 	char * recBuffer;
-	int socketFD = getSockFD();
-	int n;
 
 	errno = 0;
 	int err;

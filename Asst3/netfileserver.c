@@ -80,12 +80,15 @@ void * threadMain(int * args)
 {
 	// Set up of vars
 	///////////////////////
+	printf("11\n");
 	int n;
+	printf("22\n");
 	int newSocketFD = (int)*args;
 	char buffer[256];
 	bzero(buffer, 256);
+	printf("33\n");
 	n = read(newSocketFD, buffer, 255);
-
+	printf("44\n");
 	if(n < 0)
 	{
 		fprintf(stderr, "Couldn't read from socket\n");
@@ -109,7 +112,6 @@ void * threadMain(int * args)
 	else if(strncmp("read", cmd, 4) == 0)
 	{
 		nread(head, newSocketFD);
-		destroyList(head);
 	}
 	else if(strncmp("close", cmd, 5) == 0)
 	{

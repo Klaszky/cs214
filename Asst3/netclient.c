@@ -17,7 +17,7 @@ int main()
 	// printf("%d\n", fd);
 	// printf("%d\n", close(fd));
 	// int fd = netopen("./oz.txt", O_RDONLY);
-	int fd2 = netopen("./test", O_RDONLY);
+	int fd2 = netopen("./test", O_CREAT);
 	// printf("fd %d\n", fd);
 	printf("fd2 %d\n", fd2);
 
